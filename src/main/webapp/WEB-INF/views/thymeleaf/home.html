@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Sudoku Master - Inicio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Boostrap core css -->
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+
+  <link rel="stylesheet" th:href="@{/css/home.css}"/>
+</head>
+
+<body>
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="navbar-left">
+    <div class="coins-display">
+      <i class="fas fa-coins"></i>
+      <span class="user-name" th:text="${monedas}" > </span>
+    </div>
+  </div>
+
+  <div class="logo-section">
+    <div class="logo-icon">
+      <i class="fas fa-th"></i>
+    </div>
+    <span class="logo-text">Sudoku Master</span>
+  </div>
+
+  <div class="navbar-right">
+    <div class="user-section" onclick="toggleAccordion()">
+      <div class="user-name" th:text="${email}" > </div>
+      <i class="fas fa-chevron-down user-chevron"></i>
+    </div>
+  </div>
+</nav>
+
+<!-- ACCORDION MENU -->
+<div class="accordion-menu">
+  <div class="accordion-option" onclick="viewProfile()">
+    <i class="fas fa-user"></i>
+    <span>Ver Perfil</span>
+  </div>
+  <div class="accordion-option" onclick="viewHistory()">
+    <i class="fas fa-history"></i>
+    <span>Historial de Partidas</span>
+  </div>
+  <div class="accordion-option" onclick="viewStats()">
+    <i class="fas fa-chart-line"></i>
+    <span>Estadísticas</span>
+  </div>
+  <div class="accordion-option" onclick="logout()">
+    <i class="fas fa-sign-out-alt"></i>
+    <span>Cerrar Sesión</span>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main class="main-content">
+  <!-- WELCOME SECTION -->
+  <section class="welcome-section fade-in-up">
+    <h1 class="welcome-title">¡Bienvenido de vuelta! 👋</h1>
+    <p class="welcome-subtitle">¿Listo para un nuevo desafío de Sudoku? Elige tu nivel y comienza a jugar.</p>
+  </section>
+
+  <!-- GAME SELECTION -->
+  <section class="game-section">
+    <h2 class="section-title">Selecciona tu Desafío</h2>
+
+    <div class="game-grid">
+      <div class="game-card fade-in-up stagger-1" onclick="startGame('4x4')">
+        <div class="game-icon">
+          <i class="fas fa-border-all"></i>
+        </div>
+        <h3 class="game-title">Sudoku 4×4</h3>
+        <span class="game-difficulty difficulty-easy">Fácil</span>
+        <p style="color: var(--text-gray); margin-bottom: 1.5rem;">Perfecto para principiantes y calentamiento rápido.</p>
+        <button class="play-btn">¡Jugar Ahora!</button>
+      </div>
+
+      <div class="game-card fade-in-up stagger-2" onclick="startGame('6x6')">
+        <div class="game-icon">
+          <i class="fas fa-th-large"></i>
+        </div>
+        <h3 class="game-title">Sudoku 6×6</h3>
+        <span class="game-difficulty difficulty-medium">Medio</span>
+        <p style="color: var(--text-gray); margin-bottom: 1.5rem;">El equilibrio perfecto entre desafío y diversión.</p>
+        <button class="play-btn">¡Jugar Ahora!</button>
+      </div>
+
+      <div class="game-card fade-in-up stagger-3" onclick="startGame('9x9')">
+        <div class="game-icon">
+          <i class="fas fa-th"></i>
+        </div>
+        <h3 class="game-title">Sudoku 9×9</h3>
+        <span class="game-difficulty difficulty-hard">Difícil</span>
+        <p style="color: var(--text-gray); margin-bottom: 1.5rem;">El clásico desafío para mentes expertas.</p>
+        <button class="play-btn">¡Jugar Ahora!</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script th:src="@{/js/home.js}"></script>
+
+<!-- Boostrap core js -->
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+</body>
+</html>
