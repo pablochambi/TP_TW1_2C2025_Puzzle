@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @Controller
 public class ControladorLogin {
@@ -39,8 +38,8 @@ public class ControladorLogin {
         Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
         if (usuarioBuscado != null) {
             request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
-            request.getSession().setAttribute("id_usuario", usuarioBuscado.getId()); //
-
+            request.getSession().setAttribute("email", usuarioBuscado.getEmail());       //
+            request.getSession().setAttribute("monedas", usuarioBuscado.getMonedas());  //
             return new ModelAndView("redirect:/home");
 
         } else {
@@ -72,30 +71,19 @@ public class ControladorLogin {
     }
 
 
-    //Agregue en el modelo de la vista home: email y monedas. Estos datos se obtienen desde la session
-    //La session se crea al validar el login
 
-    @RequestMapping(path = "/home", method = RequestMethod.GET)
-    public ModelAndView irAHome(HttpSession session) {
-
-        if (session.getAttribute("id_usuario") == null) {
-            return new ModelAndView("redirect:/login");
-        }
-        Long id_usuario = (Long) session.getAttribute("id_usuario");
-
-        ModelMap model = new ModelMap();
-
-        model.put("email", servicioLogin.obtenerEmail(id_usuario)); //
-        model.put("monedas", servicioLogin.obtenerMonedas(id_usuario)); //
-
-
-        return new ModelAndView("home", model);
+    @RequestMapping(path = "/perfil", method = RequestMethod.GET)
+    public ModelAndView irAPerfil() {
+//        ModelMap model = new ModelMap();
+//        model.put("usuario", new Usuario());
+        return new ModelAndView("perfil");
     }
 
-    @RequestMapping(path = "/cerrar_sesion", method = RequestMethod.GET)
-    public ModelAndView cerrarSession(HttpSession session) {
-        session.invalidate();
-        return new ModelAndView("redirect:/login");
+    @RequestMapping(path = "/perfil/editar", method = RequestMethod.GET)
+    public ModelAndView irAEditarPerfil() {
+//        ModelMap model = new ModelMap();
+//        model.put("usuario", new Usuario());
+        return new ModelAndView("editar-perfil");
     }
 
 
@@ -103,6 +91,5 @@ public class ControladorLogin {
     public ModelAndView inicio() {
         return new ModelAndView("redirect:/login");
     }
-
 }
 

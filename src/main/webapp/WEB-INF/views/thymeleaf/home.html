@@ -46,18 +46,19 @@
   <div class="accordion-option">
     <i class="fas fa-user"></i>
     <a th:href="@{/perfil}" >Ver Perfil</a>
+<!--    <span>Ver Perfil</span>-->
   </div>
-  <div class="accordion-option" >
+  <div class="accordion-option" onclick="viewHistory()">
     <i class="fas fa-history"></i>
     <span>Historial de Partidas</span>
   </div>
-  <div class="accordion-option" >
+  <div class="accordion-option" onclick="viewStats()">
     <i class="fas fa-chart-line"></i>
     <span>Estadísticas</span>
   </div>
-  <div class="accordion-option" >
+  <div class="accordion-option" onclick="logout()">
     <i class="fas fa-sign-out-alt"></i>
-    <a th:href="@{/cerrar_sesion}" >Cerrar Session</a>
+    <span>Cerrar Sesión</span>
   </div>
 </div>
 
