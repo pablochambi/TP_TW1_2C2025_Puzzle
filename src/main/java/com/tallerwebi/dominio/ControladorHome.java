@@ -17,7 +17,7 @@ public class ControladorHome {
     @RequestMapping(path = "/tienda-monedas", method = RequestMethod.GET)
     public ModelAndView irATiendaMonedas(@ModelAttribute("usuario") Usuario usuario, HttpServletRequest request) {
 
-        if (request.getSession().getAttribute("email") == null) {
+        if (request.getSession().getAttribute("id_usuario") == null) {
             return new ModelAndView("redirect:/login");
         }
 
@@ -29,18 +29,18 @@ public class ControladorHome {
 
     }
 
-    @RequestMapping(path = "/home", method = RequestMethod.GET)
-    public ModelAndView irAHome(HttpServletRequest request) {
-
-        if (request.getSession().getAttribute("email") == null) {
-            return new ModelAndView("redirect:/login");
-        }
-
-        ModelMap model = new ModelMap();
-        model.put("email", request.getSession().getAttribute("email"));          //
-        model.put("monedas", request.getSession().getAttribute("monedas"));    //
-        return new ModelAndView("home", model);
-    }
+//    @RequestMapping(path = "/home", method = RequestMethod.GET)
+//    public ModelAndView irAHome(HttpServletRequest request) {
+//
+//        if (request.getSession().getAttribute("email") == null) {
+//            return new ModelAndView("redirect:/login");
+//        }
+//
+//        ModelMap model = new ModelMap();
+//        model.put("email", request.getSession().getAttribute("email"));          //
+//        model.put("monedas", request.getSession().getAttribute("monedas"));    //
+//        return new ModelAndView("home", model);
+//    }
 
 
 }

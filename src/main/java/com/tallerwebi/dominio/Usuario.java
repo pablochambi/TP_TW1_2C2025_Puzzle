@@ -22,6 +22,12 @@ public class Usuario {
         this.monedas = 100;
     }
 
+    public Usuario(Long id, String email,Integer monedas) {
+        this.id = id;
+        this.email = email;
+        this.monedas = monedas;
+    }
+
     public Integer getMonedas() {
         return monedas;
     }
