@@ -41,9 +41,10 @@
 
 <!-- ACCORDION MENU -->
 <div class="accordion-menu">
-  <div class="accordion-option" onclick="viewProfile()">
+  <div class="accordion-option">
     <i class="fas fa-user"></i>
-    <span>Ver Perfil</span>
+    <a th:href="@{/ver-perfil}" >Ver Perfil</a>
+<!--    <span>Ver Perfil</span>-->
   </div>
   <div class="accordion-option" onclick="viewHistory()">
     <i class="fas fa-history"></i>

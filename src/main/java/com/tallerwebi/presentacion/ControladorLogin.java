@@ -83,6 +83,14 @@ public class ControladorLogin {
         return new ModelAndView("home", model);
     }
 
+    @RequestMapping(path = "/ver-perfil", method = RequestMethod.GET)
+    public ModelAndView irAPerfil() {
+//        ModelMap model = new ModelMap();
+//        model.put("usuario", new Usuario());
+        return new ModelAndView("perfil");
+    }
+
+
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public ModelAndView inicio() {
         return new ModelAndView("redirect:/login");

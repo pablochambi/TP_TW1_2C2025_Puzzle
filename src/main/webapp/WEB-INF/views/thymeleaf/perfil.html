@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Perfil</title>
+    <!-- Bootstrap core css -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css}"/>
+    <!-- CSS personalizado -->
+    <style>
+        /* Estilo general para todos los íconos */
+        .icon {
+            font-size: calc(1em + 2px); /* 2px más grande */
+            color: #000;               /* Negro */
+            -webkit-text-stroke: 1px #000; /* Trazo grueso */
+        }
+
+    </style>
+    <link rel="stylesheet" th:href="@{/css/perfil.css}"/>
+</head>
+<body>
+<div class="container">
+    <!-- Header del Perfil -->
+    <div class="profile-header">
+        <div class="avatar" title="Avatar del usuario" id="userAvatar">S</div>
+        <div class="profile-info">
+            <div class="profile-name" id="profileName">SudokuMaster2024</div>
+            <div class="profile-email">jugador@email.com</div>
+        </div>
+        <a class="btn btn-primary edit-profile-btn" href="#">
+            <i class="bi bi-gear-fill "></i> Editar Perfil
+        </a>
+    </div>
+
+    <!-- Estadísticas por Nivel -->
+    <div class="stats-section">
+        <h2 class="section-title"><i class="bi bi-bar-chart-fill"></i> Estadísticas por Nivel</h2>
+
+        <div class="stats-grid">
+            <!-- Fácil (4x4) -->
+            <div class="stats-card">
+                <div class="card-title">
+                    <span><i class="bi bi-circle-fill text-success"></i> Fácil (4x4)</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label"><i class="bi bi-stopwatch icon"></i> Mejor tiempo</span>
+                    <span class="stat-value">1:45</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label"><i class="bi bi-controller icon"></i> Jugados</span>
+                    <span class="stat-value">89</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label"><i class="bi bi-trophy-fill icon"></i> Ganados</span>
+                    <span class="stat-value">76</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label"><i class="bi bi-x-circle icon"></i> Perdidos</span>
+                    <span class="stat-value">13</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label"><i class="bi bi-graph-up icon"></i> Victoria</span>
+                    <span class="stat-value">85%</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label"><i class="bi bi-fire icon"></i> Racha</span>
+                    <span class="stat-value">18</span>
+                </div>
+            </div>
+
+            <!-- Medio (6x6) -->
+            <div class="stats-card border rounded p-3 shadow-sm">
+                <div class="card-title mb-2 fw-semibold">
+                    <i class="bi bi-circle-fill text-warning"></i> Medio (6x6)
+                </div>
+                <div class="stat-item d-flex justify-content-between">
+                    <span><i class="bi bi-stopwatch icon"></i> Mejor tiempo</span>
+                    <span class="stat-value">4:23</span>
+                </div>
+                <div class="stat-item d-flex justify-content-between">
+                    <span><i class="bi bi-controller icon"></i> Jugados</span>
+                    <span class="stat-value">103</span>
+                </div>
+                <div class="stat-item d-flex justify-content-between">
+                    <span><i class="bi bi-trophy icon"></i> Ganados</span>
+                    <span class="stat-value">78</span>
+                </div>
+                <div class="stat-item d-flex justify-content-between">
+                    <span><i class="bi bi-x-circle icon"></i> Perdidos</span>
+                    <span class="stat-value">25</span>
+                </div>
+                <div class="stat-item d-flex justify-content-between">
+                    <span><i class="bi bi-graph-up icon"></i> Victoria</span>
+                    <span class="stat-value">76%</span>
+                </div>
+                <div class="stat-item d-flex justify-content-between">
+                    <span><i class="bi bi-fire icon"></i> Racha</span>
+                    <span class="stat-value">15</span>
+                </div>
+            </div>
+
+            <!-- Difícil (9x9) -->
+            <div class="stats-card border rounded p-3 shadow-sm">
+                <div class="card-title mb-2 fw-semibold">
+                    <i class="bi bi-circle-fill text-danger "></i> Difícil (9x9)
+                </div>
+                <div class="stat-item d-flex justify-content-between">
+                    <span><i class="bi bi-stopwatch icon"></i> Mejor tiempo</span>
+                    <span class="stat-value">8:17</span>
+                </div>
+                <div class="stat-item d-flex justify-content-between">
+                    <span><i class="bi bi-controller icon"></i> Jugados</span>
+                    <span class="stat-value">55</span>
+                </div>
+                <div class="stat-item d-flex justify-content-between">
+                    <span><i class="bi bi-trophy icon"></i> Ganados</span>
+                    <span class="stat-value">35</span>
+                </div>
+                <div class="stat-item d-flex justify-content-between">
+                    <span><i class="bi bi-x-circle icon"></i> Perdidos</span>
+                    <span class="stat-value">20</span>
+                </div>
+                <div class="stat-item d-flex justify-content-between">
+                    <span><i class="bi bi-graph-up icon"></i> Victoria</span>
+                    <span class="stat-value">64%</span>
+                </div>
+                <div class="stat-item d-flex justify-content-between">
+                    <span><i class="bi bi-fire icon"></i> Racha</span>
+                    <span class="stat-value">8</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/perfil.js}"></script>
+</body>
+</html>
