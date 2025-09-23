@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>Title</title>
+  <title>Editar Perfil</title>
 
   <!-- Boostrap core css
   <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>-->
@@ -19,7 +19,7 @@
 
   <!-- Header -->
   <div class="page-header">
-    <h1 class="page-title">⚙&#9889;&#65039; Editar Perfil</h1>
+    <h1 class="page-title"> Editar Perfil</h1>
     <p class="page-subtitle">Actualiza tu información personal</p>
   </div>
 
@@ -56,7 +56,7 @@
       <!-- Upload personalizado -->
       <div class="custom-avatar-section">
         <label for="avatarUpload" class="upload-label">
-          📁 Subir imagen personalizada<br>
+          &#128193; Subir imagen personalizada<br>
           <small>(JPG, PNG, máx. 2MB)</small>
         </label>
         <input type="file" id="avatarUpload" class="upload-input" accept="image/jpeg,image/jpg,image/png" />
@@ -84,7 +84,7 @@
 
       <!-- Email (Fixed) -->
       <div class="form-group">
-        <label class="fixed-label">📧 Email</label>
+        <label class="fixed-label">&#x1F4E7; Email</label>
         <div class="fixed-field">
           jugador@email.com
           <div class="fixed-note">El email no se puede modificar por seguridad</div>
@@ -116,8 +116,8 @@
         <button type="submit" class="btn btn-success">
           &#128190; Guardar Cambios
         </button>
-        <a href="perfil.html" class="btn btn-secondary">
-          ← Volver al Perfil
+        <a th:href="@{/perfil}" class="btn btn-secondary">
+          &larr; Volver al Perfil
         </a>
       </div>
     </form>
