@@ -18,10 +18,12 @@
 <!-- NAVBAR -->
 <nav class="navbar">
   <div class="navbar-left">
-    <div class="coins-display">
+
+    <a th:href="@{/tienda-monedas}" class="coins-display">
       <i class="fas fa-coins"></i>
       <span class="user-name" th:text="${monedas}" > </span>
-    </div>
+        </a>
+
   </div>
 
   <div class="logo-section">

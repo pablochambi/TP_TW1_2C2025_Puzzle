@@ -70,18 +70,7 @@ public class ControladorLogin {
         return new ModelAndView("nuevo-usuario", model);
     }
 
-    @RequestMapping(path = "/home", method = RequestMethod.GET)
-    public ModelAndView irAHome(HttpServletRequest request) {
 
-        if (request.getSession().getAttribute("email") == null) {
-            return new ModelAndView("redirect:/login");
-        }
-
-        ModelMap model = new ModelMap();
-        model.put("email",request.getSession().getAttribute("email") );          //
-        model.put("monedas", request.getSession().getAttribute("monedas") );    //
-        return new ModelAndView("home", model);
-    }
 
     @RequestMapping(path = "/perfil", method = RequestMethod.GET)
     public ModelAndView irAPerfil() {

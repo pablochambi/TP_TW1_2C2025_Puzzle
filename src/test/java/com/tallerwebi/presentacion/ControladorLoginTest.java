@@ -114,21 +114,21 @@ public class ControladorLoginTest {
 
 
 
-	@Test
-	public void debeMostrarHomeSiUsuarioEnSesion() {
-
-		when(requestMock.getSession()).thenReturn(sessionMock);
-		when(sessionMock.getAttribute("email")).thenReturn("test@test.com");
-		when(sessionMock.getAttribute("monedas")).thenReturn(100);
-
-
-		when(usuarioMock.getEmail()).thenReturn("dami@unlam.com");
-		when(usuarioMock.getMonedas()).thenReturn(100);
-
-		ModelAndView mav = controladorLogin.irAHome(requestMock);
-
-		assertThat(mav.getViewName(), is("home"));
-		assertThat(mav.getModel().get("email"), is("test@test.com"));
-		assertThat(mav.getModel().get("monedas"), is(100));
-	}
+//	@Test
+//	public void debeMostrarHomeSiUsuarioEnSesion() {
+//
+//		when(requestMock.getSession()).thenReturn(sessionMock);
+//		when(sessionMock.getAttribute("email")).thenReturn("test@test.com");
+//		when(sessionMock.getAttribute("monedas")).thenReturn(100);
+//
+//
+//		when(usuarioMock.getEmail()).thenReturn("dami@unlam.com");
+//		when(usuarioMock.getMonedas()).thenReturn(100);
+//
+//		ModelAndView mav = controladorLogin.irAHome(requestMock);
+//
+//		assertThat(mav.getViewName(), is("home"));
+//		assertThat(mav.getModel().get("email"), is("test@test.com"));
+//		assertThat(mav.getModel().get("monedas"), is(100));
+//	}
 }
