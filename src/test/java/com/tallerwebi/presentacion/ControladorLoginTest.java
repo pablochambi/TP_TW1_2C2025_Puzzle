@@ -5,7 +5,6 @@ import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,9 +34,10 @@ public class ControladorLoginTest {
 		servicioLoginMock = mock(ServicioLogin.class);
 		controladorLogin = new ControladorLogin(servicioLoginMock);
 
+		usuarioMock = new Usuario(1L,"test@test.com",100);
 
-		when(usuarioMock.getEmail()).thenReturn("dami@unlam.com");
-		when(usuarioMock.getMonedas()).thenReturn(100);
+//		when(usuarioMock.getEmail()).thenReturn("dami@unlam.com");
+//		when(usuarioMock.getMonedas()).thenReturn(100);
 	}
 
 	@Test
@@ -112,23 +112,20 @@ public class ControladorLoginTest {
 		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("Error al registrar el nuevo usuario"));
 	}
 
+	@Test
+	public void queAlLoguearseCorrectamente_debeMostrarseElHomeConSusDatosDeSession() {
+
+		when(sessionMock.getAttribute("id_usuario")).thenReturn(usuarioMock.getId());
+
+		when(servicioLoginMock.obtenerEmail(usuarioMock.getId())).thenReturn(usuarioMock.getEmail());
+		when(servicioLoginMock.obtenerMonedas(usuarioMock.getId())).thenReturn(usuarioMock.getMonedas());
+
+		ModelAndView mav = controladorLogin.irAHome(sessionMock);
+
+		assertThat(mav.getViewName(), is("home"));
+		assertThat(mav.getModel().get("email"), is("test@test.com"));
+		assertThat(mav.getModel().get("monedas"), is(100));
+	}
 
 
-//	@Test
-//	public void debeMostrarHomeSiUsuarioEnSesion() {
-//
-//		when(requestMock.getSession()).thenReturn(sessionMock);
-//		when(sessionMock.getAttribute("email")).thenReturn("test@test.com");
-//		when(sessionMock.getAttribute("monedas")).thenReturn(100);
-//
-//
-//		when(usuarioMock.getEmail()).thenReturn("dami@unlam.com");
-//		when(usuarioMock.getMonedas()).thenReturn(100);
-//
-//		ModelAndView mav = controladorLogin.irAHome(requestMock);
-//
-//		assertThat(mav.getViewName(), is("home"));
-//		assertThat(mav.getModel().get("email"), is("test@test.com"));
-//		assertThat(mav.getModel().get("monedas"), is(100));
-//	}
 }
