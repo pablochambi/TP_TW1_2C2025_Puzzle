@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Title</title>
+
+  <!-- Boostrap core css
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>-->
+
+  <link rel="stylesheet" th:href="@{/css/editar_perfil.css}"/>
+
+
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <div class="page-header">
+    <h1 class="page-title">⚙&#9889;&#65039; Editar Perfil</h1>
+    <p class="page-subtitle">Actualiza tu información personal</p>
+  </div>
+
+  <!-- Avatar Section -->
+  <div class="avatar-section">
+    <!-- Avatar Preview (izquierda) -->
+    <div class="avatar-preview">
+      <div class="avatar" id="avatarPreview">S</div>
+      <p class="avatar-label">Vista previa</p>
+    </div>
+
+    <!-- Avatar Selection (derecha) -->
+    <div class="avatar-selection">
+      <div class="selection-title">Seleccionar Avatar</div>
+
+      <div class="avatar-options">
+        <!-- Letra automática -->
+        <div class="avatar-option letter-avatar selected" data-type="letter" data-value="auto" title="Letra automática">
+          S
+        </div>
+
+        <div class="avatar-option" data-type="emoji" data-value="&#x1F46E;" title="Policía">&#x1F46E;</div>
+        <div class="avatar-option" data-type="emoji" data-value="&#x1F469;&#x200D;&#x1F692;" title="Bombero">&#x1F469;&#x200D;&#x1F692;</div>
+        <div class="avatar-option" data-type="emoji" data-value="&#x1F468;&#x200D;&#x1F4BC;" title="Profesional">&#x1F468;&#x200D;&#x1F4BC;</div>
+        <div class="avatar-option" data-type="emoji" data-value="&#x1F469;&#x200D;&#x1F4BB;" title="Desarrollador">&#x1F469;&#x200D;&#x1F4BB;</div>
+        <div class="avatar-option" data-type="emoji" data-value="&#x1F3AE;" title="Gamer">&#x1F3AE;</div>
+        <div class="avatar-option" data-type="emoji" data-value="&#x1F9E0;" title="Inteligente">&#x1F9E0;</div>
+        <div class="avatar-option" data-type="emoji" data-value="&#x2B50;" title="Estrella">&#x2B50;</div>
+        <div class="avatar-option" data-type="emoji" data-value="&#x1F3C6;" title="Campeón">&#x1F3C6;</div>
+
+
+      </div>
+
+      <!-- Upload personalizado -->
+      <div class="custom-avatar-section">
+        <label for="avatarUpload" class="upload-label">
+          📁 Subir imagen personalizada<br>
+          <small>(JPG, PNG, máx. 2MB)</small>
+        </label>
+        <input type="file" id="avatarUpload" class="upload-input" accept="image/jpeg,image/jpg,image/png" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Form -->
+  <div class="edit-form">
+    <form id="profileForm">
+      <!-- Username -->
+      <div class="form-group">
+        <label class="form-label" for="username">&#128100; Nombre de Usuario</label>
+        <input
+                type="text"
+                class="form-input"
+                id="username"
+                value="SudokuMaster2024"
+                placeholder="Ingresa tu nombre de usuario"
+                maxlength="30"
+                required
+        >
+        <div class="form-help">Cambiar el nombre actualizará el avatar de letra automáticamente</div>
+      </div>
+
+      <!-- Email (Fixed) -->
+      <div class="form-group">
+        <label class="fixed-label">📧 Email</label>
+        <div class="fixed-field">
+          jugador@email.com
+          <div class="fixed-note">El email no se puede modificar por seguridad</div>
+        </div>
+      </div>
+
+      <!-- Password (Editable) -->
+      <div class="form-group">
+        <label class="form-label" for="password">&#128274; Contraseña</label>
+        <div class="password-group">
+          <input
+                  type="password"
+                  class="form-input"
+                  id="password"
+                  value="password123"
+                  placeholder="Ingresa tu nueva contraseña"
+                  minlength="3"
+                  required
+          >
+          <button type="button" class="show-pass-btn" onclick="togglePassword()" title="Mostrar/Ocultar contraseña">
+            &#128065;&#65039;
+          </button>
+        </div>
+        <div class="form-help">Mínimo 3 caracteres. Incluye números y letras para mayor seguridad</div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="form-buttons">
+        <button type="submit" class="btn btn-success">
+          &#128190; Guardar Cambios
+        </button>
+        <a href="perfil.html" class="btn btn-secondary">
+          ← Volver al Perfil
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Referencias a elementos
+  const usernameInput = document.getElementById('username');
+  const passwordInput = document.getElementById('password');
+  const avatarPreview = document.getElementById('avatarPreview');
+  //const profileForm = document.getElementById('profileForm'); Desactivado para evitar errores al guardar
+  //const successMessage = document.getElementById('successMessage'); Mensaje de éxito desactivado
+  const avatarUpload = document.getElementById('avatarUpload'); //Subir imagen personalizada
+  const avatarOptions = document.querySelectorAll('.avatar-option'); //Opciones de avatar
+
+  // Valores originales
+  const originalUsername = 'SudokuMaster2024';
+  const originalPassword = 'password123';
+  let currentAvatarType = 'letter';
+  let currentAvatarValue = 'auto';
+
+  // Función para mostrar/ocultar contraseña
+  function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const showBtn = event.target;
+
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      showBtn.textContent = '\uD83D\uDD12'; // 🔒
+      showBtn.title = 'Ocultar contraseña';
+    } else {
+      passwordInput.type = 'password';
+      showBtn.textContent = '\uD83D\uDC41\uFE0F'; // 👁️
+      showBtn.title = 'Mostrar contraseña';
+    }
+
+  }
+
+  // Función para actualizar avatar según tipo seleccionado
+  function actualizarVistaPreviaDeAvatar() {
+    const username = usernameInput.value.trim();
+
+    if (currentAvatarType === 'letter') {
+      avatarPreview.className = 'avatar';
+      avatarPreview.innerHTML = username.charAt(0).toUpperCase() || 'U';
+      // Actualizar también el botón de letra automática
+      const letterOption = document.querySelector('[data-type="letter"]');
+      if (letterOption) {
+        letterOption.textContent = username.charAt(0).toUpperCase() || 'U';
+      }
+    } else if (currentAvatarType === 'emoji') {
+      avatarPreview.className = 'avatar emoji-avatar';
+      avatarPreview.innerHTML = currentAvatarValue;
+    } else if (currentAvatarType === 'image') {
+      avatarPreview.className = 'avatar';
+      avatarPreview.innerHTML = `<img src="${currentAvatarValue}" alt="Avatar personalizado">`;
+    }
+  }
+
+  // Función para seleccionar avatar
+  function selectAvatar(option) {
+    // Remover selección anterior
+    avatarOptions.forEach(opt => opt.classList.remove('selected'));
+    // Seleccionar nuevo
+    option.classList.add('selected');
+
+    currentAvatarType = option.dataset.type;
+    currentAvatarValue = option.dataset.value;
+
+    actualizarVistaPreviaDeAvatar();
+  }
+
+  // Escuchador para opciones de avatar
+  avatarOptions.forEach(option => {
+    option.addEventListener('click', () => selectAvatar(option));
+  });
+
+  // Subir imagen personalizada
+  avatarUpload.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validar tipo de archivo
+    if (!file.type.match(/^image\/(jpeg|jpg|png)$/)) {
+      alert('❌ Por favor selecciona una imagen JPG o PNG');
+      return;
+    }
+
+    // Validar tamaño (2MB máximo)
+    if (file.size > 2 * 1024 * 1024) {
+      alert('❌ La imagen debe ser menor a 2MB');
+      return;
+    }
+
+    // Leer archivo
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      // Crear opción personalizada si no existe
+      let customOption = document.querySelector('[data-type="image"]');
+      if (!customOption) {
+        customOption = document.createElement('div');
+        customOption.className = 'avatar-option';
+        customOption.setAttribute('data-type', 'image');
+        customOption.setAttribute('title', 'Imagen personalizada');
+        document.querySelector('.avatar-options').appendChild(customOption);
+      }
+
+      // Actualizar imagen
+      customOption.innerHTML = `<img src="${e.target.result}" alt="Personalizada">`;
+      customOption.setAttribute('data-value', e.target.result);
+
+      // Seleccionar automáticamente
+      currentAvatarType = 'image';
+      currentAvatarValue = e.target.result;
+
+      selectAvatar(customOption);
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Escuchador del input de username para actualizar avatar de letra
+  usernameInput.addEventListener('input', function() {
+    if (currentAvatarType === 'letter') {
+      actualizarVistaPreviaDeAvatar();
+    }
+  });
+
+  // Inicializar
+  actualizarVistaPreviaDeAvatar();
+
+</script>
+
+</body>
+</html>

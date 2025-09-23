@@ -83,11 +83,18 @@ public class ControladorLogin {
         return new ModelAndView("home", model);
     }
 
-    @RequestMapping(path = "/ver-perfil", method = RequestMethod.GET)
+    @RequestMapping(path = "/perfil", method = RequestMethod.GET)
     public ModelAndView irAPerfil() {
 //        ModelMap model = new ModelMap();
 //        model.put("usuario", new Usuario());
         return new ModelAndView("perfil");
+    }
+
+    @RequestMapping(path = "/perfil/editar", method = RequestMethod.GET)
+    public ModelAndView irAEditarPerfil() {
+//        ModelMap model = new ModelMap();
+//        model.put("usuario", new Usuario());
+        return new ModelAndView("editar-perfil");
     }
 
 
