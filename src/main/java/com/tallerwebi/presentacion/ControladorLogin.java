@@ -72,7 +72,7 @@ public class ControladorLogin {
     }
 
 
-    //Agregue en el modelo de la vista home: email y monedas. Estos datos se obtienen desde la session
+    //Agregue en el modelo de la vista home: email y monedas. Estos datos se obtienen desde el servicioLogin
     //La session se crea al validar el login
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
@@ -103,6 +103,7 @@ public class ControladorLogin {
     public ModelAndView inicio() {
         return new ModelAndView("redirect:/login");
     }
+
 
 }
 

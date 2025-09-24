@@ -36,8 +36,6 @@ public class ControladorLoginTest {
 
 		usuarioMock = new Usuario(1L,"test@test.com",100);
 
-//		when(usuarioMock.getEmail()).thenReturn("dami@unlam.com");
-//		when(usuarioMock.getMonedas()).thenReturn(100);
 	}
 
 	@Test
@@ -59,8 +57,7 @@ public class ControladorLoginTest {
 		// preparacion
 		Usuario usuarioEncontradoMock = mock(Usuario.class);
 		when(usuarioEncontradoMock.getRol()).thenReturn("ADMIN");
-		when(usuarioEncontradoMock.getEmail()).thenReturn("dami@unlam.com");
-		when(usuarioEncontradoMock.getMonedas()).thenReturn(100);
+		when(usuarioEncontradoMock.getEmail()).thenReturn("test@test.com");
 
 		when(requestMock.getSession()).thenReturn(sessionMock);
 		when(servicioLoginMock.consultarUsuario(anyString(), anyString())).thenReturn(usuarioEncontradoMock);
@@ -71,8 +68,6 @@ public class ControladorLoginTest {
 		// validacion
 		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/home"));
 		verify(sessionMock, times(1)).setAttribute("ROL", usuarioEncontradoMock.getRol());
-		verify(sessionMock, times(1)).setAttribute("email", usuarioEncontradoMock.getEmail());
-		verify(sessionMock, times(1)).setAttribute("monedas", usuarioEncontradoMock.getMonedas());
 	}
 
 	@Test
@@ -113,15 +108,18 @@ public class ControladorLoginTest {
 	}
 
 	@Test
-	public void queAlLoguearseCorrectamente_debeMostrarseElHomeConSusDatosDeSession() {
+	public void queAlLoguearseCorrectamente_debeMostrarseElHomeConLosDatosDeSession() {
 
+		// preparacion
 		when(sessionMock.getAttribute("id_usuario")).thenReturn(usuarioMock.getId());
 
 		when(servicioLoginMock.obtenerEmail(usuarioMock.getId())).thenReturn(usuarioMock.getEmail());
 		when(servicioLoginMock.obtenerMonedas(usuarioMock.getId())).thenReturn(usuarioMock.getMonedas());
 
+		// ejecucion
 		ModelAndView mav = controladorLogin.irAHome(sessionMock);
 
+		// validacion
 		assertThat(mav.getViewName(), is("home"));
 		assertThat(mav.getModel().get("email"), is("test@test.com"));
 		assertThat(mav.getModel().get("monedas"), is(100));

@@ -1,5 +1,7 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.Estadistica;
+import com.tallerwebi.dominio.ServicioEstadistica;
 import com.tallerwebi.dominio.ServicioLogin;
 import com.tallerwebi.dominio.Usuario;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,45 +17,49 @@ import static org.mockito.Mockito.*;
 
 public class ControladorPerfilTest {
 
-    private ControladorLogin controladorLogin;
+    private ControladorPerfil controladorPerfil;
     private Usuario usuarioMock;
-    private DatosLogin datosLoginMock;
+    private Estadistica estadisticaMock;
     private HttpServletRequest requestMock;
     private HttpSession sessionMock;
     private ServicioLogin servicioLoginMock;
-
+    private ServicioEstadistica servicioEstadisticasMock;
 
     @BeforeEach
     public void init(){
-        datosLoginMock = new DatosLogin("dami@unlam.com", "123");
-        usuarioMock = mock(Usuario.class);
+        usuarioMock = new Usuario(1L,"test@test.com",100);
+        estadisticaMock = new Estadistica();
         requestMock = mock(HttpServletRequest.class);
         sessionMock = mock(HttpSession.class);
         servicioLoginMock = mock(ServicioLogin.class);
-        controladorLogin = new ControladorLogin(servicioLoginMock);
 
-        usuarioMock = new Usuario(1L,"test@test.com",100);
+        servicioEstadisticasMock = mock(ServicioEstadistica.class);
+        controladorPerfil = new ControladorPerfil(servicioLoginMock,servicioEstadisticasMock);
     }
 
     @Test
-    public void queIrAlPerfilSeMuestreLosDatosDelUsuarioYSusEstadisticas() {
+    public void queIrAlPerfil_SeMuestreLosDatosDelUsuarioYSusEstadisticas() {
         // preparacion
-        when(requestMock.getSession()).thenReturn(sessionMock);
-        when(sessionMock.getAttribute("email")).thenReturn("test@test.com");
-        when(sessionMock.getAttribute("monedas")).thenReturn(100);
+        when(sessionMock.getAttribute("id_usuario")).thenReturn(usuarioMock.getId());
 
-        when(usuarioMock.getEmail()).thenReturn("dami@unlam.com");
-        when(usuarioMock.getMonedas()).thenReturn(100);
+        when(servicioLoginMock.obtenerEmail(usuarioMock.getId())).thenReturn(usuarioMock.getEmail());
+        when(servicioLoginMock.obtenerMonedas(usuarioMock.getId())).thenReturn(usuarioMock.getMonedas());
+        when(servicioLoginMock.obtenerNombreDeUsuario(usuarioMock.getId())).thenReturn(usuarioMock.getNombreUsuario());
+
+//        when(servicioEstadisticasMock.obtenerMejorTiempoDelNivelFacil(usuarioMock.getId())).thenReturn("00:50");
+//        when(servicioEstadisticasMock.obtenerPartidasGanadasDelNivelFacil(usuarioMock.getId())).thenReturn(5);
+//        when(servicioEstadisticasMock.obtenerPartidasJugadasDelNivelFacil(usuarioMock.getId())).thenReturn(7);
+//        when(servicioEstadisticasMock.obtenerPartidasPerdidas(usuarioMock.getId())).thenReturn(2);
+//        when(servicioEstadisticasMock.obtenerRachaDeVictoriasDelNivelFacil(usuarioMock.getId())).thenReturn(5);
 
         // ejecucion
+        ModelAndView mav = controladorPerfil.irAlPerfil(sessionMock);
 
-        ModelAndView mav = controladorLogin.irAHome(sessionMock);
-
-        //Validacion
+        // validacion
         assertThat(mav.getViewName(), is("home"));
         assertThat(mav.getModel().get("email"), is("test@test.com"));
+        assertThat(mav.getModel().get("nombre_usuario"), is("SudokuMaster24"));
         assertThat(mav.getModel().get("monedas"), is(100));
-
 
     }
 
