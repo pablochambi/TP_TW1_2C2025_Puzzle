@@ -113,6 +113,14 @@
             <version>${playwright.version}</version>
             <scope>test</scope>
         </dependency>
+
+
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version> <!-- Usa la versión deseada -->
+        </dependency>
         <!-- compile only, deployed container will provide this -->
         <!--
         <dependency>

@@ -15,11 +15,13 @@ public class Usuario {
     private String password;
     private String rol;
     private Boolean activo = false;
+    private Integer pistas;
 
     private Integer monedas;
 
     public Usuario() {
         this.monedas = 100;
+        this.pistas = 5;
     }
 
     public Integer getMonedas() {
@@ -66,5 +68,13 @@ public class Usuario {
 
     public void activar() {
         activo = true;
+    }
+
+    public Integer getPistas() {
+        return pistas;
+    }
+
+    public void setPistas(Integer pistas) {
+        this.pistas = pistas;
     }
 }

@@ -45,10 +45,12 @@
     <i class="fas fa-user"></i>
     <span>Ver Perfil</span>
   </div>
+  <a th:href="historial">
   <div class="accordion-option" onclick="viewHistory()">
     <i class="fas fa-history"></i>
     <span>Historial de Partidas</span>
   </div>
+  </a>
   <div class="accordion-option" onclick="viewStats()">
     <i class="fas fa-chart-line"></i>
     <span>Estadísticas</span>
@@ -72,7 +74,9 @@
     <h2 class="section-title">Selecciona tu Desafío</h2>
 
     <div class="game-grid">
-      <div class="game-card fade-in-up stagger-1" onclick="startGame('4x4')">
+<!--      <div class="game-card fade-in-up stagger-1" onclick="startGame('4x4')">-->
+      <a th:href="game">
+        <div class="game-card fade-in-up stagger-1" >
         <div class="game-icon">
           <i class="fas fa-border-all"></i>
         </div>
@@ -81,6 +85,7 @@
         <p style="color: var(--text-gray); margin-bottom: 1.5rem;">Perfecto para principiantes y calentamiento rápido.</p>
         <button class="play-btn">¡Jugar Ahora!</button>
       </div>
+      </a>
 
       <div class="game-card fade-in-up stagger-2" onclick="startGame('6x6')">
         <div class="game-icon">

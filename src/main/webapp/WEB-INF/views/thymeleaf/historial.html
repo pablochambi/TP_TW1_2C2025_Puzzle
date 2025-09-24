@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Historial Sudoku</title>
+  <link rel="stylesheet" th:href="@{/css/historial.css}"/>
+
+
+</head>
+<body>
+<div class="history-container">
+<!--  &lt;!&ndash; Título principal &ndash;&gt;-->
+<!--  <h1 class="page-title">🧩 Historial de Partidas</h1>-->
+
+<!--  &lt;!&ndash; Resumen de estadísticas &ndash;&gt;-->
+<!--  <div class="stats-summary">-->
+<!--    <div class="stat-card">-->
+<!--      <span class="stat-number">42</span>-->
+<!--      <div class="stat-label">Partidas Totales</div>-->
+<!--    </div>-->
+<!--    <div class="stat-card">-->
+<!--      <span class="stat-number">34</span>-->
+<!--      <div class="stat-label">Completadas</div>-->
+<!--    </div>-->
+<!--    <div class="stat-card">-->
+<!--      <span class="stat-number">12:34</span>-->
+<!--      <div class="stat-label">Mejor Tiempo</div>-->
+<!--    </div>-->
+<!--    <div class="stat-card">-->
+<!--      <span class="stat-number">81%</span>-->
+<!--      <div class="stat-label">Tasa Éxito</div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+  <!-- Filtros -->
+  <div class="filters">
+    <div class="filter-group">
+      <label for="difficulty">Dificultad:</label>
+      <select id="difficulty">
+        <option value="all">Todas</option>
+        <option value="easy">Fácil</option>
+        <option value="medium">Medio</option>
+        <option value="hard">Difícil</option>
+        <option value="expert">Experto</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="status">Estado:</label>
+      <select id="status">
+        <option value="all">Todos</option>
+        <option value="completed">Completadas</option>
+        <option value="abandoned">Abandonadas</option>
+      </select>
+    </div>
+  </div>
+
+
+
+<!--  <ul  th:each="producto : ${partidas}" >-->
+<!--    <li th:text="${producto.getFecha()}"></li>-->
+<!--    <li th:text="${producto.getPistasUsadas()}"></li>-->
+<!--    <li th:text="${producto.getCompletado()}"></li>-->
+<!--    <li th:text="${producto.getDificultad()}"></li>-->
+<!--    <li th:text="${producto.getTemporalizador()}"></li>-->
+<!--  </ul>-->
+
+
+
+
+
+  <!-- Lista de partidas -->
+  <div class="game-list">
+    <!-- Partida 1 -->
+
+    <ul  th:each="producto : ${partidas}" >
+    <div class="game-card completed">
+      <div class="game-header">
+        <div class="game-date" th:text="${producto.getFecha()}"> </div>
+        <div class="game-status status-abandoned" th:text="${producto.getCompletado()}" ></div>
+      </div>
+      <div class="game-details">
+        <div class="detail-item">
+          <div class="detail-icon icon-time">&#x23F1</div>
+          <div class="detail-content">
+            <div class="detail-label">Tiempo</div>
+            <div class="detail-value time-value" th:text="${producto.getTemporalizador()}"></div>
+          </div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-icon icon-difficulty">&#x2B50</div>
+          <div class="detail-content">
+            <div class="detail-label">Dificultad</div>
+            <div class="detail-value difficulty-medium" th:text="${producto.getDificultad()}"></div>
+          </div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-icon icon-hints">&#x1F4A1</div>
+          <div class="detail-content">
+            <div class="detail-label">Pistas Usadas</div>
+            <div class="detail-value hints-value" th:text="${producto.getPistasUsadas()}"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </ul>
+
+  </div>
+
+
+
+</div>
+</body>
+</html>

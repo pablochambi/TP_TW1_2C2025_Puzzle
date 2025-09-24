@@ -40,6 +40,7 @@ public class ControladorLogin {
             request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
             request.getSession().setAttribute("email", usuarioBuscado.getEmail());       //
             request.getSession().setAttribute("monedas", usuarioBuscado.getMonedas());  //
+            request.getSession().setAttribute("pistas", usuarioBuscado.getPistas());
             return new ModelAndView("redirect:/home");
 
         } else {
