@@ -9,7 +9,8 @@ import javax.transaction.Transactional;
 public class ServicioTiendaMonedasImpl implements ServicioTiendaMonedas {
 
 
+    @Override
+    public void efectuarCompra() {
 
-
-
+    }
 }

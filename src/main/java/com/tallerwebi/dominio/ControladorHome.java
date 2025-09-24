@@ -13,34 +13,31 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class ControladorHome {
 
+    private ServicioLogin servicioLogin;
+
+    public ControladorHome(ServicioLogin servicioLogin) {
+        this.servicioLogin = servicioLogin;
+    }
+
 
     @RequestMapping(path = "/tienda-monedas", method = RequestMethod.GET)
     public ModelAndView irATiendaMonedas(@ModelAttribute("usuario") Usuario usuario, HttpServletRequest request) {
+
 
         if (request.getSession().getAttribute("id_usuario") == null) {
             return new ModelAndView("redirect:/login");
         }
 
         ModelMap model = new ModelMap();
-        model.put("monedas", request.getSession().getAttribute("monedas"));
+        Integer monedas = servicioLogin.obtenerMonedas(usuario.getId());
+        model.put("monedas", monedas);
 
         return new ModelAndView("tienda-monedas", model);
 
 
     }
 
-//    @RequestMapping(path = "/home", method = RequestMethod.GET)
-//    public ModelAndView irAHome(HttpServletRequest request) {
-//
-//        if (request.getSession().getAttribute("email") == null) {
-//            return new ModelAndView("redirect:/login");
-//        }
-//
-//        ModelMap model = new ModelMap();
-//        model.put("email", request.getSession().getAttribute("email"));          //
-//        model.put("monedas", request.getSession().getAttribute("monedas"));    //
-//        return new ModelAndView("home", model);
-//    }
+
 
 
 }
