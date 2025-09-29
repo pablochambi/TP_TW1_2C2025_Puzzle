@@ -26,9 +26,15 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(Long id, String email,Integer monedas) {
+    public Usuario(Long id, String email, Integer monedas) {
         this.id = id;
         this.email = email;
+        this.monedas = monedas;
+    }
+    public Usuario(Long id, String email,String nombreUsuario, Integer monedas) {
+        this.id = id;
+        this.email = email;
+        this.nombreUsuario = nombreUsuario;
         this.monedas = monedas;
     }
 

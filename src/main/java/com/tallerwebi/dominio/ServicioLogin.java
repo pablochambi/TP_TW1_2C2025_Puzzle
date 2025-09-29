@@ -10,4 +10,6 @@ public interface ServicioLogin {
     Integer obtenerMonedas(Long id_usuario);
 
     String obtenerNombreDeUsuario(Long id_usuario);
+
+    String obtenerPassword(Long id_usuario);
 }

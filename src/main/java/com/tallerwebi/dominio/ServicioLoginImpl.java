@@ -43,7 +43,12 @@ public class ServicioLoginImpl implements ServicioLogin {
 
     @Override
     public String obtenerNombreDeUsuario(Long id_usuario) {
-        return "SudokuMaster25";
+        return "jugador123";
+    }
+
+    @Override
+    public String obtenerPassword(Long id_usuario) {
+        return "1234";
     }
 
 }

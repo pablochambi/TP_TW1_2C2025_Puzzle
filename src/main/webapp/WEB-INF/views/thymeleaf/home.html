@@ -12,6 +12,7 @@
   <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
 
   <link rel="stylesheet" th:href="@{/css/home.css}"/>
+
 </head>
 
 <body>
@@ -35,7 +36,8 @@
 
   <div class="navbar-right">
     <div class="user-section" onclick="toggleAccordion()">
-      <div class="user-name" th:text="${email}" > </div>
+      <div class="avatar" title="Avatar del usuario" id="userAvatar">J</div>
+      <div class="user-name" th:text="${nombreUsuario}" > </div>
       <i class="fas fa-chevron-down user-chevron"></i>
     </div>
   </div>
@@ -65,7 +67,7 @@
 <main class="main-content">
   <!-- WELCOME SECTION -->
   <section class="welcome-section fade-in-up">
-    <h1 class="welcome-title">¡Bienvenido de vuelta! 👋</h1>
+    <h1 class="welcome-title">¡Bienvenido de vuelta!</h1>
     <p class="welcome-subtitle">¿Listo para un nuevo desafío de Sudoku? Elige tu nivel y comienza a jugar.</p>
   </section>
 

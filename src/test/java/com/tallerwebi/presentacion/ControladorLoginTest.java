@@ -34,7 +34,6 @@ public class ControladorLoginTest {
 		servicioLoginMock = mock(ServicioLogin.class);
 		controladorLogin = new ControladorLogin(servicioLoginMock);
 
-		usuarioMock = new Usuario(1L,"test@test.com",100);
 
 	}
 
@@ -108,12 +107,15 @@ public class ControladorLoginTest {
 	}
 
 	@Test
-	public void queAlLoguearseCorrectamente_debeMostrarseElHomeConLosDatosDeSession() {
+	public void queAlLoguearseCorrectamente_debeMostrarseElHomeConLasMonedasYNombreDeUsuarioDelJugador() {
 
 		// preparacion
+
+		usuarioMock = new Usuario(1L,"test@test.com", "jugador123",100);
+
 		when(sessionMock.getAttribute("id_usuario")).thenReturn(usuarioMock.getId());
 
-		when(servicioLoginMock.obtenerEmail(usuarioMock.getId())).thenReturn(usuarioMock.getEmail());
+		when(servicioLoginMock.obtenerNombreDeUsuario(usuarioMock.getId())).thenReturn(usuarioMock.getNombreUsuario());
 		when(servicioLoginMock.obtenerMonedas(usuarioMock.getId())).thenReturn(usuarioMock.getMonedas());
 
 		// ejecucion
@@ -121,7 +123,7 @@ public class ControladorLoginTest {
 
 		// validacion
 		assertThat(mav.getViewName(), is("home"));
-		assertThat(mav.getModel().get("email"), is("test@test.com"));
+		assertThat(mav.getModel().get("nombreUsuario"), is("jugador123"));
 		assertThat(mav.getModel().get("monedas"), is(100));
 	}
 

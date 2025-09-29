@@ -195,7 +195,6 @@ body {
         grid-template-columns: repeat(3, 1fr);
     }
 
-
     .profile-header {
         text-align: left;
         display: flex;

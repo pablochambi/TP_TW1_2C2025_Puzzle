@@ -85,7 +85,7 @@ public class ControladorLogin {
 
         ModelMap model = new ModelMap();
 
-        model.put("email", servicioLogin.obtenerEmail(id_usuario)); //
+        model.put("nombreUsuario", servicioLogin.obtenerNombreDeUsuario(id_usuario)); //
         model.put("monedas", servicioLogin.obtenerMonedas(id_usuario)); //
 
 

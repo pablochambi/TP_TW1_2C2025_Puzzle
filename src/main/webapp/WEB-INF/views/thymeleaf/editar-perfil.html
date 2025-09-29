@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <title>Editar Perfil</title>
@@ -11,6 +11,50 @@
 
   <link rel="stylesheet" th:href="@{/css/editar_perfil.css}"/>
 
+  <style>
+    /* Estilos para el botón de tienda de avatares */
+    .avatar-section {
+      position: relative;
+    }
+
+    .tienda-avatar-btn {
+      position: absolute;
+      bottom: -35px;
+      right: 15px;
+      background: #1ca9ff;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 25px;
+      font-size: 20px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(79, 195, 247, 0.3);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      z-index: 10;
+    }
+
+    .tienda-avatar-btn:hover {
+      background: linear-gradient(135deg, #4FC3F7, #29B6F6);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(79, 195, 247, 0.4);
+      color: white;
+      text-decoration: none;
+    }
+
+    .tienda-avatar-btn:active {
+      transform: translateY(0px);
+      box-shadow: 0 2px 8px rgba(79, 195, 247, 0.3);
+    }
+
+    .tienda-icon {
+      font-size: 16px;
+    }
+  </style>
 
 </head>
 <body>
@@ -49,8 +93,6 @@
         <div class="avatar-option" data-type="emoji" data-value="&#x1F9E0;" title="Inteligente">&#x1F9E0;</div>
         <div class="avatar-option" data-type="emoji" data-value="&#x2B50;" title="Estrella">&#x2B50;</div>
         <div class="avatar-option" data-type="emoji" data-value="&#x1F3C6;" title="Campeón">&#x1F3C6;</div>
-
-
       </div>
 
       <!-- Upload personalizado -->
@@ -62,6 +104,12 @@
         <input type="file" id="avatarUpload" class="upload-input" accept="image/jpeg,image/jpg,image/png" />
       </div>
     </div>
+
+    <!-- Botón Tienda de Avatares -->
+    <a href="#" class="tienda-avatar-btn" title="Ver más avatares disponibles">
+      <span class="tienda-icon">&#x1F6D2;</span>
+      Tienda de Avatares
+    </a>
   </div>
 
   <!-- Edit Form -->
@@ -74,7 +122,7 @@
                 type="text"
                 class="form-input"
                 id="username"
-                value="SudokuMaster2024"
+                th:value="${nombreUsuario}"
                 placeholder="Ingresa tu nombre de usuario"
                 maxlength="30"
                 required
@@ -86,7 +134,7 @@
       <div class="form-group">
         <label class="fixed-label">&#x1F4E7; Email</label>
         <div class="fixed-field">
-          jugador@email.com
+          <span th:text="${email}"></span>
           <div class="fixed-note">El email no se puede modificar por seguridad</div>
         </div>
       </div>
@@ -99,7 +147,7 @@
                   type="password"
                   class="form-input"
                   id="password"
-                  value="password123"
+                  th:value="${password}"
                   placeholder="Ingresa tu nueva contraseña"
                   minlength="3"
                   required

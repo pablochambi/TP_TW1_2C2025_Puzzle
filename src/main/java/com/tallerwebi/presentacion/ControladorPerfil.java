@@ -10,14 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
 public class ControladorPerfil {
 
-    ServicioEstadistica servicioEstadistica;
-    ServicioLogin servicioLogin;
+    private final ServicioEstadistica servicioEstadistica;
+    private final ServicioLogin servicioLogin;
 
     @Autowired
     public ControladorPerfil(ServicioLogin servicioLogin, ServicioEstadistica servicioEstadistica) {
@@ -27,18 +26,12 @@ public class ControladorPerfil {
 
     @RequestMapping(path = "/perfil", method = RequestMethod.GET)
     public ModelAndView irAlPerfil(HttpSession session) {
-
-        if(!existeUsuarioEnSesion(session)){
+        Long idUsuario = obtenerIdUsuarioDeSesion(session);
+        if (idUsuario == null) {
             return new ModelAndView("redirect:/login");
         }
 
-        Long idUsuario = (Long) session.getAttribute("id_usuario");
-
-        ModelMap model = new ModelMap();
-        model.put("email", servicioLogin.obtenerEmail(idUsuario));
-        model.put("monedas", servicioLogin.obtenerMonedas(idUsuario));
-        model.put("nombreUsuario", servicioLogin.obtenerNombreDeUsuario(idUsuario));
-
+        ModelMap model = cargarDatosBasicosUsuario(idUsuario);
         model.put("estadisticasNivelFacil", servicioEstadistica.obtenerDeNivelFacil(idUsuario));
         model.put("estadisticasNivelMedio", servicioEstadistica.obtenerDeNivelMedio(idUsuario));
         model.put("estadisticasNivelDificil", servicioEstadistica.obtenerDeNivelDificil(idUsuario));
@@ -46,15 +39,28 @@ public class ControladorPerfil {
         return new ModelAndView("perfil", model);
     }
 
-    private boolean existeUsuarioEnSesion(HttpSession session) {
-        return session.getAttribute("id_usuario") != null;
-    }
-
-
     @RequestMapping(path = "/perfil/editar", method = RequestMethod.GET)
-    public ModelAndView irAEditarPerfil() {
-        return new ModelAndView("editar-perfil");
+    public ModelAndView irAEditarPerfil(HttpSession session) {
+        Long idUsuario = obtenerIdUsuarioDeSesion(session);
+        if (idUsuario == null) {
+            return new ModelAndView("redirect:/login");
+        }
+
+        ModelMap model = cargarDatosBasicosUsuario(idUsuario);
+        model.put("password", servicioLogin.obtenerPassword(idUsuario));
+        return new ModelAndView("editar_perfil2", model);
     }
 
+    // --- Métodos privados reutilizables ---
+    private Long obtenerIdUsuarioDeSesion(HttpSession session) {
+        return (Long) session.getAttribute("id_usuario");
+    }
 
+    private ModelMap cargarDatosBasicosUsuario(Long idUsuario) {
+        ModelMap model = new ModelMap();
+        model.put("email", servicioLogin.obtenerEmail(idUsuario));
+        model.put("monedas", servicioLogin.obtenerMonedas(idUsuario));
+        model.put("nombreUsuario", servicioLogin.obtenerNombreDeUsuario(idUsuario));
+        return model;
+    }
 }
