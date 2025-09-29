@@ -36,6 +36,7 @@ public class ControladorPerfilTest {
     @BeforeEach
     public void init(){
         usuarioMock = new Usuario(1L,"test@test.com","jugador123",100);
+        usuarioMock.setPassword("1234");
 
         estadisticasMock = new LinkedHashMap<>();
         estadisticasMock.put("Tamanio Sudoku","4x4");
@@ -66,16 +67,48 @@ public class ControladorPerfilTest {
         ModelAndView mav = controladorPerfil.irAlPerfil(sessionMock);
 
         // verificacion
-        assertThat(mav.getViewName(), is("perfil"));
-        assertThat(mav.getModel().get("email"), is("test@test.com"));
-        assertThat(mav.getModel().get("nombreUsuario"), is("jugador123"));
-        assertThat(mav.getModel().get("monedas"), is(100));
+        thenSeMuestranLosDatosBasicosDelUsuario(mav);
+        thenSeMuestranLasEstadisticasDelUsuario(mav);
+    }
 
+
+    @Test
+    public void queAlIrAEditarPerfil_SeMuestreLosDatosBasicosDelUsuarioYSuPassword() {
+        // preparacion
+        when(sessionMock.getAttribute("id_usuario")).thenReturn(usuarioMock.getId());
+
+        when(servicioLoginMock.obtenerEmail(usuarioMock.getId())).thenReturn(usuarioMock.getEmail());
+        when(servicioLoginMock.obtenerMonedas(usuarioMock.getId())).thenReturn(usuarioMock.getMonedas());
+        when(servicioLoginMock.obtenerNombreDeUsuario(usuarioMock.getId())).thenReturn(usuarioMock.getNombreUsuario());
+        when(servicioLoginMock.obtenerPassword(usuarioMock.getId())).thenReturn(usuarioMock.getPassword());
+
+        when(servicioEstadisticasMock.obtenerDeNivelFacil(usuarioMock.getId())).thenReturn(estadisticasMock);
+        when(servicioEstadisticasMock.obtenerDeNivelMedio(usuarioMock.getId())).thenReturn(estadisticasMock);
+        when(servicioEstadisticasMock.obtenerDeNivelDificil(usuarioMock.getId())).thenReturn(estadisticasMock);
+
+        // ejecucion
+        ModelAndView mav = controladorPerfil.irAEditarPerfil(sessionMock);
+
+        // verificacion
+        thenSeMuestranLosDatosBasicosDelUsuario(mav);
+        assertThat(mav.getModel().get("password"), is("1234"));
+    }
+
+    private void thenSeMuestranLosDatosBasicosDelUsuario(ModelAndView mav) {
+        assertThat(mav.getViewName(), is("editar_perfil"));
+        assertThat(mav.getModel().get("nombreUsuario"), is("jugador123"));
+        //assertThat(mav.getModel().get("avatar"), is("jugador123"));
+        assertThat(mav.getModel().get("email"), is("test@test.com"));
+        assertThat(mav.getModel().get("monedas"), is(100));
+    }
+
+    private void thenSeMuestranLasEstadisticasDelUsuario(ModelAndView mav) {
         assertThat(((Map<?, ?>) mav.getModel().get("estadisticasNivelFacil")).isEmpty(), is(false));
         assertThat(((Map<?, ?>) mav.getModel().get("estadisticasNivelMedio")).isEmpty(), is(false));
         assertThat(((Map<?, ?>) mav.getModel().get("estadisticasNivelDificil")).isEmpty(), is(false));
-
     }
+
+
 
 
 

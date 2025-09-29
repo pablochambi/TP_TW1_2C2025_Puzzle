@@ -155,9 +155,6 @@ function procesarCompra(avatar) {
         e.preventDefault();
         usarAvatarPremium(this);
     });
-
-    // Mostrar mensaje de éxito
-    mostrarMensajeExito(`¡Has comprado ${avatar.name}!`);
 }
 
 // Función para usar un avatar premium comprado
@@ -168,11 +165,8 @@ function usarAvatarPremium(btn) {
     currentAvatarType = 'premium';
     currentAvatarValue = `http://localhost:8080/spring/img/${avatarImg}`;
 
-    avatarPreview.className = 'avatar';
+    avatarPreview.className = 'avatar avatar-premium';
     avatarPreview.innerHTML = `<img src="${currentAvatarValue}" alt="Avatar Premium">`;
-
-    // Mensaje de confirmación
-    mostrarMensajeExito('¡Avatar actualizado en la vista previa!');
 }
 
 // Función para mostrar mensaje de éxito

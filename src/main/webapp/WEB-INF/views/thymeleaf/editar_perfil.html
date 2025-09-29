@@ -15,7 +15,6 @@
   <!-- Header -->
   <div class="page-header">
     <h1 class="page-title">Editar Perfil</h1>
-    <p class="page-subtitle">Actualiza tu información personal</p>
   </div>
 
   <!-- Nav Tabs -->
@@ -73,12 +72,6 @@
             </div>
             <div class="form-help">Mínimo 3 caracteres. Incluye números y letras para mayor seguridad</div>
           </div>
-
-          <!-- Buttons -->
-          <div class="form-buttons">
-            <button type="submit" class="btn btn-success">💾 Guardar Cambios</button>
-            <a th:href="@{/perfil}" class="btn btn-secondary">&larr; Volver al Perfil</a>
-          </div>
         </form>
       </div>
     </div>
@@ -101,6 +94,14 @@
         <!-- Avatares Gratis -->
         <h4 class="selection-title">&#x1F3A8; Avatares Gratis</h4>
         <div class="avatar-options mb-4">
+
+          <!-- Avatar por defecto con inicial del nombre de usuario -->
+          <div class="avatar-option letter-avatar selected"
+               data-type="letter"
+               th:data-value="${#strings.substring(nombreUsuario,0,1)}"
+               th:text="${#strings.substring(nombreUsuario,0,1)}"
+               title="Por defecto">
+          </div>
           <div class="avatar-option" data-type="emoji" data-value="&#x1F600;">&#x1F600;</div>
           <div class="avatar-option" data-type="emoji" data-value="&#x1F47E;">&#x1F47E;</div>
           <div class="avatar-option" data-type="emoji" data-value="&#x26BD;">&#x26BD;</div>
@@ -123,7 +124,9 @@
               <button class="btn btn-success comprar-btn mt-2 d-flex align-items-center justify-content-center"
                       data-avatar-name="Hombre Elegante"
                       data-avatar-price="50"
-                      data-avatar-img="emoji_hombre.png">
+                      data-avatar-img="emoji_hombre.png"
+                      data-type ="avatar-premium">
+
                 <img th:src="@{/img/coin_master.png}" alt="Moneda" class="me-2">
                 <span>50</span>
               </button>
@@ -181,12 +184,22 @@
               </button>
             </div>
           </div>
+
         </div>
 
       </div>
     </div>
-
   </div>
+
+
+  <!-- Buttons -->
+  <div class="form-buttons">
+<!--    <button type="submit" class="btn btn-success">&#x1F4BE; Guardar Cambios</button>-->
+    <a th:href="@{/perfil}" class="btn btn-success">&#x1F4BE; Guardar Cambios</a>
+    <a th:href="@{/perfil}" class="btn btn-secondary">&larr; Volver al Perfil</a>
+  </div>
+
+
 </div>
 
 <!-- Modal de Confirmación de Compra -->

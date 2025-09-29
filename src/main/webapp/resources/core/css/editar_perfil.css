@@ -31,7 +31,7 @@ body {
 .page-header {
     text-align: center;
     margin-bottom: 40px;
-    padding: 20px;
+    /*padding: 20px;*/
 }
 .page-title {
     font-size: 32px;
@@ -193,6 +193,11 @@ body {
     background: transparent;
     font-size: 64px;
 }
+.avatar.avatar-premium {
+    background: transparent;
+    font-size: 64px;
+}
+
 .avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
 
 /* Avatar Section (pantalla principal de selección) */
@@ -223,6 +228,13 @@ body {
     gap: 10px;
     margin-bottom: 16px;
 }
+.avatar-option.letter-avatar {
+    background: #2196f3;
+    color: #fff;
+    font-weight: 700;
+    font-size: 20px;
+}
+
 .avatar-option {
     width: 50px;
     height: 50px;

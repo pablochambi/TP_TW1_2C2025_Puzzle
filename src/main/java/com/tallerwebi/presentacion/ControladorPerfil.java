@@ -48,7 +48,7 @@ public class ControladorPerfil {
 
         ModelMap model = cargarDatosBasicosUsuario(idUsuario);
         model.put("password", servicioLogin.obtenerPassword(idUsuario));
-        return new ModelAndView("editar_perfil2", model);
+        return new ModelAndView("editar_perfil", model);
     }
 
     // --- Métodos privados reutilizables ---
