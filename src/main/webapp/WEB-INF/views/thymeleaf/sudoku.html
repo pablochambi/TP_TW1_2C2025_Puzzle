@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Sudoku</title>
+  <style>
+    table { border-collapse: collapse; margin: 20px auto; }
+    td {
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      border: 1px solid #000;
+      font-size: 18px;
+    }
+    .empty { color: gray; }
+  </style>
+</head>
+<body>
+<h2 style="text-align:center;">Sudoku Puzzle</h2>
+
+<table>
+  <tbody>
+  <tr th:each="row : ${sudoku.puzzle}">
+    <td th:each="cell : ${row}"
+        th:text="${cell != null ? cell : ''}"
+        th:classappend="${cell == null} ? 'empty'">
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<h2 style="text-align:center;">Sudoku Solution</h2>
+
+<table>
+  <tbody>
+  <tr th:each="row : ${sudoku.solution}">
+    <td th:each="cell : ${row}" th:text="${cell}"></td>
+  </tr>
+  </tbody>
+</table>
+
+</body>
+</html>
