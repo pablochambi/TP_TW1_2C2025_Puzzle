@@ -69,45 +69,39 @@
     <p class="welcome-subtitle">¿Listo para un nuevo desafío de Sudoku? Elige tu nivel y comienza a jugar.</p>
   </section>
 
-  <!-- GAME SELECTION -->
-  <section class="game-section">
-    <h2 class="section-title">Selecciona tu Desafío</h2>
-
-    <div class="game-grid">
-<!--      <div class="game-card fade-in-up stagger-1" onclick="startGame('4x4')">-->
-      <a th:href="game">
-        <div class="game-card fade-in-up stagger-1" >
-        <div class="game-icon">
-          <i class="fas fa-border-all"></i>
+  <div class="menu" id="menu">
+    <a th:href="@{sudoku}" style="text-decoration: none" >
+      <div class="difficulty-card easy" >
+        <div class="difficulty-header">
+          <span class="difficulty-icon">&#x1F331</span>
+          <span class="difficulty-title">Principiante</span>
         </div>
-        <h3 class="game-title">Sudoku 4×4</h3>
-        <span class="game-difficulty difficulty-easy">Fácil</span>
-        <p style="color: var(--text-gray); margin-bottom: 1.5rem;">Perfecto para principiantes y calentamiento rápido.</p>
-        <button class="play-btn">¡Jugar Ahora!</button>
+        <div class="difficulty-desc">Ideal para comenzar.</div>
       </div>
-      </a>
+    </a>
 
-      <div class="game-card fade-in-up stagger-2" onclick="startGame('6x6')">
-        <div class="game-icon">
-          <i class="fas fa-th-large"></i>
-        </div>
-        <h3 class="game-title">Sudoku 6×6</h3>
-        <span class="game-difficulty difficulty-medium">Medio</span>
-        <p style="color: var(--text-gray); margin-bottom: 1.5rem;">El equilibrio perfecto entre desafío y diversión.</p>
-        <button class="play-btn">¡Jugar Ahora!</button>
-      </div>
 
-      <div class="game-card fade-in-up stagger-3" onclick="startGame('9x9')">
-        <div class="game-icon">
-          <i class="fas fa-th"></i>
-        </div>
-        <h3 class="game-title">Sudoku 9×9</h3>
-        <span class="game-difficulty difficulty-hard">Difícil</span>
-        <p style="color: var(--text-gray); margin-bottom: 1.5rem;">El clásico desafío para mentes expertas.</p>
-        <button class="play-btn">¡Jugar Ahora!</button>
+
+
+    <a th:href="@{sudoku}" style="text-decoration: none"><div class="difficulty-card medium" href="/sudoku">
+      <div class="difficulty-header">
+        <span class="difficulty-icon">&#x26A1</span>
+        <span class="difficulty-title">Intermedio</span>
       </div>
+      <div class="difficulty-desc">Un desafío equilibrado.</div>
+    </div></a>
+
+
+
+    <a th:href="@{sudoku}" style="text-decoration: none"><div class="difficulty-card hard" href="/sudoku">
+      <div class="difficulty-header">
+        <span class="difficulty-icon">&#x1F525</span>
+        <span class="difficulty-title">Experto</span>
+      </div>
+      <div class="difficulty-desc">Para maestros del Sudoku.</div>
+    </div></a>
+
     </div>
-  </section>
 </main>
 
 <script th:src="@{/js/home.js}"></script>

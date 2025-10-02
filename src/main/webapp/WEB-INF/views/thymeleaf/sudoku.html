@@ -2,41 +2,76 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Sudoku</title>
-  <style>
-    table { border-collapse: collapse; margin: 20px auto; }
-    td {
-      width: 40px;
-      height: 40px;
-      text-align: center;
-      border: 1px solid #000;
-      font-size: 18px;
-    }
-    .empty { color: gray; }
-  </style>
+  <link rel="stylesheet" th:href="@{/css/sudoku.css}"/>
 </head>
 <body>
-<h2 style="text-align:center;">Sudoku Puzzle</h2>
+<h2>Sudoku Puzzle</h2>
 
-<table>
+<table id="puzzle">
   <tbody>
-  <tr th:each="row : ${sudoku.puzzle}">
-    <td th:each="cell : ${row}"
-        th:text="${cell != null ? cell : ''}"
-        th:classappend="${cell == null} ? 'empty'">
+  <tr th:each="row, rowStat : ${sudoku.puzzle}">
+    <td th:each="cell, colStat : ${row}"
+        th:utext="${cell != null ? cell : '<input type=&quot;text&quot; maxlength=&quot;1&quot;>'}">
     </td>
   </tr>
   </tbody>
 </table>
 
-<h2 style="text-align:center;">Sudoku Solution</h2>
+<div style="text-align:center; margin: 20px;">
+  <button onclick="checkSolution()">Verificar</button>
+  <button onclick="showSolution()">Mostrar solución</button>
+</div>
 
-<table>
+<h2>Sudoku Solution</h2>
+
+<table id="solution" style="display:none;">
   <tbody>
   <tr th:each="row : ${sudoku.solution}">
     <td th:each="cell : ${row}" th:text="${cell}"></td>
   </tr>
   </tbody>
 </table>
+
+<script>
+  function checkSolution() {
+    const puzzleTable = document.getElementById("puzzle");
+    const solutionTable = document.getElementById("solution");
+
+    const puzzleRows = puzzleTable.getElementsByTagName("tr");
+    const solutionRows = solutionTable.getElementsByTagName("tr");
+
+    let allCorrect = true;
+
+    for (let i = 0; i < puzzleRows.length; i++) {
+      const puzzleCells = puzzleRows[i].getElementsByTagName("td");
+      const solutionCells = solutionRows[i].getElementsByTagName("td");
+
+      for (let j = 0; j < puzzleCells.length; j++) {
+        const input = puzzleCells[j].querySelector("input");
+        if (input) {
+          const userValue = input.value;
+          const correctValue = solutionCells[j].innerText;
+          if (userValue === correctValue) {
+            input.classList.add("correct");
+            input.classList.remove("wrong");
+          } else {
+            input.classList.add("wrong");
+            input.classList.remove("correct");
+            allCorrect = false;
+          }
+        }
+      }
+    }
+
+    if (allCorrect) {
+      alert("🎉 ¡Felicitaciones! Sudoku resuelto correctamente 🎉");
+    }
+  }
+
+  function showSolution() {
+    document.getElementById("solution").style.display = "table";
+  }
+</script>
 
 </body>
 </html>

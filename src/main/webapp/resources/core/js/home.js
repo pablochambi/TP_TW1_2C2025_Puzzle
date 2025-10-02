@@ -76,3 +76,4 @@ function animateCoins() {
     const currentValue = parseInt(coinsElement.textContent.replace(',', ''));
     // This could be used to animate coin changes
 }
+
