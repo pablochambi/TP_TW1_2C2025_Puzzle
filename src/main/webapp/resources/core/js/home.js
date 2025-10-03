@@ -19,25 +19,25 @@ document.addEventListener('click', function(event) {
 });
 
 // Menu functions
-function viewProfile() {
-    alert('Abriendo perfil de usuario...');
-    closeAccordion();
-}
-
-function viewHistory() {
-    alert('Abriendo historial de partidas...');
-    closeAccordion();
-}
-
-function viewStats() {
-    alert('Abriendo estadísticas...');
-    closeAccordion();
-}
-
-function logout() {
-    alert('Cerrando sesión...');
-    closeAccordion();
-}
+// function viewProfile() {
+//     alert('Abriendo perfil de usuario...');
+//     closeAccordion();
+// }
+//
+// function viewHistory() {
+//     alert('Abriendo historial de partidas...');
+//     closeAccordion();
+// }
+//
+// function viewStats() {
+//     alert('Abriendo estadísticas...');
+//     closeAccordion();
+// }
+//
+// function logout() {
+//     alert('Cerrando sesión...');
+//     closeAccordion();
+// }
 
 function closeAccordion() {
     const accordion = document.querySelector('.accordion-menu');

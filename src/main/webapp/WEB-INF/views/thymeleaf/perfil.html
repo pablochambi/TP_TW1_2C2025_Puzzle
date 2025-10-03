@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Perfil</title>
+    <!-- Bootstrap core css -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css}"/>
+    <!-- CSS personalizado -->
+    <style>
+        /* Estilo general para todos los íconos */
+        .icon {
+            font-size: calc(1em + 2px); /* 2px más grande */
+            color: #000;               /* Negro */
+            -webkit-text-stroke: 1px #000; /* Trazo grueso */
+        }
+
+    </style>
+    <link rel="stylesheet" th:href="@{/css/perfil.css}"/>
+</head>
+<body>
+<div class="container">
+    <!-- Header del Perfil -->
+    <div class="profile-header">
+        <div class="avatar" title="Avatar del usuario" id="userAvatar">S</div>
+        <div class="profile-info">
+            <div class="profile-name" id="profileName">
+                <span th:text="${nombreUsuario}"></span>
+            </div>
+            <div class="profile-email">
+                <span th:text="${email}"></span>
+            </div>
+        </div>
+       <a class="btn btn-primary edit-profile-btn" th:href="@{/perfil/editar}">
+            <i class="bi bi-gear-fill "></i> Editar Perfil
+        </a>
+    </div>
+
+    <!-- Estadísticas por Nivel -->
+    <div class="stats-section">
+        <h2 class="section-title">
+            <i class="bi bi-bar-chart-fill"></i> Estadísticas por Nivel
+        </h2>
+
+        <div class="stats-grid">
+            <!-- Fácil (4x4) -->
+             <div class="stats-card">
+                <div class="card-title">
+                    <span><i class="bi bi-circle-fill text-success"></i> Fácil (4x4)</span>
+                </div>
+
+                 <div th:each="entry : ${estadisticasNivelFacil}" class="stat-item">
+                     <span class="stat-label" th:switch="${entry.key}">
+                         <i th:case="'Mejor tiempo'" class="bi bi-stopwatch icon"></i>
+                         <i th:case="'Partidas jugadas'" class="bi bi-controller icon"></i>
+                         <i th:case="'Partidas ganadas'" class="bi bi-trophy-fill icon"></i>
+                         <i th:case="'Partidas perdidas'" class="bi bi-x-circle icon"></i>
+                         <i th:case="'Porcentaje de victorias'" class="bi bi-graph-up icon"></i>
+                         <i th:case="'Mejor racha de victorias'" class="bi bi-fire icon"></i>
+                         <i th:case="*"
+                               class="bi bi-question-circle icon"></i> <!-- fallback -->
+                         <span th:text="${entry.key}"></span>
+                     </span>
+                     <span class="stat-value" th:text="${entry.value}"></span>
+                 </div>
+             </div>
+
+            <!-- Medio (6x6) -->
+            <div class="stats-card">
+                <div class="card-title">
+                    <span><i class="bi bi-circle-fill text-warning"></i> Medio (6x6)</span>
+                </div>
+                <div th:each="entry : ${estadisticasNivelMedio}" class="stat-item">
+                    <span class="stat-label" th:switch="${entry.key}">
+                        <i th:case="'Mejor tiempo'" class="bi bi-stopwatch icon"></i>
+                        <i th:case="'Partidas jugadas'" class="bi bi-controller icon"></i>
+                        <i th:case="'Partidas ganadas'" class="bi bi-trophy-fill icon"></i>
+                        <i th:case="'Partidas perdidas'" class="bi bi-x-circle icon"></i>
+                        <i th:case="'Porcentaje de victorias'" class="bi bi-graph-up icon"></i>
+                        <i th:case="'Mejor racha de victorias'" class="bi bi-fire icon"></i>
+                        <i th:case="*" class="bi bi-question-circle icon"></i>
+                        <span th:text="${entry.key}"></span>
+                    </span>
+                    <span class="stat-value" th:text="${entry.value}"></span>
+                </div>
+            </div>
+
+            <!-- Difícil (9x9) -->
+            <div class="stats-card">
+                <div class="card-title">
+                    <span><i class="bi bi-circle-fill text-danger"></i> Difícil (9x9)</span>
+                </div>
+                <div th:each="entry : ${estadisticasNivelDificil}" class="stat-item">
+                    <span class="stat-label" th:switch="${entry.key}">
+                        <i th:case="'Mejor tiempo'" class="bi bi-stopwatch icon"></i>
+                        <i th:case="'Partidas jugadas'" class="bi bi-controller icon"></i>
+                        <i th:case="'Partidas ganadas'" class="bi bi-trophy-fill icon"></i>
+                        <i th:case="'Partidas perdidas'" class="bi bi-x-circle icon"></i>
+                        <i th:case="'Porcentaje de victorias'" class="bi bi-graph-up icon"></i>
+                        <i th:case="'Mejor racha de victorias'" class="bi bi-fire icon"></i>
+                        <i th:case="*" class="bi bi-question-circle icon"></i>
+                        <span th:text="${entry.key}"></span>
+                    </span>
+                    <span class="stat-value" th:text="${entry.value}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<script th:src="@{/js/perfil.js}"></script>
+</body>
+</html>

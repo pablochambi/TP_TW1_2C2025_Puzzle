@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class ControladorLogin {
@@ -41,6 +42,8 @@ public class ControladorLogin {
             request.getSession().setAttribute("email", usuarioBuscado.getEmail());       //
             request.getSession().setAttribute("monedas", usuarioBuscado.getMonedas());  //
             request.getSession().setAttribute("pistas", usuarioBuscado.getPistas());
+            request.getSession().setAttribute("id_usuario", usuarioBuscado.getId()); //
+
             return new ModelAndView("redirect:/home");
 
         } else {
@@ -71,22 +74,39 @@ public class ControladorLogin {
         return new ModelAndView("nuevo-usuario", model);
     }
 
-    @RequestMapping(path = "/home", method = RequestMethod.GET)
-    public ModelAndView irAHome(HttpServletRequest request) {
 
-        if (request.getSession().getAttribute("email") == null) {
+    //Agregue en el modelo de la vista home: email y monedas. Estos datos se obtienen desde el servicioLogin
+    //La session se crea al validar el login
+
+    @RequestMapping(path = "/home", method = RequestMethod.GET)
+    public ModelAndView irAHome(HttpSession session) {
+
+        if (session.getAttribute("id_usuario") == null) {
             return new ModelAndView("redirect:/login");
         }
+        Long id_usuario = (Long) session.getAttribute("id_usuario");
 
         ModelMap model = new ModelMap();
-        model.put("email",request.getSession().getAttribute("email") );          //
-        model.put("monedas", request.getSession().getAttribute("monedas") );    //
+
+        model.put("nombreUsuario", servicioLogin.obtenerNombreDeUsuario(id_usuario)); //
+        model.put("monedas", servicioLogin.obtenerMonedas(id_usuario)); //
+
+
         return new ModelAndView("home", model);
     }
+
+    @RequestMapping(path = "/cerrar_sesion", method = RequestMethod.GET)
+    public ModelAndView cerrarSession(HttpSession session) {
+        session.invalidate();
+        return new ModelAndView("redirect:/login");
+    }
+
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public ModelAndView inicio() {
         return new ModelAndView("redirect:/login");
     }
+
+
 }
 

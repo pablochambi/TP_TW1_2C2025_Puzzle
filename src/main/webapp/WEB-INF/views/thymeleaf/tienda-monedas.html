@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Tienda de Monedas - Sudoku Master</title>
+
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/tienda-monedas.css}"/>
+</head>
+
+<body>
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="navbar-left">
+        <div class="logo-section">
+            <a th:href="@{/home}" class="logo-icon">
+
+                <i class="fas fa-th"></i>
+
+            </a>
+        </div>
+    </div>
+
+    <div class="breadcrumb-section">
+        <span class="breadcrumb-item">Tienda</span>
+        <i class="fas fa-chevron-right"></i>
+        <span class="breadcrumb-item current">Monedas</span>
+    </div>
+
+    <div class="navbar-right">
+        <div class="coins-display">
+            <i class="fas fa-coins"></i>
+            <span class="user-coins" th:text="${monedas}"></span>
+
+        </div>
+    </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main-content">
+    <div class="coins-grid">
+        <!-- Paquete 1 -->
+        <div class="coin-package">
+            <div class="coin-amount">1000 <i class="fas fa-coins"></i></div>
+            <div class="coin-icon">
+                <img th:src="@{/img/coins_1.png}"  alt="Primer paquete">
+            </div>
+            <button class="buy-btn">1 USD</button>
+        </div>
+
+        <!-- Paquete 2 -->
+        <div class="coin-package">
+            <div class="coin-amount">2200 <i class="fas fa-coins"></i></div>
+            <div class="coin-icon">
+                <img th:src="@{/img/coins_2.png}" alt="Segundo paquete">
+            </div>
+            <button class="buy-btn">2 USD</button>
+        </div>
+
+        <!-- Paquete 3 -->
+        <div class="coin-package">
+            <div class="coin-amount">7000 <i class="fas fa-coins"></i></div>
+            <div class="coin-icon">
+                <img th:src="@{/img/coins_3.png}" alt="Tercer paquete">
+            </div>
+            <button class="buy-btn">6 USD</button>
+        </div>
+
+        <!-- Paquete 4 -->
+        <div class="coin-package">
+            <div class="coin-amount">11000 <i class="fas fa-coins"></i></div>
+            <div class="coin-icon">
+                <img th:src="@{/img/coins_4.png}" alt="Cuarto paquete">
+            </div>
+            <button class="buy-btn">9 USD</button>
+        </div>
+
+        <!-- Paquete 5 -->
+        <div class="coin-package">
+            <div class="coin-amount">25000 <i class="fas fa-coins"></i></div>
+            <div class="coin-icon">
+                <img th:src="@{/img/coins_5.png}" alt="Quinto paquete">
+            </div>
+            <button class="buy-btn">20 USD</button>
+        </div>
+
+        <!-- Paquete 6 -->
+        <div class="coin-package">
+            <div class="coin-amount">150000 <i class="fas fa-coins"></i></div>
+            <div class="coin-icon">
+                <img th:src="@{/img/coins_6.png}" alt="Sexto paquete">
+            </div>
+            <button class="buy-btn">100 USD</button>
+        </div>
+    </div>
+</main>
+
+<!-- Bootstrap JS -->
+<script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+</body>
+</html>

@@ -12,16 +12,19 @@
   <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
 
   <link rel="stylesheet" th:href="@{/css/home.css}"/>
+
 </head>
 
 <body>
 <!-- NAVBAR -->
 <nav class="navbar">
   <div class="navbar-left">
-    <div class="coins-display">
+
+    <a th:href="@{/tienda-monedas}" class="coins-display">
       <i class="fas fa-coins"></i>
       <span class="user-name" th:text="${monedas}" > </span>
-    </div>
+        </a>
+
   </div>
 
   <div class="logo-section">
@@ -33,7 +36,8 @@
 
   <div class="navbar-right">
     <div class="user-section" onclick="toggleAccordion()">
-      <div class="user-name" th:text="${email}" > </div>
+      <div class="avatar" title="Avatar del usuario" id="userAvatar">J</div>
+      <div class="user-name" th:text="${nombreUsuario}" > </div>
       <i class="fas fa-chevron-down user-chevron"></i>
     </div>
   </div>
@@ -41,23 +45,21 @@
 
 <!-- ACCORDION MENU -->
 <div class="accordion-menu">
-  <div class="accordion-option" onclick="viewProfile()">
+  <div class="accordion-option">
     <i class="fas fa-user"></i>
-    <span>Ver Perfil</span>
+    <a th:href="@{/perfil}" >Ver Perfil</a>
   </div>
-  <a th:href="historial">
-  <div class="accordion-option" onclick="viewHistory()">
+  <div class="accordion-option" >
     <i class="fas fa-history"></i>
     <span>Historial de Partidas</span>
   </div>
-  </a>
-  <div class="accordion-option" onclick="viewStats()">
+  <div class="accordion-option" >
     <i class="fas fa-chart-line"></i>
     <span>Estadísticas</span>
   </div>
-  <div class="accordion-option" onclick="logout()">
+  <div class="accordion-option" >
     <i class="fas fa-sign-out-alt"></i>
-    <span>Cerrar Sesión</span>
+    <a th:href="@{/cerrar_sesion}" >Cerrar Session</a>
   </div>
 </div>
 
@@ -65,7 +67,7 @@
 <main class="main-content">
   <!-- WELCOME SECTION -->
   <section class="welcome-section fade-in-up">
-    <h1 class="welcome-title">¡Bienvenido de vuelta! 👋</h1>
+    <h1 class="welcome-title">¡Bienvenido de vuelta!</h1>
     <p class="welcome-subtitle">¿Listo para un nuevo desafío de Sudoku? Elige tu nivel y comienza a jugar.</p>
   </section>
 

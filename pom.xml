@@ -145,6 +145,20 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.12.0</version> <!-- Usa la versión deseada -->
         </dependency>
+
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>bootstrap-icons</artifactId>
+            <version>1.11.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.38</version>
+            <scope>provided</scope>
+        </dependency>
+
+
         <!-- compile only, deployed container will provide this -->
         <!--
         <dependency>

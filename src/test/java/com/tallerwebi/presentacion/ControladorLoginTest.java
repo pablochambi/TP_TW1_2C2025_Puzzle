@@ -5,7 +5,6 @@ import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,8 +35,6 @@ public class ControladorLoginTest {
 		controladorLogin = new ControladorLogin(servicioLoginMock);
 
 
-		when(usuarioMock.getEmail()).thenReturn("dami@unlam.com");
-		when(usuarioMock.getMonedas()).thenReturn(100);
 	}
 
 	@Test
@@ -59,8 +56,7 @@ public class ControladorLoginTest {
 		// preparacion
 		Usuario usuarioEncontradoMock = mock(Usuario.class);
 		when(usuarioEncontradoMock.getRol()).thenReturn("ADMIN");
-		when(usuarioEncontradoMock.getEmail()).thenReturn("dami@unlam.com");
-		when(usuarioEncontradoMock.getMonedas()).thenReturn(100);
+		when(usuarioEncontradoMock.getEmail()).thenReturn("test@test.com");
 
 		when(requestMock.getSession()).thenReturn(sessionMock);
 		when(servicioLoginMock.consultarUsuario(anyString(), anyString())).thenReturn(usuarioEncontradoMock);
@@ -71,8 +67,6 @@ public class ControladorLoginTest {
 		// validacion
 		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/home"));
 		verify(sessionMock, times(1)).setAttribute("ROL", usuarioEncontradoMock.getRol());
-		verify(sessionMock, times(1)).setAttribute("email", usuarioEncontradoMock.getEmail());
-		verify(sessionMock, times(1)).setAttribute("monedas", usuarioEncontradoMock.getMonedas());
 	}
 
 	@Test
@@ -112,23 +106,26 @@ public class ControladorLoginTest {
 		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("Error al registrar el nuevo usuario"));
 	}
 
-
-
 	@Test
-	public void debeMostrarHomeSiUsuarioEnSesion() {
+	public void queAlLoguearseCorrectamente_debeMostrarseElHomeConLasMonedasYNombreDeUsuarioDelJugador() {
 
-		when(requestMock.getSession()).thenReturn(sessionMock);
-		when(sessionMock.getAttribute("email")).thenReturn("test@test.com");
-		when(sessionMock.getAttribute("monedas")).thenReturn(100);
+		// preparacion
 
+		usuarioMock = new Usuario(1L,"test@test.com", "jugador123",100);
 
-		when(usuarioMock.getEmail()).thenReturn("dami@unlam.com");
-		when(usuarioMock.getMonedas()).thenReturn(100);
+		when(sessionMock.getAttribute("id_usuario")).thenReturn(usuarioMock.getId());
 
-		ModelAndView mav = controladorLogin.irAHome(requestMock);
+		when(servicioLoginMock.obtenerNombreDeUsuario(usuarioMock.getId())).thenReturn(usuarioMock.getNombreUsuario());
+		when(servicioLoginMock.obtenerMonedas(usuarioMock.getId())).thenReturn(usuarioMock.getMonedas());
 
+		// ejecucion
+		ModelAndView mav = controladorLogin.irAHome(sessionMock);
+
+		// validacion
 		assertThat(mav.getViewName(), is("home"));
-		assertThat(mav.getModel().get("email"), is("test@test.com"));
+		assertThat(mav.getModel().get("nombreUsuario"), is("jugador123"));
 		assertThat(mav.getModel().get("monedas"), is(100));
 	}
+
+
 }

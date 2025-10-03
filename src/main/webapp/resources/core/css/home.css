@@ -79,6 +79,21 @@ body {
     margin-right: 0.5rem;
 }
 
+.avatar {
+    width: 50px;
+    height: 50px;
+    background: #2196f3;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1px 10px 1px 1px;
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
 .user-chevron {
     transition: var(--transition);
     font-size: 0.8rem;
@@ -120,18 +135,22 @@ body {
     padding: 0.5rem 1rem;
     border-radius: 25px;
     color: white;
+    text-decoration: none;
     font-weight: 600;
     box-shadow: var(--shadow);
     transition: var(--transition);
+   
 }
 
 .coins-display:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-hover);
+    text-decoration: none;
 }
 
 .coins-display i {
     margin-right: 0.5rem;
+    text-decoration: none;
 }
 
 /* ACCORDION MENU */
