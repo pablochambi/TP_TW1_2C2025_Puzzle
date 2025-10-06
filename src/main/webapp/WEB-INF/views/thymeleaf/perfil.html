@@ -4,10 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Perfil</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!-- Bootstrap core css -->
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css}"/>
+
+    <link rel="stylesheet" th:href="@{/css/home.css}"/>
     <!-- CSS personalizado -->
     <style>
         /* Estilo general para todos los íconos */
@@ -21,16 +26,19 @@
     <link rel="stylesheet" th:href="@{/css/perfil.css}"/>
 </head>
 <body>
+
+<div th:replace="fragment/header :: header"></div>
+
 <div class="container">
     <!-- Header del Perfil -->
     <div class="profile-header">
-        <div class="avatar" title="Avatar del usuario" id="userAvatar">S</div>
+        <div class="avatar" title="Avatar del usuario" id="userAvatar" th:text="${usuario.nombreUsuario.substring(0,1).toUpperCase()}">S</div>
         <div class="profile-info">
             <div class="profile-name" id="profileName">
-                <span th:text="${nombreUsuario}"></span>
+                <span th:text="${usuario.nombreUsuario}"></span>
             </div>
             <div class="profile-email">
-                <span th:text="${email}"></span>
+                <span th:text="${usuario.email}"></span>
             </div>
         </div>
        <a class="btn btn-primary edit-profile-btn" th:href="@{/perfil/editar}">
@@ -45,10 +53,10 @@
         </h2>
 
         <div class="stats-grid">
-            <!-- Fácil (4x4) -->
+            <!-- Fácil -->
              <div class="stats-card">
                 <div class="card-title">
-                    <span><i class="bi bi-circle-fill text-success"></i> Fácil (4x4)</span>
+                    <span><i class="bi bi-circle-fill text-success"></i> Fácil</span>
                 </div>
 
                  <div th:each="entry : ${estadisticasNivelFacil}" class="stat-item">
@@ -67,10 +75,10 @@
                  </div>
              </div>
 
-            <!-- Medio (6x6) -->
+            <!-- Medio -->
             <div class="stats-card">
                 <div class="card-title">
-                    <span><i class="bi bi-circle-fill text-warning"></i> Medio (6x6)</span>
+                    <span><i class="bi bi-circle-fill text-warning"></i> Medio</span>
                 </div>
                 <div th:each="entry : ${estadisticasNivelMedio}" class="stat-item">
                     <span class="stat-label" th:switch="${entry.key}">
@@ -87,10 +95,10 @@
                 </div>
             </div>
 
-            <!-- Difícil (9x9) -->
+            <!-- Difícil -->
             <div class="stats-card">
                 <div class="card-title">
-                    <span><i class="bi bi-circle-fill text-danger"></i> Difícil (9x9)</span>
+                    <span><i class="bi bi-circle-fill text-danger"></i> Difícil</span>
                 </div>
                 <div th:each="entry : ${estadisticasNivelDificil}" class="stat-item">
                     <span class="stat-label" th:switch="${entry.key}">
@@ -111,7 +119,7 @@
 
 
 </div>
-
+<script th:src="@{/js/home.js}"></script>
 <script th:src="@{/js/perfil.js}"></script>
 </body>
 </html>

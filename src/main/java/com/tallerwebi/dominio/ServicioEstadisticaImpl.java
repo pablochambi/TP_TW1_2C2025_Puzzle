@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -10,39 +11,62 @@ import java.util.Map;
 @Service
 public class ServicioEstadisticaImpl implements ServicioEstadistica {
 
-   @Override
-   public Map<String, String> obtenerDeNivelFacil(Long idUsuario) {
 
-       Map<String, String> listaDeNivelFacil = new LinkedHashMap<>();
-       listaDeNivelFacil.put("Mejor tiempo", "00:45");
-       listaDeNivelFacil.put("Partidas ganadas", "3");
-       listaDeNivelFacil.put("Partidas jugadas", "4");
-       listaDeNivelFacil.put("Partidas perdidas", "1");
-       listaDeNivelFacil.put("Porcentaje de victorias", "75%");
-       listaDeNivelFacil.put("Mejor racha de victorias", "3");
+    private RepositorioPartida repositorioPartida;
 
-       return listaDeNivelFacil;
-   }
+    @Autowired
+    public ServicioEstadisticaImpl(RepositorioPartida repositorioPartida) {
+        this.repositorioPartida = repositorioPartida;
+    }
 
-   public Map<String, String> obtenerDeNivelMedio(Long idUsuario) {
-       Map<String, String> listaDeNivelMedio = new LinkedHashMap<>();
-       listaDeNivelMedio.put("Mejor tiempo", "01:50");
-       listaDeNivelMedio.put("Partidas ganadas", "2");
-       listaDeNivelMedio.put("Partidas jugadas", "3");
-       listaDeNivelMedio.put("Partidas perdidas", "1");
-       listaDeNivelMedio.put("Porcentaje de victorias", "66%");
-       listaDeNivelMedio.put("Mejor racha de victorias", "2");
-       return listaDeNivelMedio;
-   }
+    @Override
+    public Map<String, Object> obtenerEstadisticas(Long id_usuario, String nivel) {
+        List<Partida> partidas = repositorioPartida.obtenerPartidasPorUsuarioYNivel(id_usuario, nivel);
 
-   public Map<String, String> obtenerDeNivelDificil(Long idUsuario) {
-       Map<String, String> listaDeNivelDificil = new LinkedHashMap<>();
-       listaDeNivelDificil.put("Mejor tiempo", "--:--");
-       listaDeNivelDificil.put("Partidas ganadas", "0");
-       listaDeNivelDificil.put("Partidas jugadas", "0");
-       listaDeNivelDificil.put("Partidas perdidas", "0");
-       listaDeNivelDificil.put("Porcentaje de victorias", "--");
-       listaDeNivelDificil.put("Mejor racha de victorias", "0");
-       return listaDeNivelDificil;
-   }
+        if (partidas.isEmpty()) {
+            Map<String, Object> estadisticas = new LinkedHashMap<>();
+            estadisticas.put("Mejor tiempo", "--:--");
+            estadisticas.put("Partidas jugadas", 0);
+            estadisticas.put("Partidas ganadas", 0);
+            estadisticas.put("Partidas perdidas", 0);
+            estadisticas.put("Porcentaje de victorias", "0%");
+            estadisticas.put("Mejor racha de victorias", 0);
+
+            return estadisticas;
+        }
+
+        return calcularEstadisticas(partidas);
+    }
+
+    private Map<String, Object> calcularEstadisticas(List<Partida> partidas) {
+        Map<String, Object> estadisticas = new LinkedHashMap<>();
+
+        int partidasJugadas = partidas.size();
+        int partidasGanadas = (int) partidas.stream().filter(Partida::getGanada).count();
+        int partidasPerdidas = partidasJugadas - partidasGanadas;
+        double porcentajeVictoria = (partidasGanadas * 100.0) / partidasJugadas;
+
+
+        estadisticas.put("Mejor tiempo", "--:--");
+        estadisticas.put("Partidas jugadas", partidasJugadas);
+        estadisticas.put("Partidas ganadas", partidasGanadas);
+        estadisticas.put("Partidas perdidas", partidasPerdidas);
+        estadisticas.put("Porcentaje de Victoria", String.format("%.1f%%", porcentajeVictoria));
+        estadisticas.put("Mejor racha de victorias", 0);
+
+        return estadisticas;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

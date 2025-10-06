@@ -6,5 +6,8 @@ public interface RepositorioUsuario {
     void guardar(Usuario usuario);
     Usuario buscar(String email);
     void modificar(Usuario usuario);
+
+    void actualizarPerfil(Long id, String nuevoNombre, String nuevaUrl, String nuevaPassword);
+    Usuario obtenerUsuarioPorId(Long id_usuario);
 }
 

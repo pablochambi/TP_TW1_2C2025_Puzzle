@@ -66,7 +66,7 @@ public class ControladorHomeTest {
 
             when(requestMock.getSession()).thenReturn(sessionMock);
             when(sessionMock.getAttribute("id_usuario")).thenReturn(usuario.getId());
-            when(servicioLoginMock.obtenerMonedas(usuario.getId())).thenReturn(100);
+            when(servicioLoginMock.consultarUsuarioPorId(usuario.getId())).thenReturn(usuario);
 
             ModelAndView resultado = controladorHome.irATiendaMonedas(usuario, requestMock);
 

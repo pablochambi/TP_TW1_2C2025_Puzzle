@@ -32,23 +32,13 @@ public class ServicioLoginImpl implements ServicioLogin {
     }
 
     @Override
-    public String obtenerEmail(Long id_usuario) {
-        return "test@test.com";
+    public void actualizarPerfil(Long idUsuario, String nuevoNombre, String nuevoAvatar, String nuevaPassword) {
+        repositorioUsuario.actualizarPerfil(idUsuario, nuevoNombre, nuevoAvatar, nuevaPassword);
     }
 
     @Override
-    public Integer obtenerMonedas(Long id_usuario) {
-        return 100;
-    }
-
-    @Override
-    public String obtenerNombreDeUsuario(Long id_usuario) {
-        return "jugador123";
-    }
-
-    @Override
-    public String obtenerPassword(Long id_usuario) {
-        return "1234";
+    public Usuario consultarUsuarioPorId(Long id_usuario) {
+        return repositorioUsuario.obtenerUsuarioPorId(id_usuario);
     }
 
 }

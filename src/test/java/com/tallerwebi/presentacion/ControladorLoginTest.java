@@ -28,12 +28,11 @@ public class ControladorLoginTest {
 	@BeforeEach
 	public void init(){
 		datosLoginMock = new DatosLogin("dami@unlam.com", "123");
-		usuarioMock = mock(Usuario.class);
+		usuarioMock = new Usuario(1L,"test@test.com", "jugador123",100);
 		requestMock = mock(HttpServletRequest.class);
 		sessionMock = mock(HttpSession.class);
 		servicioLoginMock = mock(ServicioLogin.class);
 		controladorLogin = new ControladorLogin(servicioLoginMock);
-
 
 	}
 
@@ -111,20 +110,18 @@ public class ControladorLoginTest {
 
 		// preparacion
 
-		usuarioMock = new Usuario(1L,"test@test.com", "jugador123",100);
-
 		when(sessionMock.getAttribute("id_usuario")).thenReturn(usuarioMock.getId());
 
-		when(servicioLoginMock.obtenerNombreDeUsuario(usuarioMock.getId())).thenReturn(usuarioMock.getNombreUsuario());
-		when(servicioLoginMock.obtenerMonedas(usuarioMock.getId())).thenReturn(usuarioMock.getMonedas());
+		when(servicioLoginMock.consultarUsuarioPorId(usuarioMock.getId())).thenReturn(usuarioMock);
 
 		// ejecucion
 		ModelAndView mav = controladorLogin.irAHome(sessionMock);
 
 		// validacion
 		assertThat(mav.getViewName(), is("home"));
-		assertThat(mav.getModel().get("nombreUsuario"), is("jugador123"));
-		assertThat(mav.getModel().get("monedas"), is(100));
+		assertThat(((Usuario)mav.getModel().get("usuario")).getNombreUsuario(), is("jugador123"));
+		assertThat(((Usuario)mav.getModel().get("usuario")).getMonedas(), is(100));
+
 	}
 
 

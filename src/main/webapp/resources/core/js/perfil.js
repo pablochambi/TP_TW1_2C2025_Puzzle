@@ -38,3 +38,16 @@ function observarCambioDelUserName() {
 document.addEventListener('DOMContentLoaded', function() {
     observarCambioDelUserName();
 });
+
+
+window.addEventListener("pageshow", function (event) {
+    // Si la página fue cargada desde caché del navegador (por "Atrás")
+    if (event.persisted) {
+        window.location.reload(); // fuerza recarga desde el servidor
+    }
+});
+
+window.addEventListener("popstate", function (event) {
+    // Cuando el usuario presiona la flecha "Atrás"
+    window.location.href = "/spring/home"; // <-- Cambiá por tu controlador real
+});

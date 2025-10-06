@@ -4,12 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Editar Perfil</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
   <!-- Bootstrap -->
   <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css}"/>
+
   <link rel="stylesheet" th:href="@{/css/editar_perfil.css}"/>
+  <link rel="stylesheet" th:href="@{/css/home.css}"/>
 </head>
 <body>
+<div th:replace="fragment/header :: header"></div>
+
 <div class="container">
 
   <!-- Header -->
@@ -17,36 +25,38 @@
     <h1 class="page-title">Editar Perfil</h1>
   </div>
 
-  <!-- Nav Tabs -->
-  <ul class="nav nav-tabs" id="perfilTabs" role="tablist">
-    <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="datos-tab" data-bs-toggle="tab"
-              data-bs-target="#datos" type="button" role="tab"
-              aria-controls="datos" aria-selected="true">
-        Datos de Usuario
-      </button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link" id="avatar-tab" data-bs-toggle="tab"
-              data-bs-target="#avatar" type="button" role="tab"
-              aria-controls="avatar" aria-selected="false">
-        Avatar
-      </button>
-    </li>
-  </ul>
+  <!-- FORMULARIO ÚNICO -->
+  <form id="perfilForm" method="post" th:action="@{/perfil/guardar}">
 
-  <!-- Tab Content -->
-  <div class="tab-content" id="perfilTabsContent">
+    <!-- Nav Tabs -->
+    <ul class="nav nav-tabs" id="perfilTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="datos-tab" data-bs-toggle="tab"
+                data-bs-target="#datos" type="button" role="tab"
+                aria-controls="datos" aria-selected="true">
+          Datos de Usuario
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="avatar-tab" data-bs-toggle="tab"
+                data-bs-target="#avatar" type="button" role="tab"
+                aria-controls="avatar" aria-selected="false">
+          Avatar
+        </button>
+      </li>
+    </ul>
 
-    <!-- TAB 1: DATOS DE USUARIO -->
-    <div class="tab-pane fade show active" id="datos" role="tabpanel" aria-labelledby="datos-tab">
-      <div class="edit-form mt-4">
-        <form id="profileForm">
+    <!-- Tab Content -->
+    <div class="tab-content" id="perfilTabsContent">
+
+      <!-- TAB 1: DATOS DE USUARIO -->
+      <div class="tab-pane fade show active" id="datos" role="tabpanel" aria-labelledby="datos-tab">
+        <div class="edit-form mt-4">
           <!-- Username -->
           <div class="form-group">
-            <label class="form-label" for="username">👤 Nombre de Usuario</label>
-            <input type="text" class="form-input" id="username"
-                   th:value="${nombreUsuario}"
+            <label class="form-label" for="username">&#x1F464; Nombre de Usuario</label>
+            <input type="text" class="form-input" id="username" name="nombreUsuario"
+                   th:value="${usuario.nombreUsuario}"
                    placeholder="Ingresa tu nombre de usuario"
                    maxlength="30" required>
             <div class="form-help">Cambiar el nombre actualizará el avatar de letra automáticamente</div>
@@ -56,7 +66,7 @@
           <div class="form-group">
             <label class="fixed-label">&#x1F4E7; Email</label>
             <div class="fixed-field">
-              <span th:text="${email}"></span>
+              <span th:text="${usuario.email}"></span>
               <div class="fixed-note">El email no se puede modificar por seguridad</div>
             </div>
           </div>
@@ -65,140 +75,139 @@
           <div class="form-group">
             <label class="form-label" for="password">&#128274; Contraseña</label>
             <div class="password-group">
-              <input type="password" class="form-input" id="password"
-                     th:value="${password}" placeholder="Ingresa tu nueva contraseña"
+              <input type="password" class="form-input" id="password" name="password"
+                     th:value="${usuario.password}" placeholder="Ingresa tu nueva contraseña"
                      minlength="3" required>
               <button type="button" class="show-pass-btn" onclick="togglePassword()">&#128065;&#65039;</button>
             </div>
             <div class="form-help">Mínimo 3 caracteres. Incluye números y letras para mayor seguridad</div>
           </div>
-        </form>
+        </div>
+      </div>
+
+      <!-- TAB 2: AVATAR -->
+      <div class="tab-pane fade" id="avatar" role="tabpanel" aria-labelledby="avatar-tab">
+        <div class="mt-4">
+
+          <!-- Card de Vista Previa -->
+          <div class="card text-center mb-4">
+            <div class="card-body">
+              <div class="avatar" id="avatarPreview">S</div>
+              <div class="caja-datos">
+                <h5 class="card-title" th:text="${usuario.nombreUsuario}">Usuario</h5>
+                <p class="card-text" th:text="${usuario.email}">usuario@mail.com</p>
+              </div>
+              <input type="hidden" name="avatarSeleccionado" id="avatarSeleccionadoInput" value="" />
+            </div>
+          </div>
+
+          <!-- Avatares Gratis -->
+          <h4 class="selection-title">&#x1F3A8; Avatares Gratis</h4>
+          <div class="avatar-options mb-4">
+
+            <!-- Avatar por defecto con inicial del nombre de usuario -->
+            <div class="avatar-option letter-avatar selected"
+                 data-type="letter"
+                 th:data-value="${#strings.substring(usuario.nombreUsuario,0,1)}"
+                 th:text="${#strings.substring(usuario.nombreUsuario,0,1)}"
+                 title="Por defecto">
+            </div>
+            <div class="avatar-option" data-type="emoji" data-value="&#x1F600;">&#x1F600;</div>
+            <div class="avatar-option" data-type="emoji" data-value="&#x1F47E;">&#x1F47E;</div>
+            <div class="avatar-option" data-type="emoji" data-value="&#x26BD;">&#x26BD;</div>
+            <div class="avatar-option" data-type="emoji" data-value="&#x1F46E;" title="Policía">&#x1F46E;</div>
+            <div class="avatar-option" data-type="emoji" data-value="&#x1F469;&#x200D;&#x1F692;" title="Bombero">&#x1F469;&#x200D;&#x1F692;</div>
+            <div class="avatar-option" data-type="emoji" data-value="&#x1F468;&#x200D;&#x1F4BC;" title="Profesional">&#x1F468;&#x200D;&#x1F4BC;</div>
+            <div class="avatar-option" data-type="emoji" data-value="&#x1F469;&#x200D;&#x1F4BB;" title="Desarrollador">&#x1F469;&#x200D;&#x1F4BB;</div>
+            <div class="avatar-option" data-type="emoji" data-value="&#x1F3AE;" title="Gamer">&#x1F3AE;</div>
+            <div class="avatar-option" data-type="emoji" data-value="&#x1F9E0;" title="Inteligente">&#x1F9E0;</div>
+            <div class="avatar-option" data-type="emoji" data-value="&#x2B50;" title="Estrella">&#x2B50;</div>
+            <div class="avatar-option" data-type="emoji" data-value="&#x1F3C6;" title="Campeón">&#x1F3C6;</div>
+          </div>
+
+          <!-- Avatares de Pago -->
+          <h4 class="selection-title">&#x1F48E; Avatares Premium</h4>
+          <div class="row g-3">
+            <div class="col-6 col-md-3">
+              <div class="card text-center p-2">
+                <img th:src="@{/img/emoji_hombre.png}" class="card-img-top" alt="Premium 1" data-avatar-src="@{/img/emoji_hombre.png}">
+                <button type="button" class="btn btn-success comprar-btn mt-2 d-flex align-items-center justify-content-center"
+                        data-avatar-name="Hombre Elegante"
+                        data-avatar-price="50"
+                        data-avatar-img="emoji_hombre.png"
+                        data-type ="avatar-premium">
+
+                  <img th:src="@{/img/coin_master.png}" alt="Moneda" class="me-2">
+                  <span>50</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+              <div class="card text-center p-2">
+                <img th:src="@{/img/emoji_potter.png}" class="card-img-top" alt="Premium 2" data-avatar-src="@{/img/emoji_potter.png}">
+                <button type="button" class="btn btn-success comprar-btn mt-2 d-flex align-items-center justify-content-center"
+                        data-avatar-name="Mago Potter"
+                        data-avatar-price="50"
+                        data-avatar-img="emoji_potter.png">
+                  <img th:src="@{/img/coin_master.png}" alt="Moneda" class="me-2">
+                  <span>50</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+              <div class="card text-center p-2">
+                <img th:src="@{/img/emojis_detective.png}" class="card-img-top" alt="Premium 3" data-avatar-src="@{/img/emojis_detective.png}">
+                <button type="button" class="btn btn-success comprar-btn mt-2 d-flex align-items-center justify-content-center"
+                        data-avatar-name="Detective"
+                        data-avatar-price="50"
+                        data-avatar-img="emojis_detective.png">
+                  <img th:src="@{/img/coin_master.png}" alt="Moneda" class="me-2">
+                  <span>50</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+              <div class="card text-center p-2">
+                <img th:src="@{/img/emojis_pirata.png}" class="card-img-top" alt="Premium 4" data-avatar-src="@{/img/emojis_pirata.png}">
+                <button type="button" class="btn btn-success comprar-btn mt-2 d-flex align-items-center justify-content-center"
+                        data-avatar-name="Pirata"
+                        data-avatar-price="50"
+                        data-avatar-img="emojis_pirata.png">
+                  <img th:src="@{/img/coin_master.png}" alt="Moneda" class="me-2">
+                  <span>50</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+              <div class="card text-center p-2">
+                <img th:src="@{/img/emojis_mago.png}" class="card-img-top" alt="Premium 5" data-avatar-src="@{/img/emojis_mago.png}">
+                <button type="button" class="btn btn-success comprar-btn mt-2 d-flex align-items-center justify-content-center"
+                        data-avatar-name="Mago Místico"
+                        data-avatar-price="50"
+                        data-avatar-img="emojis_mago.png">
+                  <img th:src="@{/img/coin_master.png}" alt="Moneda" class="me-2">
+                  <span>50</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
       </div>
     </div>
 
-    <!-- TAB 2: AVATAR -->
-    <div class="tab-pane fade" id="avatar" role="tabpanel" aria-labelledby="avatar-tab">
-      <div class="mt-4">
-
-        <!-- Card de Vista Previa -->
-        <div class="card text-center mb-4">
-          <div class="card-body">
-            <div class="avatar" id="avatarPreview">S</div>
-            <div class="caja-datos">
-              <h5 class="card-title" th:text="${nombreUsuario}">Usuario</h5>
-              <p class="card-text" th:text="${email}">usuario@mail.com</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Avatares Gratis -->
-        <h4 class="selection-title">&#x1F3A8; Avatares Gratis</h4>
-        <div class="avatar-options mb-4">
-
-          <!-- Avatar por defecto con inicial del nombre de usuario -->
-          <div class="avatar-option letter-avatar selected"
-               data-type="letter"
-               th:data-value="${#strings.substring(nombreUsuario,0,1)}"
-               th:text="${#strings.substring(nombreUsuario,0,1)}"
-               title="Por defecto">
-          </div>
-          <div class="avatar-option" data-type="emoji" data-value="&#x1F600;">&#x1F600;</div>
-          <div class="avatar-option" data-type="emoji" data-value="&#x1F47E;">&#x1F47E;</div>
-          <div class="avatar-option" data-type="emoji" data-value="&#x26BD;">&#x26BD;</div>
-          <div class="avatar-option" data-type="emoji" data-value="&#x1F46E;" title="Policía">&#x1F46E;</div>
-          <div class="avatar-option" data-type="emoji" data-value="&#x1F469;&#x200D;&#x1F692;" title="Bombero">&#x1F469;&#x200D;&#x1F692;</div>
-          <div class="avatar-option" data-type="emoji" data-value="&#x1F468;&#x200D;&#x1F4BC;" title="Profesional">&#x1F468;&#x200D;&#x1F4BC;</div>
-          <div class="avatar-option" data-type="emoji" data-value="&#x1F469;&#x200D;&#x1F4BB;" title="Desarrollador">&#x1F469;&#x200D;&#x1F4BB;</div>
-          <div class="avatar-option" data-type="emoji" data-value="&#x1F3AE;" title="Gamer">&#x1F3AE;</div>
-          <div class="avatar-option" data-type="emoji" data-value="&#x1F9E0;" title="Inteligente">&#x1F9E0;</div>
-          <div class="avatar-option" data-type="emoji" data-value="&#x2B50;" title="Estrella">&#x2B50;</div>
-          <div class="avatar-option" data-type="emoji" data-value="&#x1F3C6;" title="Campeón">&#x1F3C6;</div>
-        </div>
-
-        <!-- Avatares de Pago -->
-        <h4 class="selection-title">&#x1F48E; Avatares Premium</h4>
-        <div class="row g-3">
-          <div class="col-6 col-md-3">
-            <div class="card text-center p-2">
-              <img th:src="@{/img/emoji_hombre.png}" class="card-img-top" alt="Premium 1" data-avatar-src="@{/img/emoji_hombre.png}">
-              <button class="btn btn-success comprar-btn mt-2 d-flex align-items-center justify-content-center"
-                      data-avatar-name="Hombre Elegante"
-                      data-avatar-price="50"
-                      data-avatar-img="emoji_hombre.png"
-                      data-type ="avatar-premium">
-
-                <img th:src="@{/img/coin_master.png}" alt="Moneda" class="me-2">
-                <span>50</span>
-              </button>
-            </div>
-          </div>
-
-          <div class="col-6 col-md-3">
-            <div class="card text-center p-2">
-              <img th:src="@{/img/emoji_potter.png}" class="card-img-top" alt="Premium 2" data-avatar-src="@{/img/emoji_potter.png}">
-              <button class="btn btn-success comprar-btn mt-2 d-flex align-items-center justify-content-center"
-                      data-avatar-name="Mago Potter"
-                      data-avatar-price="50"
-                      data-avatar-img="emoji_potter.png">
-                <img th:src="@{/img/coin_master.png}" alt="Moneda" class="me-2">
-                <span>50</span>
-              </button>
-            </div>
-          </div>
-
-          <div class="col-6 col-md-3">
-            <div class="card text-center p-2">
-              <img th:src="@{/img/emojis_detective.png}" class="card-img-top" alt="Premium 3" data-avatar-src="@{/img/emojis_detective.png}">
-              <button class="btn btn-success comprar-btn mt-2 d-flex align-items-center justify-content-center"
-                      data-avatar-name="Detective"
-                      data-avatar-price="50"
-                      data-avatar-img="emojis_detective.png">
-                <img th:src="@{/img/coin_master.png}" alt="Moneda" class="me-2">
-                <span>50</span>
-              </button>
-            </div>
-          </div>
-
-          <div class="col-6 col-md-3">
-            <div class="card text-center p-2">
-              <img th:src="@{/img/emojis_pirata.png}" class="card-img-top" alt="Premium 4" data-avatar-src="@{/img/emojis_pirata.png}">
-              <button class="btn btn-success comprar-btn mt-2 d-flex align-items-center justify-content-center"
-                      data-avatar-name="Pirata"
-                      data-avatar-price="50"
-                      data-avatar-img="emojis_pirata.png">
-                <img th:src="@{/img/coin_master.png}" alt="Moneda" class="me-2">
-                <span>50</span>
-              </button>
-            </div>
-          </div>
-
-          <div class="col-6 col-md-3">
-            <div class="card text-center p-2">
-              <img th:src="@{/img/emojis_mago.png}" class="card-img-top" alt="Premium 5" data-avatar-src="@{/img/emojis_mago.png}">
-              <button class="btn btn-success comprar-btn mt-2 d-flex align-items-center justify-content-center"
-                      data-avatar-name="Mago Místico"
-                      data-avatar-price="50"
-                      data-avatar-img="emojis_mago.png">
-                <img th:src="@{/img/coin_master.png}" alt="Moneda" class="me-2">
-                <span>50</span>
-              </button>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
+    <!-- Buttons -->
+    <div class="form-buttons">
+      <button type="submit" class="btn btn-success">&#x1F4BE; Guardar Cambios</button>
+      <a th:href="@{/perfil}" class="btn btn-secondary">&larr; Volver al Perfil</a>
     </div>
-  </div>
 
-
-  <!-- Buttons -->
-  <div class="form-buttons">
-<!--    <button type="submit" class="btn btn-success">&#x1F4BE; Guardar Cambios</button>-->
-    <a th:href="@{/perfil}" class="btn btn-success">&#x1F4BE; Guardar Cambios</a>
-    <a th:href="@{/perfil}" class="btn btn-secondary">&larr; Volver al Perfil</a>
-  </div>
-
+  </form>
 
 </div>
 
@@ -226,7 +235,7 @@
     </div>
   </div>
 </div>
-
+<script th:src="@{/js/home.js}"></script>
 <script th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/js/editar_perfil.js}"></script>
 </body>

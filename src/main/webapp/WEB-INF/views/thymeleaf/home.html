@@ -16,52 +16,7 @@
 </head>
 
 <body>
-<!-- NAVBAR -->
-<nav class="navbar">
-  <div class="navbar-left">
-
-    <a th:href="@{/tienda-monedas}" class="coins-display">
-      <i class="fas fa-coins"></i>
-      <span class="user-name" th:text="${monedas}" > </span>
-        </a>
-
-  </div>
-
-  <div class="logo-section">
-    <div class="logo-icon">
-      <i class="fas fa-th"></i>
-    </div>
-    <span class="logo-text">Sudoku Master</span>
-  </div>
-
-  <div class="navbar-right">
-    <div class="user-section" onclick="toggleAccordion()">
-      <div class="avatar" title="Avatar del usuario" id="userAvatar">J</div>
-      <div class="user-name" th:text="${nombreUsuario}" > </div>
-      <i class="fas fa-chevron-down user-chevron"></i>
-    </div>
-  </div>
-</nav>
-
-<!-- ACCORDION MENU -->
-<div class="accordion-menu">
-  <div class="accordion-option">
-    <i class="fas fa-user"></i>
-    <a th:href="@{/perfil}" >Ver Perfil</a>
-  </div>
-  <div class="accordion-option" >
-    <i class="fas fa-history"></i>
-    <span>Historial de Partidas</span>
-  </div>
-  <div class="accordion-option" >
-    <i class="fas fa-chart-line"></i>
-    <span>Estadísticas</span>
-  </div>
-  <div class="accordion-option" >
-    <i class="fas fa-sign-out-alt"></i>
-    <a th:href="@{/cerrar_sesion}" >Cerrar Session</a>
-  </div>
-</div>
+<div th:replace="fragment/header :: header"></div>
 
 <!-- MAIN CONTENT -->
 <main class="main-content">
@@ -107,6 +62,7 @@
 </main>
 
 <script th:src="@{/js/home.js}"></script>
+<script th:src="@{/js/perfil.js}"></script>
 
 <!-- Boostrap core js -->
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>

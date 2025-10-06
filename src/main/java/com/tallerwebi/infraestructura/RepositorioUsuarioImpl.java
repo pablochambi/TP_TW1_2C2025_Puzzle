@@ -45,4 +45,22 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         sessionFactory.getCurrentSession().update(usuario);
     }
 
+    @Override
+    public void actualizarPerfil(Long id_usuario, String nuevoNombre, String nuevaUrl, String nuevaPassword) {
+
+        Usuario usuario = sessionFactory.getCurrentSession().get(Usuario.class, id_usuario);
+
+        if (usuario != null) {
+            usuario.setNombreUsuario(nuevoNombre);
+            usuario.setUrlAvatar(nuevaUrl);
+            usuario.setPassword(nuevaPassword);
+            sessionFactory.getCurrentSession().update(usuario);
+        }
+    }
+
+    @Override
+    public Usuario obtenerUsuarioPorId(Long id_usuario) {
+        return sessionFactory.getCurrentSession().get(Usuario.class, id_usuario);
+    }
+
 }

@@ -88,9 +88,7 @@ public class ControladorLogin {
 
         ModelMap model = new ModelMap();
 
-        model.put("nombreUsuario", servicioLogin.obtenerNombreDeUsuario(id_usuario)); //
-        model.put("monedas", servicioLogin.obtenerMonedas(id_usuario)); //
-
+        model.put("usuario", servicioLogin.consultarUsuarioPorId(id_usuario));
 
         return new ModelAndView("home", model);
     }

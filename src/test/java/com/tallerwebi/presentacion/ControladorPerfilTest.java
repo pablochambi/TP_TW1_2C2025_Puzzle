@@ -1,6 +1,5 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Estadistica;
 import com.tallerwebi.dominio.ServicioEstadistica;
 import com.tallerwebi.dominio.ServicioLogin;
 import com.tallerwebi.dominio.Usuario;
@@ -11,36 +10,34 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 
 public class ControladorPerfilTest {
 
     private ControladorPerfil controladorPerfil;
     private Usuario usuarioMock;
-    private Map<String, String> estadisticasMock;
-
-    private Map<String, String> listaEstadisticasMock;
 
     private HttpServletRequest requestMock;
     private HttpSession sessionMock;
     private ServicioLogin servicioLoginMock;
     private ServicioEstadistica servicioEstadisticasMock;
 
+    private Map<String, Object> estadisticasFacilMock;
+    private Map<String, Object> estadisticasMedioMock;
+    private Map<String, Object> estadisticasDificilMock;
+
 
     // Inicializo los Mocks y el controlador para usar en cada test
     @BeforeEach
     public void init(){
-        usuarioMock = new Usuario(1L,"test@test.com","jugador123",100);
+        usuarioMock = new Usuario(1L,"test@test.com","jugador123",100,"img/avatar/test.jpg");
         usuarioMock.setPassword("1234");
-
-        estadisticasMock = new LinkedHashMap<>();
-        estadisticasMock.put("Tamanio Sudoku","4x4");
-        estadisticasMock.put("Mejor tiempo","00:50");
 
         requestMock = mock(HttpServletRequest.class);
         sessionMock = mock(HttpSession.class);
@@ -48,69 +45,184 @@ public class ControladorPerfilTest {
 
         servicioEstadisticasMock = mock(ServicioEstadistica.class);
         controladorPerfil = new ControladorPerfil(servicioLoginMock,servicioEstadisticasMock);
+
+
+        // Simulacion de Estadisticas por Nivel
+        estadisticasFacilMock = new LinkedHashMap<>();
+        estadisticasFacilMock.put("Partidas Jugadas", "5");
+        estadisticasFacilMock.put("Partidas Ganadas", "4");
+
+        estadisticasMedioMock = new LinkedHashMap<>();
+        estadisticasMedioMock.put("Partidas Jugadas", "5");
+        estadisticasMedioMock.put("Partidas Ganadas", "3");
+
+        estadisticasDificilMock = new LinkedHashMap<>();
+        estadisticasDificilMock.put("Partidas Jugadas", "5");
+        estadisticasDificilMock.put("Partidas Ganadas", "2");
+    }
+
+    // ==================== TESTS DE /perfil ====================
+
+    @Test
+    public void queAlAccederAlPerfilSinSesionRedirijaAlLogin() {
+        when(sessionMock.getAttribute("id_usuario")).thenReturn(null);
+
+        ModelAndView mav = controladorPerfil.irAlPerfil(sessionMock);
+
+        assertThat(mav.getViewName(), is("redirect:/login"));
     }
 
     @Test
-    public void queAlIrAPerfil_SeMuestreLosDatosDelUsuarioYSusEstadisticas() {
-        // preparacion
+    public void queAlAccederAlPerfilConSesionValidaMuestreLaVistaPerfil() {
+
         when(sessionMock.getAttribute("id_usuario")).thenReturn(usuarioMock.getId());
 
-        when(servicioLoginMock.obtenerEmail(usuarioMock.getId())).thenReturn(usuarioMock.getEmail());
-        when(servicioLoginMock.obtenerMonedas(usuarioMock.getId())).thenReturn(usuarioMock.getMonedas());
-        when(servicioLoginMock.obtenerNombreDeUsuario(usuarioMock.getId())).thenReturn(usuarioMock.getNombreUsuario());
-
-        when(servicioEstadisticasMock.obtenerDeNivelFacil(usuarioMock.getId())).thenReturn(estadisticasMock);
-        when(servicioEstadisticasMock.obtenerDeNivelMedio(usuarioMock.getId())).thenReturn(estadisticasMock);
-        when(servicioEstadisticasMock.obtenerDeNivelDificil(usuarioMock.getId())).thenReturn(estadisticasMock);
-
-        // ejecucion
         ModelAndView mav = controladorPerfil.irAlPerfil(sessionMock);
 
-        // verificacion
-        thenSeMuestranLosDatosBasicosDelUsuario(mav);
-        thenSeMuestranLasEstadisticasDelUsuario(mav);
+        assertThat(mav.getViewName(), is("perfil"));
+        assertThat(mav.getModel(), is(notNullValue()));
     }
+
+    @Test
+    public void queAlAccederAlPerfilSeCarguenLosDatosBasicosDelUsuario() {
+
+        when(sessionMock.getAttribute("id_usuario")).thenReturn(usuarioMock.getId());
+        when(servicioLoginMock.consultarUsuarioPorId(usuarioMock.getId())).thenReturn(usuarioMock);
+
+        ModelAndView mav = controladorPerfil.irAlPerfil(sessionMock);
+
+        assertThat(mav.getViewName(), is("perfil"));
+        assertThat(mav.getModel().get("usuario"), is(usuarioMock));
+    }
+
+
+    @Test
+    public void queAlAccederAlPerfilSeCarguenLasEstadisticasDeTodosLosNiveles() {
+
+
+        when(sessionMock.getAttribute("id_usuario")).thenReturn(usuarioMock.getId());
+
+        when(servicioEstadisticasMock.obtenerEstadisticas(usuarioMock.getId(),"FACIL")).thenReturn(estadisticasFacilMock);
+        when(servicioEstadisticasMock.obtenerEstadisticas(usuarioMock.getId(),"MEDIO")).thenReturn(estadisticasMedioMock);
+        when(servicioEstadisticasMock.obtenerEstadisticas(usuarioMock.getId(),"DIFICIL")).thenReturn(estadisticasDificilMock);
+
+        ModelAndView mav = controladorPerfil.irAlPerfil(sessionMock);
+
+        assertThat(mav.getModel().get("estadisticasNivelFacil"), is(estadisticasFacilMock));
+        assertThat(mav.getModel().get("estadisticasNivelMedio"), is(estadisticasMedioMock));
+        assertThat(mav.getModel().get("estadisticasNivelDificil"), is(estadisticasDificilMock));
+    }
+
+
+    @Test
+    public void queAlAccederAlPerfilSeLlamenLosServiciosCorrectamente() {
+        Long idUsuario = 1L;
+        when(sessionMock.getAttribute("id_usuario")).thenReturn(idUsuario);
+
+        controladorPerfil.irAlPerfil(sessionMock);
+
+        verify(servicioLoginMock, times(1)).consultarUsuarioPorId(idUsuario);
+        verify(servicioEstadisticasMock, times(1)).obtenerEstadisticas(idUsuario,"FACIL");
+        verify(servicioEstadisticasMock, times(1)).obtenerEstadisticas(idUsuario,"MEDIO");
+        verify(servicioEstadisticasMock, times(1)).obtenerEstadisticas(idUsuario,"DIFICIL");
+    }
+
+    @Test
+    public void queAlAccederAlPerfilConEstadisticasVaciasNoFalle() {
+        Long idUsuario = 1L;
+        when(sessionMock.getAttribute("id_usuario")).thenReturn(idUsuario);
+
+        when(servicioEstadisticasMock.obtenerEstadisticas(idUsuario,"FACIL")).thenReturn(new HashMap<>());
+        when(servicioEstadisticasMock.obtenerEstadisticas(idUsuario,"MEDIO")).thenReturn(new HashMap<>());
+        when(servicioEstadisticasMock.obtenerEstadisticas(idUsuario,"DIFICIL")).thenReturn(new HashMap<>());
+
+        ModelAndView mav = controladorPerfil.irAlPerfil(sessionMock);
+
+        assertThat(mav.getViewName(), is("perfil"));
+
+        assertThat(mav.getModel().get("estadisticasNivelFacil"), is(notNullValue()));
+        assertThat(mav.getModel().get("estadisticasNivelMedio"),  is(notNullValue()));
+        assertThat(mav.getModel().get("estadisticasNivelDificil"),  is(notNullValue()));
+    }
+
 
 
     @Test
     public void queAlIrAEditarPerfil_SeMuestreLosDatosBasicosDelUsuarioYSuPassword() {
         // preparacion
         when(sessionMock.getAttribute("id_usuario")).thenReturn(usuarioMock.getId());
-
-        when(servicioLoginMock.obtenerEmail(usuarioMock.getId())).thenReturn(usuarioMock.getEmail());
-        when(servicioLoginMock.obtenerMonedas(usuarioMock.getId())).thenReturn(usuarioMock.getMonedas());
-        when(servicioLoginMock.obtenerNombreDeUsuario(usuarioMock.getId())).thenReturn(usuarioMock.getNombreUsuario());
-        when(servicioLoginMock.obtenerPassword(usuarioMock.getId())).thenReturn(usuarioMock.getPassword());
-
-        when(servicioEstadisticasMock.obtenerDeNivelFacil(usuarioMock.getId())).thenReturn(estadisticasMock);
-        when(servicioEstadisticasMock.obtenerDeNivelMedio(usuarioMock.getId())).thenReturn(estadisticasMock);
-        when(servicioEstadisticasMock.obtenerDeNivelDificil(usuarioMock.getId())).thenReturn(estadisticasMock);
+        when(servicioLoginMock.consultarUsuarioPorId(usuarioMock.getId())).thenReturn(usuarioMock);
 
         // ejecucion
         ModelAndView mav = controladorPerfil.irAEditarPerfil(sessionMock);
 
         // verificacion
-        thenSeMuestranLosDatosBasicosDelUsuario(mav);
-        assertThat(mav.getModel().get("password"), is("1234"));
-    }
-
-    private void thenSeMuestranLosDatosBasicosDelUsuario(ModelAndView mav) {
         assertThat(mav.getViewName(), is("editar_perfil"));
-        assertThat(mav.getModel().get("nombreUsuario"), is("jugador123"));
-        //assertThat(mav.getModel().get("avatar"), is("jugador123"));
-        assertThat(mav.getModel().get("email"), is("test@test.com"));
-        assertThat(mav.getModel().get("monedas"), is(100));
-    }
-
-    private void thenSeMuestranLasEstadisticasDelUsuario(ModelAndView mav) {
-        assertThat(((Map<?, ?>) mav.getModel().get("estadisticasNivelFacil")).isEmpty(), is(false));
-        assertThat(((Map<?, ?>) mav.getModel().get("estadisticasNivelMedio")).isEmpty(), is(false));
-        assertThat(((Map<?, ?>) mav.getModel().get("estadisticasNivelDificil")).isEmpty(), is(false));
+        assertThat(mav.getModel().get("usuario"), is(usuarioMock));
+        assertThat(((Usuario) mav.getModel().get("usuario")).getPassword(), is("1234"));
     }
 
 
+    // ==================== TESTS DE /perfil/editar POST (Guardar y Volver) ====================
+
+    @Test
+    public void queAlGuardarCambiosDelPerfilSinSesionRedirijaAlLogin() {
+        when(sessionMock.getAttribute("id_usuario")).thenReturn(null);
+
+        ModelAndView mav = controladorPerfil.guardarPerfil("nuevoNombre", "nuevoAvatar", "nuevaPassword", sessionMock);
+
+        assertThat(mav.getViewName(), is("redirect:/login"));
+        verify(servicioLoginMock, never()).actualizarPerfil(any(), any(), any(), any());
+    }
+
+    @Test
+    public void queAlGuardarCambiosDelPerfilSeActualicenLosDatosYRedirijaAlPerfil() {
+        Long idUsuario = 1L;
+        String nuevoNombre = "nuevoUsuario";
+        String nuevoAvatar = "img/avatar/test.jpg";
+        String nuevaPassword = "nuevaPassword123";
+
+        Usuario usuarioActualizado = new Usuario();
+        usuarioActualizado.setId(idUsuario);
+        usuarioActualizado.setNombreUsuario(nuevoNombre);
+        usuarioActualizado.setUrlAvatar(nuevoAvatar);
+        usuarioActualizado.setPassword(nuevaPassword);
+
+        when(sessionMock.getAttribute("id_usuario")).thenReturn(idUsuario);
+        when(servicioLoginMock.consultarUsuarioPorId(idUsuario)).thenReturn(usuarioActualizado);
+
+        doNothing().when(servicioLoginMock).actualizarPerfil(idUsuario, nuevoNombre, nuevoAvatar, nuevaPassword);
+
+        ModelAndView mav = controladorPerfil.guardarPerfil(nuevoNombre, nuevoAvatar, nuevaPassword, sessionMock);
+
+        assertThat(mav.getViewName(), is("redirect:/perfil"));
+        assertThat(((Usuario)mav.getModel().get("usuario")).getNombreUsuario(), is(usuarioActualizado.getNombreUsuario()));
+        verify(servicioLoginMock, times(1)).actualizarPerfil(idUsuario, nuevoNombre, nuevoAvatar, nuevaPassword);
+    }
 
 
+
+    // ==================== TESTS DE /perfil/volver (Volver sin guardar) ====================
+
+    @Test
+    public void queAlVolverAlPerfilDesdeEditarSinSesionRedirijaAlLogin() {
+        when(sessionMock.getAttribute("id_usuario")).thenReturn(null);
+
+        ModelAndView mav = controladorPerfil.volverAlPerfil(sessionMock);
+
+        assertThat(mav.getViewName(),is("redirect:/login") );
+    }
+
+    @Test
+    public void queAlVolverAlPerfilDesdeEditarRedirijaAlPerfilSinGuardarCambios() {
+        Long idUsuario = 1L;
+        when(sessionMock.getAttribute("id_usuario")).thenReturn(idUsuario);
+
+        ModelAndView mav = controladorPerfil.volverAlPerfil(sessionMock);
+
+        assertThat(mav.getViewName(), is("redirect:/perfil"));
+        verify(servicioLoginMock, never()).actualizarPerfil(any(), any(), any(), any());
+    }
 
 
 }

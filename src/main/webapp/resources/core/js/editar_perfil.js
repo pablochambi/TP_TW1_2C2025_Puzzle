@@ -169,72 +169,53 @@ function usarAvatarPremium(btn) {
     avatarPreview.innerHTML = `<img src="${currentAvatarValue}" alt="Avatar Premium">`;
 }
 
-// Función para mostrar mensaje de éxito
-function mostrarMensajeExito(mensaje) {
-    // Crear elemento de mensaje si no existe
-    let mensajeDiv = document.querySelector('.success-message');
-    if (!mensajeDiv) {
-        mensajeDiv = document.createElement('div');
-        mensajeDiv.className = 'success-message';
-        document.body.appendChild(mensajeDiv);
-    }
-
-    mensajeDiv.textContent = mensaje;
-    mensajeDiv.style.display = 'block';
-
-    // Ocultar después de 3 segundos
-    setTimeout(() => {
-        mensajeDiv.style.display = 'none';
-    }, 3000);
-}
-
 // ===============================
 // SUBIR IMAGEN PERSONALIZADA
 // ===============================
 
-if (avatarUpload) {
-    avatarUpload.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        // Validar tipo de archivo
-        if (!file.type.match(/^image\/(jpeg|jpg|png)$/)) {
-            alert('❌ Por favor selecciona una imagen JPG o PNG');
-            return;
-        }
-
-        // Validar tamaño (2MB máximo)
-        if (file.size > 2 * 1024 * 1024) {
-            alert('❌ La imagen debe ser menor a 2MB');
-            return;
-        }
-
-        // Leer archivo
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            // Crear opción personalizada si no existe
-            let customOption = document.querySelector('[data-type="image"]');
-            if (!customOption) {
-                customOption = document.createElement('div');
-                customOption.className = 'avatar-option';
-                customOption.setAttribute('data-type', 'image');
-                customOption.setAttribute('title', 'Imagen personalizada');
-                document.querySelector('.avatar-options').appendChild(customOption);
-            }
-
-            // Actualizar imagen
-            customOption.innerHTML = `<img src="${e.target.result}" alt="Personalizada">`;
-            customOption.setAttribute('data-value', e.target.result);
-
-            // Seleccionar automáticamente
-            currentAvatarType = 'image';
-            currentAvatarValue = e.target.result;
-
-            selectAvatar(customOption);
-        };
-        reader.readAsDataURL(file);
-    });
-}
+// if (avatarUpload) {
+//     avatarUpload.addEventListener('change', function(e) {
+//         const file = e.target.files[0];
+//         if (!file) return;
+//
+//         // Validar tipo de archivo
+//         if (!file.type.match(/^image\/(jpeg|jpg|png)$/)) {
+//             alert('❌ Por favor selecciona una imagen JPG o PNG');
+//             return;
+//         }
+//
+//         // Validar tamaño (2MB máximo)
+//         if (file.size > 2 * 1024 * 1024) {
+//             alert('❌ La imagen debe ser menor a 2MB');
+//             return;
+//         }
+//
+//         // Leer archivo
+//         const reader = new FileReader();
+//         reader.onload = function(e) {
+//             // Crear opción personalizada si no existe
+//             let customOption = document.querySelector('[data-type="image"]');
+//             if (!customOption) {
+//                 customOption = document.createElement('div');
+//                 customOption.className = 'avatar-option';
+//                 customOption.setAttribute('data-type', 'image');
+//                 customOption.setAttribute('title', 'Imagen personalizada');
+//                 document.querySelector('.avatar-options').appendChild(customOption);
+//             }
+//
+//             // Actualizar imagen
+//             customOption.innerHTML = `<img src="${e.target.result}" alt="Personalizada">`;
+//             customOption.setAttribute('data-value', e.target.result);
+//
+//             // Seleccionar automáticamente
+//             currentAvatarType = 'image';
+//             currentAvatarValue = e.target.result;
+//
+//             selectAvatar(customOption);
+//         };
+//         reader.readAsDataURL(file);
+//     });
+// }
 
 // ===============================
 // ACTUALIZAR AVATAR AL CAMBIAR NOMBRE
@@ -252,3 +233,22 @@ usernameInput.addEventListener('input', function() {
 
 // Inicializar vista previa del avatar
 actualizarVistaPreviaDeAvatar();
+
+
+// ===============================
+// COLOCA AVATAR SELECCIONADO EN INPUT HIDDEN para enviarlo al controlador desde el formulario
+// ===============================
+const avatarInput = document.getElementById('avatarSeleccionadoInput');
+
+avatarOptions.forEach(option => {
+    option.addEventListener('click', () => {
+        const value = option.getAttribute('data-value');
+
+        // Actualiza la vista previa
+        avatarPreview.textContent = value;
+
+        // Guarda el valor en el input hidden
+        avatarInput.value = value;
+    });
+});
+

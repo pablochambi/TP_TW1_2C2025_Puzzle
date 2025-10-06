@@ -5,9 +5,5 @@ import java.util.Map;
 
 public interface ServicioEstadistica {
 
-    Map<String, String> obtenerDeNivelFacil(Long idUsuario);
-
-    Map<String, String>  obtenerDeNivelMedio(Long idUsuario);
-
-    Map<String, String>  obtenerDeNivelDificil(Long idUsuario);
+    Map<String, Object> obtenerEstadisticas(Long id_usuario, String nivel);
 }
