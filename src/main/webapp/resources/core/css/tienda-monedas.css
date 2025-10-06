@@ -121,7 +121,7 @@ body {
 }
 
 
-/* MAIN CONTENT */
+
 .main-content {
     margin-top: 100px;
     padding: 2rem;
@@ -130,10 +130,10 @@ body {
     margin-right: auto;
 }
 
-/* GRID DE MONEDAS */
+
 .coins-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 2rem;
     margin-top: 1rem;
 }
@@ -168,7 +168,7 @@ body {
     color: var(--gold);
 }
 
-/* ICONOS DE MONEDAS */
+
 .coin-icon {
     height: 100px;
     display: flex;
@@ -185,7 +185,7 @@ body {
     object-fit: contain;
 }
 
-/* BOTONES */
+
 .buy-btn {
     background: var(--success-green);
     color: white;
@@ -204,7 +204,7 @@ body {
     transform: translateY(-2px);
 }
 
-/* RESPONSIVE */
+
 @media (max-width: 768px) {
     .navbar {
         padding: 1rem;
