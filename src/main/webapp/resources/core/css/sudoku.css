@@ -1,3 +1,4 @@
+
 body {
     font-family: "Segoe UI", Arial, sans-serif;
     background: linear-gradient(135deg, #e0f7fa, #e8eaf6);
@@ -132,4 +133,104 @@ button:nth-child(2):hover {
     75% { transform: translateX(-4px); }
     100% { transform: translateX(0); }
 }
+
+
+/*extra*/
+
+
+
+input.correct {
+    background-color: #b9f6ca; /* verde claro */
+    border: 2px solid #2e7d32;
+    color: #2e7d32;
+}
+
+input.wrong {
+    background-color: #ff8a80; /* rojo claro */
+    border: 2px solid #c62828;
+    color: #c62828;
+}
+
+
+
+
+/*extra*/
+
+
+
+
+
+
+
+
+
+input.correct {
+    background-color: #b9f6ca; /* verde claro */
+    border: 2px solid #2e7d32;
+    color: #2e7d32;
+}
+
+input.wrong {
+    background-color: #ff8a80; /* rojo claro */
+    border: 2px solid #c62828;
+    color: #c62828;
+}
+
+/* Animación de vibración (shake) */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    50% { transform: translateX(4px); }
+    75% { transform: translateX(-4px); }
+}
+input.shake {
+    animation: shake 0.3s;
+}
+
+/* Confeti animado */
+.confetti {
+    position: fixed;
+    top: 0;
+    width: 8px;
+    height: 8px;
+    opacity: 0.9;
+    border-radius: 2px;
+    animation: fall linear forwards;
+    background-color: #f1c40f; /* fallback por si JS no corre */
+}
+@keyframes fall {
+    to {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* Mensaje de felicitación */
+.congrats-message {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    background: rgba(255, 255, 255, 0.95);
+    color: #2e7d32;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 1rem 2rem;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    opacity: 0;
+    transition: all 0.4s ease;
+    z-index: 999;
+}
+.congrats-message.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+
+
+
+
+
+
 

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Sudoku</title>
   <link rel="stylesheet" th:href="@{/css/sudoku.css}"/>
 </head>
@@ -33,44 +35,107 @@
 </table>
 
 <script>
-  function checkSolution() {
+  document.addEventListener("DOMContentLoaded", () => {
     const puzzleTable = document.getElementById("puzzle");
     const solutionTable = document.getElementById("solution");
 
     const puzzleRows = puzzleTable.getElementsByTagName("tr");
     const solutionRows = solutionTable.getElementsByTagName("tr");
 
-    let allCorrect = true;
-
+    // Asigna eventos a las celdas editables
     for (let i = 0; i < puzzleRows.length; i++) {
       const puzzleCells = puzzleRows[i].getElementsByTagName("td");
-      const solutionCells = solutionRows[i].getElementsByTagName("td");
-
       for (let j = 0; j < puzzleCells.length; j++) {
         const input = puzzleCells[j].querySelector("input");
         if (input) {
-          const userValue = input.value;
-          const correctValue = solutionCells[j].innerText;
-          if (userValue === correctValue) {
-            input.classList.add("correct");
-            input.classList.remove("wrong");
-          } else {
-            input.classList.add("wrong");
-            input.classList.remove("correct");
-            allCorrect = false;
-          }
+          input.addEventListener("input", () => {
+            const correctValue = solutionRows[i].getElementsByTagName("td")[j].innerText.trim();
+            const userValue = input.value.trim();
+
+            if (userValue === "") {
+              input.classList.remove("correct", "wrong", "shake");
+              return;
+            }
+
+            if (userValue === correctValue) {
+              input.classList.add("correct");
+              input.classList.remove("wrong", "shake");
+            } else {
+              input.classList.add("wrong", "shake");
+              input.classList.remove("correct");
+
+              // Quita la animación de vibración después de un instante
+              setTimeout(() => input.classList.remove("shake"), 400);
+            }
+
+            checkIfSudokuIsComplete();
+          });
         }
       }
     }
 
-    if (allCorrect) {
-      alert("🎉 ¡Felicitaciones! Sudoku resuelto correctamente 🎉");
-    }
-  }
+    function checkIfSudokuIsComplete() {
+      let allCorrect = true;
 
-  function showSolution() {
-    document.getElementById("solution").style.display = "table";
-  }
+      for (let i = 0; i < puzzleRows.length; i++) {
+        const puzzleCells = puzzleRows[i].getElementsByTagName("td");
+        const solutionCells = solutionRows[i].getElementsByTagName("td");
+
+        for (let j = 0; j < puzzleCells.length; j++) {
+          const input = puzzleCells[j].querySelector("input");
+          if (input) {
+            const userValue = input.value.trim();
+            const correctValue = solutionCells[j].innerText.trim();
+            if (userValue !== correctValue) {
+              allCorrect = false;
+              break;
+            }
+          }
+        }
+      }
+
+      if (allCorrect) {
+        launchConfetti();
+        showCongratsMessage();
+      }
+    }
+
+    // 🎉 Confeti visual
+    function launchConfetti() {
+      const duration = 2000;
+      const end = Date.now() + duration;
+
+      (function frame() {
+        const confettiCount = 5;
+        for (let i = 0; i < confettiCount; i++) {
+          const confetti = document.createElement("div");
+          confetti.className = "confetti";
+          confetti.style.left = Math.random() * 100 + "vw";
+          confetti.style.animationDuration = Math.random() * 1 + 1 + "s";
+          document.body.appendChild(confetti);
+
+          setTimeout(() => confetti.remove(), 2000);
+        }
+        if (Date.now() < end) requestAnimationFrame(frame);
+      })();
+    }
+
+    // 🏆 Mensaje de felicitación flotante
+    function showCongratsMessage() {
+      const msg = document.createElement("div");
+      msg.className = "congrats-message";
+      msg.innerHTML = "&#x1F389; ¡Felicitaciones! Sudoku completado &#x1F389;";
+      document.body.appendChild(msg);
+
+      setTimeout(() => msg.classList.add("show"), 100);
+      setTimeout(() => msg.classList.remove("show"), 3000);
+      setTimeout(() => msg.remove(), 3500);
+    }
+  });
+
+  function showSolution() {document.getElementById("solution").style.display = "table"; }
+
+
 </script>
 
 </body>
