@@ -31,8 +31,8 @@ public class ControladorHome {
         }
 
         ModelMap model = new ModelMap();
-        Integer monedas = servicioLogin.obtenerMonedas(usuario.getId());
-        model.put("monedas", monedas);
+        Usuario usuarioEncontrado = servicioLogin.consultarUsuarioPorId(usuario.getId());
+        model.put("usuario", usuarioEncontrado);
 
         return new ModelAndView("tienda-monedas", model);
 

@@ -16,9 +16,7 @@ public class ServicioEstadisticaTest {
 
     private ServicioEstadistica servicioEstadistica;
     private RepositorioPartida repositorioPartidaMock;
-    private List<Partida> partidasFaciles;
-    private List<Partida> partidasMedias;
-    private List<Partida> partidasDificiles;
+    private List<Partida> partidas;
     private Usuario usuarioMock;
 
     @BeforeEach
@@ -29,20 +27,13 @@ public class ServicioEstadisticaTest {
         usuarioMock = new Usuario(1L, "usuario1",100);
 
         // Configurar partidas de nivel fácil
-        partidasFaciles = new ArrayList<>();
-        partidasFaciles.add(crearPartida(1L, usuarioMock, "FACIL", true, 100));
-        partidasFaciles.add(crearPartida(2L, usuarioMock, "FACIL", true, 150));
-        partidasFaciles.add(crearPartida(3L, usuarioMock, "FACIL", false, 50));
-        partidasFaciles.add(crearPartida(4L, usuarioMock, "FACIL", true, 200));
-        partidasFaciles.add(crearPartida(5L, usuarioMock, "FACIL", false, 75));
+        partidas = new ArrayList<>();
+        partidas.add(crearPartida(1L, usuarioMock, "FACIL", true, 100));
+        partidas.add(crearPartida(2L, usuarioMock, "FACIL", true, 150));
+        partidas.add(crearPartida(3L, usuarioMock, "FACIL", false, 50));
+        partidas.add(crearPartida(4L, usuarioMock, "FACIL", true, 200));
+        partidas.add(crearPartida(5L, usuarioMock, "FACIL", false, 75));
 
-        // Configurar partidas de nivel medio
-        partidasMedias = new ArrayList<>();
-        partidasMedias.add(crearPartida(6L, usuarioMock, "MEDIO", true, 200));
-        partidasMedias.add(crearPartida(7L, usuarioMock, "MEDIO", false, 100));
-        partidasMedias.add(crearPartida(8L, usuarioMock, "MEDIO", true, 250));
-        partidasMedias.add(crearPartida(9L, usuarioMock, "MEDIO", true, 300));
-        partidasMedias.add(crearPartida(10L, usuarioMock, "MEDIO", false, 150));
 
     }
 
@@ -51,27 +42,27 @@ public class ServicioEstadisticaTest {
     @Test
     public void queAlObtenerEstadisticasDeNivelFacilRetorneMapaConDatosCorrectos() {
         when(repositorioPartidaMock.obtenerPartidasPorUsuarioYNivel(1L, "FACIL"))
-                .thenReturn(partidasFaciles);
+                .thenReturn(partidas);
 
         Map<String, Object> estadisticas = servicioEstadistica.obtenerEstadisticas(1L, "FACIL");
 
         assertThat(estadisticas, is(notNullValue()));
-        assertThat(estadisticas.get("Partidas Jugadas"), is(5));
-        assertThat(estadisticas.get("Partidas Ganadas"), is(3));
-        assertThat(estadisticas.get("Partidas Perdidas"), is(2));
+        assertThat(estadisticas.get("Partidas jugadas"), is(5));
+        assertThat(estadisticas.get("Partidas ganadas"), is(3));
+        assertThat(estadisticas.get("Partidas perdidas"), is(2));
         assertThat(estadisticas.get("Porcentaje de Victoria"), is("60,0%"));
     }
 
 
     @Test
-    public void queAlObtenerEstadisticasFacilesSinPartidasRetorneMapaVacio() {
+    public void queAlObtenerEstadisticasFacilesSinPartidasNoRetorneUnMapaVacio() {
         when(repositorioPartidaMock.obtenerPartidasPorUsuarioYNivel(1L, "FACIL"))
                 .thenReturn(new ArrayList<>());
 
         Map<String, Object> estadisticas = servicioEstadistica.obtenerEstadisticas(1L, "FACIL");
 
         assertThat(estadisticas, is(notNullValue()));
-        assertThat(estadisticas.isEmpty(), is(true));
+        assertThat(estadisticas.isEmpty(), is(false));
     }
 
 
@@ -79,7 +70,7 @@ public class ServicioEstadisticaTest {
 //    @Test
 //    public void queElMapaDeEstadisticasMantenga_ElOrdenDeInsercion() {
 //        when(repositorioPartidaMock.obtenerPartidasPorUsuarioYNivel(1L, "FACIL"))
-//                .thenReturn(partidasFaciles);
+//                .thenReturn(partidas);
 //
 //        Map<String, Object> estadisticas = servicioEstadistica.obtenerDeNivelFacil(1L);
 //
@@ -97,7 +88,7 @@ public class ServicioEstadisticaTest {
 //        partidasUsuario2.add(crearPartida(20L, 2L, "FACIL", true, 100));
 //
 //        when(repositorioPartidaMock.obtenerPartidasPorUsuarioYNivel(1L, "FACIL"))
-//                .thenReturn(partidasFaciles);
+//                .thenReturn(partidas);
 //        when(repositorioPartidaMock.obtenerPartidasPorUsuarioYNivel(2L, "FACIL"))
 //                .thenReturn(partidasUsuario2);
 //

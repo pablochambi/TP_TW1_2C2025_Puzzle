@@ -72,7 +72,7 @@ public class ControladorHomeTest {
 
 
             assertThat(resultado.getViewName(), equalTo("tienda-monedas"));
-            assertThat(resultado.getModel().get("monedas"), equalTo(usuario.getMonedas()));
+            assertThat(((Usuario)resultado.getModel().get("usuario")).getMonedas(), equalTo(usuario.getMonedas()));
 
 
     }
