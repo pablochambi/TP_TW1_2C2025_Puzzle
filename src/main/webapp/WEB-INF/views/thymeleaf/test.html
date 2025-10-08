@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Sudoku - Competencia</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+    <style>
+        table { border-collapse: collapse; margin: 20px auto; }
+        td {
+            width: 50px; height: 50px;
+            border: 1px solid #444; text-align: center;
+        }
+        input {
+            width: 100%; height: 100%;
+            text-align: center; font-size: 18px;
+            border: none; outline: none;
+        }
+        .rival { background-color: rgba(0, 150, 255, 0.3); }
+    </style>
+</head>
+<body>
+<h2 style="text-align:center;">Sudoku Competitivo</h2>
+
+<table id="puzzle">
+    <tbody>
+    <tr th:each="row, rowStat : ${puzzle}">
+        <td th:each="cell, colStat : ${row}">
+            <input th:if="${cell == null}" maxlength="1"
+                   oninput="handleInput(this, [[${rowStat.index}]], [[${colStat.index}]])">
+            <span th:if="${cell != null}" th:text="${cell}"></span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    let stompClient = null;
+
+    function connect() {
+        const socket = new SockJS('/spring/sudoku-ws');
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function () {
+            console.log("✅ Conectado a WebSocket");
+            stompClient.subscribe('/topic/updates', function (message) {
+                const update = JSON.parse(message.body);
+                updateCell(update.row, update.col, update.color);
+            });
+        });
+    }
+
+    function handleInput(input, row, col) {
+        input.classList.add("own");
+        stompClient.send("/app/cell-update", {}, JSON.stringify({row, col, color: "rival"}));
+    }
+
+    function updateCell(row, col, colorClass) {
+        const table = document.getElementById("puzzle");
+        const cell = table.rows[row].cells[col];
+        const input = cell.querySelector("input");
+        if (input) {
+            input.classList.add(colorClass);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", connect);
+</script>
+</body>
+</html>
