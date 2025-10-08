@@ -25,9 +25,12 @@ public class Usuario {
     private Integer monedas;
     private String urlAvatar;
 
+    private Integer saldo;
+
     public Usuario() {
         this.monedas = 110;
         this.pistas = 5;
+        this.saldo = 150;
         this.nombreUsuario = "jugador123";
     }
 
@@ -47,7 +50,28 @@ public class Usuario {
         this.email = email;
         this.nombreUsuario = nombreUsuario;
         this.monedas = monedas;
+    }
+
+    public void agregarMonedas(Integer cantidad) {
+        this.monedas += cantidad;
+    }
+
+    public void restarSaldo(Integer cantidad) {
+        this.saldo -= cantidad;
+    }
+
+
+
+    public void activar() {
+        activo = true;
         this.urlAvatar = urlAvatar;
     }
 
+    public Integer getPistas() {
+        return pistas;
+    }
+
+    public void setPistas(Integer pistas) {
+        this.pistas = pistas;
+    }
 }

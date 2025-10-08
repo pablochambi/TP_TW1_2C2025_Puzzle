@@ -10,4 +10,5 @@ public interface ServicioLogin {
     void actualizarPerfil(Long idUsuario, String nuevoNombre, String nuevoAvatar, String nuevaPassword);
 
     Usuario consultarUsuarioPorId(Long id_usuario);
+    Integer obtenerMonedas(Long idUsuario);
 }

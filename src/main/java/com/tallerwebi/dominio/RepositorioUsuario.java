@@ -9,5 +9,6 @@ public interface RepositorioUsuario {
 
     void actualizarPerfil(Long id, String nuevoNombre, String nuevaUrl, String nuevaPassword);
     Usuario obtenerUsuarioPorId(Long id_usuario);
+    Integer obtenerMonedasUsuario(Long idUsuario);
 }
 

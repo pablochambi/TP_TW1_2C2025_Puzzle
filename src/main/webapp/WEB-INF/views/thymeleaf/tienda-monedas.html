@@ -4,102 +4,133 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Tienda de Monedas - Sudoku Master</title>
-
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/tienda-monedas.css}"/>
 </head>
-
-<body>
-<!-- NAVBAR -->
+<body> <!-- NAVBAR -->
 <nav class="navbar">
     <div class="navbar-left">
-        <div class="logo-section">
-            <a th:href="@{/home}" class="logo-icon">
-
-                <i class="fas fa-th"></i>
-
-            </a>
-        </div>
+        <div class="logo-section"><a th:href="@{/home}" class="logo-icon"> <i class="fas fa-th"></i> </a></div>
     </div>
-
-    <div class="breadcrumb-section">
-        <span class="breadcrumb-item">Tienda</span>
-        <i class="fas fa-chevron-right"></i>
-        <span class="breadcrumb-item current">Monedas</span>
-    </div>
-
+    <div class="breadcrumb-section"><span class="breadcrumb-item">Tienda</span> <i class="fas fa-chevron-right"></i>
+        <span class="breadcrumb-item current">Monedas</span></div>
     <div class="navbar-right">
-        <div class="coins-display">
-            <i class="fas fa-coins"></i>
-            <span class="user-coins" th:text="${monedas}"></span>
-
+        <div class="coins-display"><i class="fas fa-coins"></i> <span class="user-coins" th:text="${monedas}"></span>
         </div>
     </div>
-</nav>
-
-<!-- MAIN CONTENT -->
+</nav> <!-- MAIN CONTENT -->
 <main class="main-content">
-    <div class="coins-grid">
-        <!-- Paquete 1 -->
+    <div class="coins-grid"> <!-- Paquete 1 -->
         <div class="coin-package">
             <div class="coin-amount">1000 <i class="fas fa-coins"></i></div>
-            <div class="coin-icon">
-                <img th:src="@{/img/coins_1.png}"  alt="Primer paquete">
-            </div>
-            <button class="buy-btn">1 USD</button>
-        </div>
-
-        <!-- Paquete 2 -->
+            <div class="coin-icon"><img th:src="@{/img/coins_1.png}" alt="Primer paquete"></div>
+            <button class="buy-btn" data-bs-toggle="modal" data-bs-target="#modalPago"
+                    onclick="seleccionarPaquete(1, 1000, 1)"> 1 USD
+            </button>
+        </div> <!-- Paquete 2 -->
         <div class="coin-package">
             <div class="coin-amount">2200 <i class="fas fa-coins"></i></div>
-            <div class="coin-icon">
-                <img th:src="@{/img/coins_2.png}" alt="Segundo paquete">
-            </div>
-            <button class="buy-btn">2 USD</button>
-
-        </div>
-
-        <!-- Paquete 3 -->
+            <div class="coin-icon"><img th:src="@{/img/coins_2.png}" alt="Segundo paquete"></div>
+            <button class="buy-btn" data-bs-toggle="modal" data-bs-target="#modalPago"
+                    onclick="seleccionarPaquete(2, 2200, 2)"> 2 USD
+            </button>
+        </div> <!-- Paquete 3 -->
         <div class="coin-package">
             <div class="coin-amount">7000 <i class="fas fa-coins"></i></div>
-            <div class="coin-icon">
-                <img th:src="@{/img/coins_3.png}" alt="Tercer paquete">
-            </div>
-            <button class="buy-btn">6 USD</button>
-        </div>
-
-        <!-- Paquete 4 -->
+            <div class="coin-icon"><img th:src="@{/img/coins_3.png}" alt="Tercer paquete"></div>
+            <button class="buy-btn" data-bs-toggle="modal" data-bs-target="#modalPago"
+                    onclick="seleccionarPaquete(3, 7000, 6)"> 6 USD
+            </button>
+        </div> <!-- Paquete 4 -->
         <div class="coin-package">
             <div class="coin-amount">11000 <i class="fas fa-coins"></i></div>
-            <div class="coin-icon">
-                <img th:src="@{/img/coins_4.png}" alt="Cuarto paquete">
-            </div>
-            <button class="buy-btn">9 USD</button>
-        </div>
-
-        <!-- Paquete 5 -->
+            <div class="coin-icon"><img th:src="@{/img/coins_4.png}" alt="Cuarto paquete"></div>
+            <button class="buy-btn" data-bs-toggle="modal" data-bs-target="#modalPago"
+                    onclick="seleccionarPaquete(4, 11000, 9)"> 9 USD
+            </button>
+        </div> <!-- Paquete 5 -->
         <div class="coin-package">
             <div class="coin-amount">25000 <i class="fas fa-coins"></i></div>
-            <div class="coin-icon">
-                <img th:src="@{/img/coins_5.png}" alt="Quinto paquete">
-            </div>
-            <button class="buy-btn">20 USD</button>
-        </div>
-
-        <!-- Paquete 6 -->
+            <div class="coin-icon"><img th:src="@{/img/coins_5.png}" alt="Quinto paquete"></div>
+            <button class="buy-btn" data-bs-toggle="modal" data-bs-target="#modalPago"
+                    onclick="seleccionarPaquete(5, 25000, 20)"> 20 USD
+            </button>
+        </div> <!-- Paquete 6 -->
         <div class="coin-package">
             <div class="coin-amount">150000 <i class="fas fa-coins"></i></div>
-            <div class="coin-icon">
-                <img th:src="@{/img/coins_6.png}" alt="Sexto paquete">
+            <div class="coin-icon"><img th:src="@{/img/coins_6.png}" alt="Sexto paquete"></div>
+            <button class="buy-btn" data-bs-toggle="modal" data-bs-target="#modalPago"
+                    onclick="seleccionarPaquete(6, 150000, 100)"> 100 USD
+            </button>
+        </div>
+
+
+    </div> <!-- MODAL ERROR -->
+    <div id="modalError" class="modal fade" tabindex="-1" th:attr="data-mostrar=${errorPago != null}">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header"><h5 class="modal-title text-danger">Error en el Pago</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center"><i class="fas fa-times-circle"
+                                                       style="font-size: 3rem; color: #f44336;"></i>
+                    <p class="mt-3 alert alert-danger" th:text="${errorPago}"></p></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> Cerrar</button>
+                </div>
             </div>
-            <button class="buy-btn">100 USD</button>
+        </div>
+
+
+    </div> <!-- MODAL DE ÉXITO -->
+    <div id="modalExito" class="modal fade" tabindex="-1" th:attr="data-mostrar=${exitoPago != null}">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header"><h5 class="modal-title text-success">¡Compra Exitosa!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center"><i class="fas fa-check-circle"
+                                                       style="font-size: 3rem; color: #4caf50;"></i>
+                    <p class="mt-3" th:text="${exitoPago}"></p></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"> ¡Genial!</button>
+                </div>
+            </div>
+        </div>
+    </div> <!-- MODAL -->
+    <div class="modal fade" id="modalPago" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header"><h5 class="modal-title">Confirmar Compra</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="info-paquete"><p><strong>Paquete:</strong> <span id="cantidadMonedas"></span> monedas
+                    </p>
+                        <p><strong>Precio:</strong> USD <span id="precioPaquete"></span></p></div>
+                    <h6>Método de pago:</h6>
+                    <form th:action="@{/procesar-pago}" method="POST" id="formPago"><input type="hidden"
+                                                                                           name="paqueteId"
+                                                                                           id="paqueteId" value="">
+                        <div class="metodos-pago">
+                            <div class="form-check"><input class="form-check-input" type="radio" name="metodoPago"
+                                                           id="mercadopago" value="mercadopago" checked> <label
+                                    class="form-check-label" for="mercadopago"> Mercado Pago </label></div>
+                        </div>
+                    </form>
+                    <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}"></p></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> Cancelar</button>
+                    <button type="submit" form="formPago" class="btn btn-primary"> Confirmar Compra</button>
+                </div>
+            </div>
         </div>
     </div>
-</main>
-
-<!-- Bootstrap JS -->
+</main> <!-- Bootstrap JS -->
 <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+<script th:src="@{js/tienda-monedas.js}"></script>
 </body>
 </html>

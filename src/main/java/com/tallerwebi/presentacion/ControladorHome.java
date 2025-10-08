@@ -23,15 +23,18 @@ public class ControladorHome {
 
 
     @RequestMapping(path = "/tienda-monedas", method = RequestMethod.GET)
-    public ModelAndView irATiendaMonedas(Usuario usuario, HttpServletRequest request) {
+    public ModelAndView irATiendaMonedas( HttpServletRequest request) {
+        Long idUsuario = (Long) request.getSession().getAttribute("id_usuario");
 
 
-        if (request.getSession().getAttribute("id_usuario") == null) {
+        if (idUsuario == null) {
             return new ModelAndView("redirect:/login");
         }
 
         ModelMap model = new ModelMap();
-        Usuario usuarioEncontrado = servicioLogin.consultarUsuarioPorId(usuario.getId());
+        Integer monedas = servicioLogin.obtenerMonedas(idUsuario);
+         model.put("monedas", monedas);
+        Usuario usuarioEncontrado = servicioLogin.consultarUsuarioPorId(idUsuario);
         model.put("usuario", usuarioEncontrado);
 
         return new ModelAndView("tienda-monedas", model);

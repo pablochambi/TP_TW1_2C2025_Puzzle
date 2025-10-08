@@ -41,5 +41,10 @@ public class ServicioLoginImpl implements ServicioLogin {
         return repositorioUsuario.obtenerUsuarioPorId(id_usuario);
     }
 
+    @Override
+    public Integer obtenerMonedas(Long idUsuario) {
+        return repositorioUsuario.obtenerMonedasUsuario(idUsuario);
+    }
+
 }
 

@@ -43,7 +43,7 @@ public class ControladorHomeTest {
 
             //ejec
 
-            ModelAndView resultado = controladorHome.irATiendaMonedas(usuario, requestMock);
+            ModelAndView resultado = controladorHome.irATiendaMonedas(requestMock);
 
             //assert
 
@@ -56,7 +56,7 @@ public class ControladorHomeTest {
             when(requestMock.getSession()).thenReturn(sessionMock);
             when(sessionMock.getAttribute("id_usuario")).thenReturn(null);
 
-            ModelAndView resultado = controladorHome.irATiendaMonedas(usuario, requestMock);
+            ModelAndView resultado = controladorHome.irATiendaMonedas(requestMock);
 
             assertThat(resultado.getViewName(), equalTo("redirect:/login"));
 
@@ -68,7 +68,7 @@ public class ControladorHomeTest {
             when(sessionMock.getAttribute("id_usuario")).thenReturn(usuario.getId());
             when(servicioLoginMock.consultarUsuarioPorId(usuario.getId())).thenReturn(usuario);
 
-            ModelAndView resultado = controladorHome.irATiendaMonedas(usuario, requestMock);
+            ModelAndView resultado = controladorHome.irATiendaMonedas(requestMock);
 
 
             assertThat(resultado.getViewName(), equalTo("tienda-monedas"));

@@ -63,4 +63,10 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         return sessionFactory.getCurrentSession().get(Usuario.class, id_usuario);
     }
 
+    @Override
+    public Integer obtenerMonedasUsuario(Long idUsuario) {
+        Usuario usuario = obtenerUsuarioPorId(idUsuario);
+        return usuario.getMonedas();
+    }
+
 }
