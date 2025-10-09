@@ -126,6 +126,7 @@ body {
     gap: 12px;
     justify-content: center;
     flex-wrap: wrap;
+    margin: 70px;
 }
 .btn {
     padding: 12px 22px;
@@ -291,7 +292,7 @@ body {
 }
 
 /* Avatares premium (cards) */
-.row.g-3 { margin-top: 8px; }
+.row.g-3 { margin-top: 8px; margin-bottom: 40px }
 .card .card-img-top {
     width: 100px;
     height: 100px;

@@ -13,9 +13,6 @@ const avatarOptions = document.querySelectorAll('.avatar-option');
 let currentAvatarType = 'letter';
 let currentAvatarValue = 'auto';
 
-// Array para almacenar avatares comprados (simula persistencia)
-let avataresPremiumComprados = [];
-
 // ===============================
 // FUNCIONES PRINCIPALES
 // ===============================
@@ -85,7 +82,7 @@ avatarOptions.forEach(option => {
 
 // Referencias al modal
 const modalCompra = new bootstrap.Modal(document.getElementById('confirmCompraModal'));
-let avatarSeleccionadoParaCompra = null;
+const confirmarCompraLink = document.getElementById('confirmarCompraBtn');
 
 // Escuchadores para todos los botones de compra
 document.querySelectorAll('.comprar-btn').forEach(btn => {
@@ -93,69 +90,34 @@ document.querySelectorAll('.comprar-btn').forEach(btn => {
         e.preventDefault();
 
         // Obtener información del avatar
+        const avatarId = this.getAttribute('data-avatar-id');
         const avatarName = this.getAttribute('data-avatar-name');
         const avatarPrice = this.getAttribute('data-avatar-price');
         const avatarImg = this.getAttribute('data-avatar-img');
-
-        // Guardar referencia para la confirmación
-        avatarSeleccionadoParaCompra = {
-            name: avatarName,
-            price: avatarPrice,
-            img: avatarImg,
-            button: this
-        };
 
         // Actualizar contenido del modal
         document.getElementById('modalAvatarName').textContent = avatarName;
         document.getElementById('modalAvatarPrice').textContent = avatarPrice;
         document.getElementById('modalAvatarImg').src = `http://localhost:8080/spring/img/${avatarImg}`;
 
+        // Actualizar href del enlace con el ID del avatar
+        confirmarCompraLink.href = `http://localhost:8080/spring/perfil/avatar/comprar/${avatarId}`;
+
         // Mostrar modal
         modalCompra.show();
     });
 });
 
-// Confirmar la compra
-document.getElementById('confirmarCompraBtn').addEventListener('click', function() {
-    if (!avatarSeleccionadoParaCompra) return;
-
-    // Simular proceso de compra (aquí harías la petición al backend)
-    procesarCompra(avatarSeleccionadoParaCompra);
-
-    // Cerrar modal
-    modalCompra.hide();
-
-    // Limpiar selección
-    avatarSeleccionadoParaCompra = null;
-});
-
-// Función para procesar la compra
-function procesarCompra(avatar) {
-    // Agregar avatar a la lista de comprados
-    avataresPremiumComprados.push(avatar.img);
-
-    // Cambiar el botón de "Comprar" a "Usar"
-    const btnComprar = avatar.button;
-    const parentCard = btnComprar.closest('.card');
-
-    // Reemplazar contenido del botón
-    btnComprar.className = 'btn btn-primary usar-btn mt-2 d-flex align-items-center justify-content-center';
-    btnComprar.innerHTML = 'Usar';
-
-    // Guardar datos del avatar en el botón
-    btnComprar.setAttribute('data-avatar-type', 'premium');
-    btnComprar.setAttribute('data-avatar-img', avatar.img);
-
-    // Remover evento de compra
-    const newBtn = btnComprar.cloneNode(true);
-    btnComprar.parentNode.replaceChild(newBtn, btnComprar);
-
-    // Agregar evento "Usar" al nuevo botón
-    newBtn.addEventListener('click', function(e) {
+// Validación mínima antes de permitir la compra (opcional)
+confirmarCompraLink.addEventListener('click', function(e) {
+    // Validación simple: verificar que el href no esté vacío o sea el default '#'
+    if (!this.href || this.href.endsWith('#')) {
         e.preventDefault();
-        usarAvatarPremium(this);
-    });
-}
+        alert('Error: No se ha seleccionado un avatar válido');
+        return false;
+    }
+    // Si todo está bien, el enlace se ejecuta normalmente
+});
 
 // Función para usar un avatar premium comprado
 function usarAvatarPremium(btn) {
@@ -168,54 +130,6 @@ function usarAvatarPremium(btn) {
     avatarPreview.className = 'avatar avatar-premium';
     avatarPreview.innerHTML = `<img src="${currentAvatarValue}" alt="Avatar Premium">`;
 }
-
-// ===============================
-// SUBIR IMAGEN PERSONALIZADA
-// ===============================
-
-// if (avatarUpload) {
-//     avatarUpload.addEventListener('change', function(e) {
-//         const file = e.target.files[0];
-//         if (!file) return;
-//
-//         // Validar tipo de archivo
-//         if (!file.type.match(/^image\/(jpeg|jpg|png)$/)) {
-//             alert('❌ Por favor selecciona una imagen JPG o PNG');
-//             return;
-//         }
-//
-//         // Validar tamaño (2MB máximo)
-//         if (file.size > 2 * 1024 * 1024) {
-//             alert('❌ La imagen debe ser menor a 2MB');
-//             return;
-//         }
-//
-//         // Leer archivo
-//         const reader = new FileReader();
-//         reader.onload = function(e) {
-//             // Crear opción personalizada si no existe
-//             let customOption = document.querySelector('[data-type="image"]');
-//             if (!customOption) {
-//                 customOption = document.createElement('div');
-//                 customOption.className = 'avatar-option';
-//                 customOption.setAttribute('data-type', 'image');
-//                 customOption.setAttribute('title', 'Imagen personalizada');
-//                 document.querySelector('.avatar-options').appendChild(customOption);
-//             }
-//
-//             // Actualizar imagen
-//             customOption.innerHTML = `<img src="${e.target.result}" alt="Personalizada">`;
-//             customOption.setAttribute('data-value', e.target.result);
-//
-//             // Seleccionar automáticamente
-//             currentAvatarType = 'image';
-//             currentAvatarValue = e.target.result;
-//
-//             selectAvatar(customOption);
-//         };
-//         reader.readAsDataURL(file);
-//     });
-// }
 
 // ===============================
 // ACTUALIZAR AVATAR AL CAMBIAR NOMBRE
@@ -234,7 +148,6 @@ usernameInput.addEventListener('input', function() {
 // Inicializar vista previa del avatar
 actualizarVistaPreviaDeAvatar();
 
-
 // ===============================
 // COLOCA AVATAR SELECCIONADO EN INPUT HIDDEN para enviarlo al controlador desde el formulario
 // ===============================
@@ -251,4 +164,3 @@ avatarOptions.forEach(option => {
         avatarInput.value = value;
     });
 });
-

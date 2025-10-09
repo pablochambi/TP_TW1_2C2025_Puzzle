@@ -39,13 +39,8 @@ public class ControladorLogin {
         Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
         if (usuarioBuscado != null) {
             request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
-            request.getSession().setAttribute("email", usuarioBuscado.getEmail());       //
-            request.getSession().setAttribute("monedas", usuarioBuscado.getMonedas());  //
-            request.getSession().setAttribute("pistas", usuarioBuscado.getPistas());
-            request.getSession().setAttribute("id_usuario", usuarioBuscado.getId()); //
-
+            request.getSession().setAttribute("id_usuario", usuarioBuscado.getId());
             return new ModelAndView("redirect:/home");
-
         } else {
             model.put("error", "Usuario o clave incorrecta");
         }

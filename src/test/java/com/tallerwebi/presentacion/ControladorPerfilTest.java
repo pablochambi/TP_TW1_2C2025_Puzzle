@@ -1,8 +1,6 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.ServicioEstadistica;
-import com.tallerwebi.dominio.ServicioLogin;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -10,9 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -27,6 +23,8 @@ public class ControladorPerfilTest {
     private HttpSession sessionMock;
     private ServicioLogin servicioLoginMock;
     private ServicioEstadistica servicioEstadisticasMock;
+    private ServicioAvatar servicioAvatarMock;
+
 
     private Map<String, Object> estadisticasFacilMock;
     private Map<String, Object> estadisticasMedioMock;
@@ -42,9 +40,11 @@ public class ControladorPerfilTest {
         requestMock = mock(HttpServletRequest.class);
         sessionMock = mock(HttpSession.class);
         servicioLoginMock = mock(ServicioLogin.class);
-
         servicioEstadisticasMock = mock(ServicioEstadistica.class);
-        controladorPerfil = new ControladorPerfil(servicioLoginMock,servicioEstadisticasMock);
+        servicioAvatarMock = mock(ServicioAvatar.class);
+
+        when(requestMock.getSession()).thenReturn(sessionMock);
+        controladorPerfil = new ControladorPerfil(servicioLoginMock,servicioEstadisticasMock,servicioAvatarMock);
 
 
         // Simulacion de Estadisticas por Nivel
@@ -146,6 +146,7 @@ public class ControladorPerfilTest {
     }
 
 
+    // ==================== TESTS DE /perfil/editar GET (Ir a Editar) ====================
 
     @Test
     public void queAlIrAEditarPerfil_SeMuestreLosDatosBasicosDelUsuarioYSuPassword() {
@@ -163,8 +164,6 @@ public class ControladorPerfilTest {
     }
 
 
-    // ==================== TESTS DE /perfil/editar POST (Guardar y Volver) ====================
-
     @Test
     public void queAlGuardarCambiosDelPerfilSinSesionRedirijaAlLogin() {
         when(sessionMock.getAttribute("id_usuario")).thenReturn(null);
@@ -173,6 +172,23 @@ public class ControladorPerfilTest {
 
         assertThat(mav.getViewName(), is("redirect:/login"));
         verify(servicioLoginMock, never()).actualizarPerfil(any(), any(), any(), any());
+    }
+
+    @Test
+    public void queAlIrAEditarPerfil_SeMuestreLasImagenesDeLosAvatares() {
+        // preparacion
+        when(sessionMock.getAttribute("id_usuario")).thenReturn(usuarioMock.getId());
+        when(servicioAvatarMock.obtenerAvataresDisponibles()).thenReturn( (List.of(new Avatar())) );
+
+        // ejecucion
+        ModelAndView mav = controladorPerfil.irAEditarPerfil(sessionMock);
+
+        // verificacion
+        assertThat(mav.getViewName(), is("editar_perfil"));
+        assertThat(mav.getModel().get("lista_avatares"),  instanceOf(List.class));
+        assertThat(((List<?>)mav.getModel().get("lista_avatares")).isEmpty(), is(false));
+
+        verify(servicioAvatarMock, times(1)).obtenerAvataresDisponibles();
     }
 
     @Test
