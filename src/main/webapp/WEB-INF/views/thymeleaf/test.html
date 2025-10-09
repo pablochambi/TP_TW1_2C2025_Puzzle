@@ -1,67 +1,49 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
-    <title>Sudoku - Competencia</title>
+    <title>Sudoku Test</title>
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
     <style>
-        table { border-collapse: collapse; margin: 20px auto; }
-        td {
-            width: 50px; height: 50px;
-            border: 1px solid #444; text-align: center;
-        }
-        input {
-            width: 100%; height: 100%;
-            text-align: center; font-size: 18px;
-            border: none; outline: none;
-        }
-        .rival { background-color: rgba(0, 150, 255, 0.3); }
+        input.own { background: lightgreen; }
+        input.rival { background: lightcoral; }
     </style>
 </head>
 <body>
-<h2 style="text-align:center;">Sudoku Competitivo</h2>
-
+<h2>Sudoku Test</h2>
 <table id="puzzle">
-    <tbody>
-    <tr th:each="row, rowStat : ${puzzle}">
-        <td th:each="cell, colStat : ${row}">
-            <input th:if="${cell == null}" maxlength="1"
-                   oninput="handleInput(this, [[${rowStat.index}]], [[${colStat.index}]])">
-            <span th:if="${cell != null}" th:text="${cell}"></span>
-        </td>
-    </tr>
-    </tbody>
+    <tr><td><input data-row="0" data-col="0" oninput="handleInput(this)"></td><td><input data-row="0" data-col="1" oninput="handleInput(this)"></td></tr>
+    <tr><td><input data-row="1" data-col="0" oninput="handleInput(this)"></td><td><input data-row="1" data-col="1" oninput="handleInput(this)"></td></tr>
 </table>
 
 <script>
-    let stompClient = null;
+    let stompClient;
 
     function connect() {
         const socket = new SockJS('/spring/sudoku-ws');
         stompClient = Stomp.over(socket);
-
-        stompClient.connect({}, function () {
-            console.log("✅ Conectado a WebSocket");
-            stompClient.subscribe('/topic/updates', function (message) {
+        stompClient.connect({}, function(frame) {
+            console.log('✅ Connected:', frame);
+            stompClient.subscribe('/topic/updates', function(message) {
                 const update = JSON.parse(message.body);
                 updateCell(update.row, update.col, update.color);
             });
         });
     }
 
-    function handleInput(input, row, col) {
+    function handleInput(input) {
+        const row = input.dataset.row;
+        const col = input.dataset.col;
         input.classList.add("own");
-        stompClient.send("/app/cell-update", {}, JSON.stringify({row, col, color: "rival"}));
+        stompClient.send("/app/cell-update", {}, JSON.stringify({
+            row: row, col: col, color: "rival"
+        }));
     }
 
-    function updateCell(row, col, colorClass) {
-        const table = document.getElementById("puzzle");
-        const cell = table.rows[row].cells[col];
-        const input = cell.querySelector("input");
-        if (input) {
-            input.classList.add(colorClass);
-        }
+    function updateCell(row, col, color) {
+        const input = document.querySelector(`input[data-row='${row}'][data-col='${col}']`);
+        input.classList.add(color);
+        setTimeout(() => input.classList.remove(color), 1500);
     }
 
     document.addEventListener("DOMContentLoaded", connect);
