@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Sudoku en Tiempo Real</title>
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+  <style>
+    table { border-collapse: collapse; margin: 20px auto; }
+    td {
+      width: 40px; height: 40px; text-align: center;
+      border: 1px solid #444; font-size: 20px;
+    }
+    input { width: 100%; text-align: center; border: none; font-size: 20px; }
+  </style>
+</head>
+<body>
+<h2 style="text-align:center;">🧩 Sudoku en Tiempo Real</h2>
+<table id="sudoku-board"></table>
+
+<script>
+  // --- 1. Crear tablero ---
+  const size = 4;
+  const board = document.getElementById("sudoku-board");
+
+  for (let i = 0; i < size; i++) {
+    const row = board.insertRow();
+    for (let j = 0; j < size; j++) {
+      const cell = row.insertCell();
+      const input = document.createElement("input");
+      input.type = "number";
+      input.min = 1;
+      input.max = 4;
+      input.dataset.row = i;
+      input.dataset.col = j;
+      input.addEventListener("input", onCellChange);
+      cell.appendChild(input);
+    }
+  }
+
+  // --- 2. Conectar a WebSocket ---
+  var socket = new SockJS('/spring/sudoku-ws');
+  var stompClient = Stomp.over(socket);
+
+  stompClient.connect({}, function (frame) {
+    console.log('Conectado: ' + frame);
+
+    // Escuchar los mensajes desde el servidor
+    stompClient.subscribe('/topic/board-updates', function (message) {
+      const update = JSON.parse(message.body);
+      const input = document.querySelector(`input[data-row="${update.row}"][data-col="${update.col}"]`);
+      if (input) input.value = update.value;
+    });
+  });
+
+  // --- 3. Enviar cambios ---
+  function onCellChange(event) {
+    const row = event.target.dataset.row;
+    const col = event.target.dataset.col;
+    const value = event.target.value;
+
+    stompClient.send("/app/cell-update", {}, JSON.stringify({
+      row: row,
+      col: col,
+      value: value
+    }));
+  }
+</script>
+</body>
+</html>
