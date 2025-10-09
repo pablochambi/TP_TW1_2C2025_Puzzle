@@ -11,15 +11,14 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+
 @Repository("repositorioUsuario")
 public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
-    private SessionFactory sessionFactory;
 
     @Autowired
-    public RepositorioUsuarioImpl(SessionFactory sessionFactory){
-        this.sessionFactory = sessionFactory;
-    }
+    SessionFactory sessionFactory;
 
     @Override
     public Usuario buscarUsuario(String email, String password) {
@@ -55,22 +54,60 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     }
 
     @Override
-    public void actualizarPerfil(Long id_usuario, String nuevoNombre, String nuevaUrlImagen, String nuevoIconoHexadecimal, String nuevaPassword) {
+    public void actualizarPerfil(Long id_usuario, String nuevoNombre, Long id_avatar, String nuevaPassword) {
 
-        Usuario usuario = obtenerUsuarioPorId(id_usuario);
+        Session session = sessionFactory.getCurrentSession();
 
-        boolean esIcono = nuevoIconoHexadecimal != null;
-        boolean tieneImagen = nuevaUrlImagen != null;
-
-        if (!esIcono && !tieneImagen) {
-            throw new RuntimeException("No se puede modificar la imagen del usuario");
+        // 1️⃣ Buscar usuario
+        Usuario usuario = session.get(Usuario.class, id_usuario);
+        if (usuario == null) {
+            throw new RuntimeException("Usuario no encontrado");
         }
 
+        // 2️⃣ Buscar nuevo avatar seleccionado
+        Avatar nuevoAvatar = session.get(Avatar.class, id_avatar);
+        if (nuevoAvatar == null) {
+            throw new RuntimeException("Avatar no encontrado");
+        }
+
+        // 3️⃣ Verificar que el usuario tenga ese avatar comprado
+        Usuario_Avatar usuarioAvatar = buscarRelacionEntreUsuarioYAvatar(usuario, nuevoAvatar);
+        if (usuarioAvatar == null) {
+            throw new RuntimeException("El usuario no posee el avatar seleccionado");
+        }
+
+        // 4️⃣ Desactivar avatar anterior (si existe)
+        Usuario_Avatar actual = obtenerAvatarEnUso(usuario);
+        if (actual != null) {
+            actual.setEn_uso(false);
+            session.update(actual);
+        }
+
+        // 5️⃣ Activar el nuevo avatar
+        usuarioAvatar.setEn_uso(true);
+        session.update(usuarioAvatar);
+
+        // 6️⃣ Actualizar datos del usuario
         usuario.setNombreUsuario(nuevoNombre);
         usuario.setPassword(nuevaPassword);
+        session.update(usuario);
+    }
 
-        sessionFactory.getCurrentSession().update(usuario);
+    private Usuario_Avatar obtenerAvatarEnUso(Usuario usuario) {
+        return (Usuario_Avatar) sessionFactory.getCurrentSession()
+                .createCriteria(Usuario_Avatar.class)
+                .add(Restrictions.eq("usuario", usuario))
+                .add(Restrictions.eq("en_uso", true))
+                .uniqueResult();
+    }
 
+
+    private Usuario_Avatar buscarRelacionEntreUsuarioYAvatar(Usuario usuario, Avatar avatar) {
+        return (Usuario_Avatar) sessionFactory.getCurrentSession()
+                .createCriteria(Usuario_Avatar.class)
+                .add(Restrictions.eq("usuario", usuario))
+                .add(Restrictions.eq("avatar", avatar))
+                .uniqueResult();
     }
 
     @Override

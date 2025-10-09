@@ -6,14 +6,10 @@ public interface RepositorioUsuario {
     void guardar(Usuario usuario);
     Usuario buscar(String email);
     void modificar(Usuario usuario);
-
-    void actualizarPerfil(Long id, String nuevoNombre, String nuevaUrl, String nuevaPassword);
     Usuario obtenerUsuarioPorId(Long id_usuario);
     Integer obtenerMonedasUsuario(Long idUsuario);
-
     void actualizarPerfil(Long idUsuario, String nuevoNombre,
-                          String nuevaUrlImagen, String nuevoIconoHexadecimal, String nuevaPassword);
-
+                          Long id_avatar, String nuevaPassword);
     void actualizarNombreYPassword(Long idUsuario, String nuevoNombre, String nuevaPassword);
 }
 

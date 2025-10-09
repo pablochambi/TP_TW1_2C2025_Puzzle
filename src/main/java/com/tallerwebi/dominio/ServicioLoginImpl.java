@@ -35,33 +35,18 @@ public class ServicioLoginImpl implements ServicioLogin {
     }
 
     @Override
-    public void actualizarPerfil(Long idUsuario, String nuevoNombre, String nuevoAvatar, String nuevaPassword) {
+    public void actualizarPerfil(Long idUsuario, String nuevoNombre, Long id_avatar, String nuevaPassword) {
 
-        String nuevaUrlImagen = null;
-        String nuevoIconoHexadecimal = null;
+        Avatar avatarEncontrado = repositorioAvatar.buscarAvatarPorId(id_avatar);
         Usuario usuario = repositorioUsuario.obtenerUsuarioPorId(idUsuario);
 
-        if(usuario.getNombreUsuario().equals(nuevoNombre) && usuario.getPassword().equals(nuevaPassword)){
+        if(avatarEncontrado == null || usuario == null) throw new RuntimeException("Avatar null o usuario null");
 
-            if (nuevoAvatar.startsWith("/img/")) {
-                Avatar avatar = repositorioAvatar.buscarAvatarPorUrlImagen(nuevoAvatar);// Es una URL de imagen
-            }else if (nuevoAvatar.matches("(?i)&?#x[0-9a-f]+;")) {
-                nuevoIconoHexadecimal = nuevoAvatar; // Es un icono en formato hexadecimal
-            } else {
-                throw new FormatoDeAvatarInvalido();
-            }
+
+        repositorioUsuario.actualizarPerfil(idUsuario, nuevoNombre, id_avatar, nuevaPassword);
 
 
 
-        }else{
-//            repositorioUsuario.actualizarNombreYPassword(idUsuario, nuevoNombre, nuevaPassword);
-        }
-
-
-
-
-
-        repositorioUsuario.actualizarPerfil(idUsuario, nuevoNombre, nuevaUrlImagen,nuevoIconoHexadecimal, nuevaPassword);
     }
 
     @Override

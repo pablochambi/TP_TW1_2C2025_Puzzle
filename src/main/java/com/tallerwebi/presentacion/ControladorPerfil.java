@@ -79,7 +79,7 @@ public class ControladorPerfil {
     //Faltan arreglar el metodo actualizarPerfil de servicioLogin y el metodo en el repositorio
     @RequestMapping(path = "/perfil/guardar", method = RequestMethod.POST)
     public ModelAndView guardarPerfil(@RequestParam("nombreUsuario") String nuevoNombre,
-                                      @RequestParam("avatarSeleccionado") String nuevoAvatar,
+                                      @RequestParam("id_avatar") Long id_avatar,
                                       @RequestParam("password") String nuevaPassword,
                                       HttpSession sessionMock) {
 
@@ -91,7 +91,7 @@ public class ControladorPerfil {
         ModelMap model = new ModelMap();
 
         try {
-            servicioLogin.actualizarPerfil(idUsuario, nuevoNombre, nuevoAvatar, nuevaPassword);
+            servicioLogin.actualizarPerfil(idUsuario, nuevoNombre, id_avatar, nuevaPassword);
             model.put("usuario",servicioLogin.consultarUsuarioPorId(idUsuario));
 
         } catch (FormatoDeAvatarInvalido e) {

@@ -45,44 +45,34 @@ public class ServicioLoginTest {
     @Test
     public void queAlActualizarPerfilSeModifiquenTodosLosDatosCorrectamente() {
         String nuevoNombre = "nuevoNombre";
-        String nuevaUrl = "nuevaUrl.jpg";
+        Long idAvatar = 1L;
         String nuevaPassword = "nuevaPassword";
-        String nuevoIconoHexadecimal = "";
 
-        doNothing().when(repositorioUsuarioMock).actualizarPerfil(usuarioMock.getId(), nuevoNombre, nuevaUrl,nuevoIconoHexadecimal, nuevaPassword);
+        when(repositorioUsuarioMock.obtenerUsuarioPorId(usuarioMock.getId())).thenReturn(usuarioMock);
+        when(repositorioAvatarMock.buscarAvatarPorId(idAvatar)).thenReturn(new Avatar());
 
-        servicioLogin.actualizarPerfil(usuarioMock.getId(), nuevoNombre, nuevaUrl, nuevaPassword);
+        doNothing().when(repositorioUsuarioMock).actualizarPerfil(usuarioMock.getId(), nuevoNombre, idAvatar, nuevaPassword);
 
-        verify(repositorioUsuarioMock, times(1)).actualizarPerfil(usuarioMock.getId(), nuevoNombre, nuevaUrl, nuevoIconoHexadecimal, nuevaPassword);
+        servicioLogin.actualizarPerfil(usuarioMock.getId(), nuevoNombre, idAvatar, nuevaPassword);
+
+        verify(repositorioUsuarioMock, times(1)).actualizarPerfil(usuarioMock.getId(), nuevoNombre,idAvatar, nuevaPassword);
     }
 
-    @Test
-    public void queAlActualizarPerfilConUsuarioInexistenteLanceUsuarioInexistente() {
-        String nuevoNombre = "nuevoNombre";
-        String nuevaUrl = "nuevaUrl.jpg";
-        String nuevaPassword = "nuevaPassword";
-        String nuevoIconoHexadecimal = "";
-
-        doThrow(UsuarioInexistente.class).when(repositorioUsuarioMock).actualizarPerfil(999L, nuevoNombre, nuevaUrl,nuevoIconoHexadecimal, nuevaPassword);
-
-        assertThrows(UsuarioInexistente.class, () -> {
-            servicioLogin.actualizarPerfil(999L, nuevoNombre, nuevaUrl, nuevaPassword);
-        });
-        verify(repositorioUsuarioMock, times(1)).actualizarPerfil(999L, nuevoNombre, nuevaUrl,nuevoIconoHexadecimal, nuevaPassword);
-    }
 
     @Test
     public void queAlActualizarPerfilConUnaRutaDeLaNuevaImagenDePerfil_seGuardeComoRutaAEsaImagen() {
         String nuevoNombre = "nuevoNombre";
-        String nuevoAvatar = "img/avatar/nuevaImagen.jpg";
+        Long idAvatar = 1L;
         String nuevaPassword = "nuevaPassword";
-        String nuevoIconoHexadecimal = "";
 
-        doNothing().when(repositorioUsuarioMock).actualizarPerfil(usuarioMock.getId(), nuevoNombre, nuevoAvatar,nuevoIconoHexadecimal,  nuevaPassword);
+        when(repositorioUsuarioMock.obtenerUsuarioPorId(usuarioMock.getId())).thenReturn(usuarioMock);
+        when(repositorioAvatarMock.buscarAvatarPorId(idAvatar)).thenReturn(new Avatar());
 
-        servicioLogin.actualizarPerfil(usuarioMock.getId(), nuevoNombre, nuevoAvatar, nuevaPassword);
+        doNothing().when(repositorioUsuarioMock).actualizarPerfil(usuarioMock.getId(), nuevoNombre, idAvatar,  nuevaPassword);
 
-        verify(repositorioUsuarioMock, times(1)).actualizarPerfil(usuarioMock.getId(), nuevoNombre, nuevoAvatar,nuevoIconoHexadecimal,  nuevaPassword);
+        servicioLogin.actualizarPerfil(usuarioMock.getId(), nuevoNombre, idAvatar, nuevaPassword);
+
+        verify(repositorioUsuarioMock, times(1)).actualizarPerfil(usuarioMock.getId(), nuevoNombre, idAvatar,  nuevaPassword);
     }
 
 }

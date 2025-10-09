@@ -8,7 +8,7 @@ public interface ServicioLogin {
     void registrar(Usuario usuario) throws UsuarioExistente;
 
     void actualizarPerfil(Long idUsuario, String nuevoNombre,
-                          String nuevoAvatar, String nuevaPassword);
+                          Long id_avatar, String nuevaPassword);
 
     Usuario consultarUsuarioPorId(Long id_usuario);
     Integer obtenerMonedas(Long idUsuario);

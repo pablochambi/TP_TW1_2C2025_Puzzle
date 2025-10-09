@@ -34,4 +34,9 @@ public class RepositoprioAvatarImpl implements RepositorioAvatar {
                 .uniqueResult();
     }
 
+    @Override
+    public Avatar buscarAvatarPorId(Long idAvatar) {
+        return sessionFactory.getCurrentSession().get(Avatar.class, idAvatar);
+    }
+
 }

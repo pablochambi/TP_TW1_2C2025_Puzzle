@@ -168,7 +168,7 @@ public class ControladorPerfilTest {
     public void queAlGuardarCambiosDelPerfilSinSesionRedirijaAlLogin() {
         when(sessionMock.getAttribute("id_usuario")).thenReturn(null);
 
-        ModelAndView mav = controladorPerfil.guardarPerfil("nuevoNombre", "nuevoAvatar", "nuevaPassword", sessionMock);
+        ModelAndView mav = controladorPerfil.guardarPerfil("nuevoNombre", 1L, "nuevaPassword", sessionMock);
 
         assertThat(mav.getViewName(), is("redirect:/login"));
         verify(servicioLoginMock, never()).actualizarPerfil(any(), any(), any(), any());
@@ -177,8 +177,12 @@ public class ControladorPerfilTest {
     @Test
     public void queAlIrAEditarPerfil_SeMuestreLasImagenesDeLosAvatares() {
         // preparacion
+        AvatarDTO avatar = new AvatarDTO();
+        avatar.setId(1L);
+        avatar.setNombre("avatar");
+
         when(sessionMock.getAttribute("id_usuario")).thenReturn(usuarioMock.getId());
-        when(servicioAvatarMock.obtenerAvataresDisponibles()).thenReturn( (List.of(new Avatar())) );
+        when(servicioAvatarMock.obtenerAvataresDTO(any())).thenReturn( (List.of(avatar)) );
 
         // ejecucion
         ModelAndView mav = controladorPerfil.irAEditarPerfil(sessionMock);
@@ -188,32 +192,31 @@ public class ControladorPerfilTest {
         assertThat(mav.getModel().get("lista_avatares"),  instanceOf(List.class));
         assertThat(((List<?>)mav.getModel().get("lista_avatares")).isEmpty(), is(false));
 
-        verify(servicioAvatarMock, times(1)).obtenerAvataresDisponibles();
+        verify(servicioAvatarMock, times(1)).obtenerAvataresDTO(any());
     }
 
     @Test
     public void queAlGuardarCambiosDelPerfilSeActualicenLosDatosYRedirijaAlPerfil() {
         Long idUsuario = 1L;
         String nuevoNombre = "nuevoUsuario";
-        String nuevoAvatar = "img/avatar/test.jpg";
+        Long idAvatar = 1L;
         String nuevaPassword = "nuevaPassword123";
 
         Usuario usuarioActualizado = new Usuario();
         usuarioActualizado.setId(idUsuario);
         usuarioActualizado.setNombreUsuario(nuevoNombre);
-        usuarioActualizado.setUrlAvatar(nuevoAvatar);
         usuarioActualizado.setPassword(nuevaPassword);
 
         when(sessionMock.getAttribute("id_usuario")).thenReturn(idUsuario);
         when(servicioLoginMock.consultarUsuarioPorId(idUsuario)).thenReturn(usuarioActualizado);
 
-        doNothing().when(servicioLoginMock).actualizarPerfil(idUsuario, nuevoNombre, nuevoAvatar, nuevaPassword);
+        doNothing().when(servicioLoginMock).actualizarPerfil(idUsuario, nuevoNombre, idAvatar, nuevaPassword);
 
-        ModelAndView mav = controladorPerfil.guardarPerfil(nuevoNombre, nuevoAvatar, nuevaPassword, sessionMock);
+        ModelAndView mav = controladorPerfil.guardarPerfil(nuevoNombre, idAvatar, nuevaPassword, sessionMock);
 
         assertThat(mav.getViewName(), is("redirect:/perfil"));
         assertThat(((Usuario)mav.getModel().get("usuario")).getNombreUsuario(), is(usuarioActualizado.getNombreUsuario()));
-        verify(servicioLoginMock, times(1)).actualizarPerfil(idUsuario, nuevoNombre, nuevoAvatar, nuevaPassword);
+        verify(servicioLoginMock, times(1)).actualizarPerfil(idUsuario, nuevoNombre, idAvatar, nuevaPassword);
     }
 
 
