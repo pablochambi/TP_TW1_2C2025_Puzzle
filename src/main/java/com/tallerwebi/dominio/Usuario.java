@@ -1,6 +1,6 @@
 package com.tallerwebi.dominio;
-
 import lombok.Setter;
+
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,14 +21,13 @@ public class Usuario {
     private String rol;
     private Boolean activo = false;
     private Integer pistas;
-
     private Integer monedas;
     private String urlAvatar;
 
     private Integer saldo;
 
     public Usuario() {
-        this.monedas = 110;
+        this.monedas = 100;
         this.pistas = 5;
         this.saldo = 150;
         this.nombreUsuario = "jugador123";

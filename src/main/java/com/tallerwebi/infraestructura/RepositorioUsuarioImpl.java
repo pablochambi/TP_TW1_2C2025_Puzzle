@@ -58,36 +58,36 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
         Session session = sessionFactory.getCurrentSession();
 
-        // 1️⃣ Buscar usuario
+        // 1 Buscar usuario
         Usuario usuario = session.get(Usuario.class, id_usuario);
         if (usuario == null) {
             throw new RuntimeException("Usuario no encontrado");
         }
 
-        // 2️⃣ Buscar nuevo avatar seleccionado
+        // 2 Buscar nuevo avatar seleccionado
         Avatar nuevoAvatar = session.get(Avatar.class, id_avatar);
         if (nuevoAvatar == null) {
             throw new RuntimeException("Avatar no encontrado");
         }
 
-        // 3️⃣ Verificar que el usuario tenga ese avatar comprado
+        // 3 Verificar que el usuario tenga ese avatar comprado
         Usuario_Avatar usuarioAvatar = buscarRelacionEntreUsuarioYAvatar(usuario, nuevoAvatar);
         if (usuarioAvatar == null) {
             throw new RuntimeException("El usuario no posee el avatar seleccionado");
         }
 
-        // 4️⃣ Desactivar avatar anterior (si existe)
+        // 4 Desactivar avatar anterior (si existe)
         Usuario_Avatar actual = obtenerAvatarEnUso(usuario);
         if (actual != null) {
             actual.setEn_uso(false);
             session.update(actual);
         }
 
-        // 5️⃣ Activar el nuevo avatar
+        // 5 Activar el nuevo avatar
         usuarioAvatar.setEn_uso(true);
         session.update(usuarioAvatar);
 
-        // 6️⃣ Actualizar datos del usuario
+        // 6 Actualizar datos del usuario
         usuario.setNombreUsuario(nuevoNombre);
         usuario.setPassword(nuevaPassword);
         session.update(usuario);

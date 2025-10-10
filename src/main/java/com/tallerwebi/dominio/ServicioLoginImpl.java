@@ -37,15 +37,7 @@ public class ServicioLoginImpl implements ServicioLogin {
     @Override
     public void actualizarPerfil(Long idUsuario, String nuevoNombre, Long id_avatar, String nuevaPassword) {
 
-        Avatar avatarEncontrado = repositorioAvatar.buscarAvatarPorId(id_avatar);
-        Usuario usuario = repositorioUsuario.obtenerUsuarioPorId(idUsuario);
-
-        if(avatarEncontrado == null || usuario == null) throw new RuntimeException("Avatar null o usuario null");
-
-
         repositorioUsuario.actualizarPerfil(idUsuario, nuevoNombre, id_avatar, nuevaPassword);
-
-
 
     }
 
