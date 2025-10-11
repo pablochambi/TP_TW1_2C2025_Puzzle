@@ -1,29 +1,137 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
+  <meta charset="UTF-8">
   <title>Sudoku</title>
-  <link rel="stylesheet" th:href="@{/css/sudoku.css}"/>
+  <link rel="stylesheet" th:href="@{/css/sudoku.css}">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f8f9fa;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    h2 {
+      margin-top: 20px;
+    }
+
+    table {
+      border-collapse: collapse;
+      margin: 20px auto;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    td {
+      width: 45px;
+      height: 45px;
+      text-align: center;
+      border: 1px solid #999;
+      font-size: 18px;
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      border: none;
+      outline: none;
+      font-size: 18px;
+      background: white;
+      cursor: pointer;
+    }
+
+    .correct {
+      background-color: #c6f6d5 !important; /* verde */
+    }
+
+    .wrong {
+      background-color: #feb2b2 !important; /* rojo */
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 10px;
+      font-size: 18px;
+    }
+
+    .controls {
+      margin-top: 20px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 5px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Overlay de pausa */
+    #pauseOverlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      font-size: 22px;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 10;
+    }
+
+    #pauseOverlay button {
+      background-color: #28a745;
+      margin-top: 15px;
+    }
+
+    #pauseOverlay button.exit {
+      background-color: #dc3545;
+    }
+
+  </style>
 </head>
 <body>
-<h2>Sudoku Puzzle</h2>
+<h2>🧩 Sudoku</h2>
 
+<div class="stats">
+  <div>⏱️ Tiempo: <span id="timer">00:00</span></div>
+  <div>⭐ Puntos: <span id="score">0</span></div>
+  <div>💡 Pistas: <span id="hints">5</span></div>
+</div>
+
+<!-- TABLERO -->
 <table id="puzzle">
   <tbody>
   <tr th:each="row, rowStat : ${sudoku.puzzle}">
-    <td th:each="cell, colStat : ${row}"
-        th:utext="${cell != null ? cell : '<input type=&quot;text&quot; maxlength=&quot;1&quot;>'}">
+    <td th:each="cell, colStat : ${row}">
+      <span th:if="${cell != null}" th:text="${cell}"></span>
+      <input th:unless="${cell != null}"
+             type="text" maxlength="1"
+             th:attr="data-row=${rowStat.index}, data-col=${colStat.index}"
+             oninput="handleInput(this)">
     </td>
   </tr>
   </tbody>
 </table>
 
-<div style="text-align:center; margin: 20px;">
-  <button onclick="checkSolution()">Verificar</button>
-  <button onclick="showSolution()">Mostrar solución</button>
-</div>
-
-<h2>Sudoku Solution</h2>
-
+<!-- Solución oculta -->
 <table id="solution" style="display:none;">
   <tbody>
   <tr th:each="row : ${sudoku.solution}">
@@ -32,45 +140,131 @@
   </tbody>
 </table>
 
+<!-- Botones -->
+<div class="controls">
+  <button onclick="togglePause()">⏸️ Pausa</button>
+  <button onclick="useHint()">💡 Pista</button>
+  <button onclick="clearCell()">🧹 Borrar</button>
+</div>
+
+<!-- Overlay de Pausa -->
+<div id="pauseOverlay">
+  <div>⏸️ Juego en pausa</div>
+  <button onclick="resumeGame()">Continuar</button>
+  <button class="exit" onclick="exitGame()">Salir</button>
+</div>
+
 <script>
-  function checkSolution() {
-    const puzzleTable = document.getElementById("puzzle");
-    const solutionTable = document.getElementById("solution");
+  let timerInterval;
+  let seconds = 0;
+  let isPaused = false;
+  let score = 0;
+  let hints = 5;
+  let selectedInput = null;
 
-    const puzzleRows = puzzleTable.getElementsByTagName("tr");
-    const solutionRows = solutionTable.getElementsByTagName("tr");
+  // Inicializa el juego
+  document.addEventListener("DOMContentLoaded", () => {
+    startTimer();
+    document.querySelectorAll("#puzzle input").forEach(input => {
+      input.addEventListener("focus", () => selectedInput = input);
+    });
+  });
 
-    let allCorrect = true;
-
-    for (let i = 0; i < puzzleRows.length; i++) {
-      const puzzleCells = puzzleRows[i].getElementsByTagName("td");
-      const solutionCells = solutionRows[i].getElementsByTagName("td");
-
-      for (let j = 0; j < puzzleCells.length; j++) {
-        const input = puzzleCells[j].querySelector("input");
-        if (input) {
-          const userValue = input.value;
-          const correctValue = solutionCells[j].innerText;
-          if (userValue === correctValue) {
-            input.classList.add("correct");
-            input.classList.remove("wrong");
-          } else {
-            input.classList.add("wrong");
-            input.classList.remove("correct");
-            allCorrect = false;
-          }
-        }
+  // Cronómetro
+  function startTimer() {
+    timerInterval = setInterval(() => {
+      if (!isPaused) {
+        seconds++;
+        const mins = String(Math.floor(seconds / 60)).padStart(2, "0");
+        const secs = String(seconds % 60).padStart(2, "0");
+        document.getElementById("timer").textContent = `${mins}:${secs}`;
       }
-    }
+    }, 1000);
+  }
 
-    if (allCorrect) {
-      alert("🎉 ¡Felicitaciones! Sudoku resuelto correctamente 🎉");
+  function togglePause() {
+    isPaused = !isPaused;
+    const overlay = document.getElementById("pauseOverlay");
+    overlay.style.display = isPaused ? "flex" : "none";
+  }
+
+  function resumeGame() {
+    isPaused = false;
+    document.getElementById("pauseOverlay").style.display = "none";
+  }
+
+  function exitGame() {
+    const confirmExit = confirm("⚠️ ¿Seguro que deseas salir? Perderás el progreso.");
+    if (confirmExit) {
+      window.location.href = "/spring/home";
     }
   }
 
-  function showSolution() {
-    document.getElementById("solution").style.display = "table";
+  // Manejar input del usuario
+  function handleInput(input) {
+    const value = input.value.trim();
+    const row = input.getAttribute("data-row");
+    const col = input.getAttribute("data-col");
+
+    if (!/^[1-9]$/.test(value)) {
+      input.value = "";
+      return;
+    }
+
+    const correctValue = document.getElementById("solution").rows[row].cells[col].innerText;
+
+    if (value === correctValue) {
+      input.classList.add("correct");
+      input.classList.remove("wrong");
+      score += 10;
+      document.getElementById("score").textContent = score;
+    } else {
+      input.classList.add("wrong");
+      input.classList.remove("correct");
+    }
   }
+
+  // Botón de borrar
+  function clearCell() {
+    if (selectedInput) {
+      selectedInput.value = "";
+      selectedInput.classList.remove("correct", "wrong");
+    }
+  }
+
+  // Botón de pista
+  function useHint() {
+    if (hints <= 0) {
+      alert("⚠️ No te quedan pistas disponibles.");
+      return;
+    }
+
+    const emptyCells = Array.from(document.querySelectorAll("#puzzle input"))
+            .filter(i => !i.value);
+
+    if (emptyCells.length === 0) {
+      alert("🎉 ¡Ya completaste el Sudoku!");
+      return;
+    }
+
+    const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+    const row = randomCell.getAttribute("data-row");
+    const col = randomCell.getAttribute("data-col");
+    const correctValue = document.getElementById("solution").rows[row].cells[col].innerText;
+
+    randomCell.value = correctValue;
+    randomCell.classList.add("correct");
+    randomCell.disabled = true;
+
+    hints--;
+    document.getElementById("hints").textContent = hints;
+  }
+
+  // Confirmar antes de recargar
+  window.addEventListener("beforeunload", function (e) {
+    e.preventDefault();
+    e.returnValue = "Si recargas perderás tu progreso. ¿Deseas continuar?";
+  });
 </script>
 
 </body>
