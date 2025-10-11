@@ -72,36 +72,37 @@
   </section>
 
   <div class="menu" id="menu">
-    <a th:href="@{sudoku}" style="text-decoration: none" >
-      <div class="difficulty-card easy" >
-        <div class="difficulty-header">
-          <span class="difficulty-icon">&#x1F331</span>
-          <span class="difficulty-title">Principiante</span>
-        </div>
-        <div class="difficulty-desc">Ideal para comenzar.</div>
+
+  <a th:href="@{/sudoku(difficulty='easy')}" style="text-decoration: none">
+    <div class="difficulty-card easy">
+      <div class="difficulty-header">
+        <span class="difficulty-icon">&#x1F331</span>
+        <span class="difficulty-title">Principiante</span>
       </div>
-    </a>
+      <div class="difficulty-desc">Ideal para comenzar.</div>
+    </div>
+  </a>
 
 
-
-
-    <a th:href="@{sudoku}" style="text-decoration: none"><div class="difficulty-card medium" href="/sudoku">
+  <a th:href="@{/sudoku(difficulty='medium')}" style="text-decoration: none">
+    <div class="difficulty-card medium">
       <div class="difficulty-header">
         <span class="difficulty-icon">&#x26A1</span>
         <span class="difficulty-title">Intermedio</span>
       </div>
       <div class="difficulty-desc">Un desafío equilibrado.</div>
-    </div></a>
+    </div>
+  </a>
 
-
-
-    <a th:href="@{sudoku}" style="text-decoration: none"><div class="difficulty-card hard" href="/sudoku">
+  <a th:href="@{/sudoku(difficulty='hard')}" style="text-decoration: none">
+    <div class="difficulty-card hard">
       <div class="difficulty-header">
         <span class="difficulty-icon">&#x1F525</span>
         <span class="difficulty-title">Experto</span>
       </div>
       <div class="difficulty-desc">Para maestros del Sudoku.</div>
-    </div></a>
+    </div>
+  </a>
 
     </div>
 </main>
