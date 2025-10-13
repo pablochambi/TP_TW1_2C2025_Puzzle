@@ -1,68 +1,166 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Sudoku en Tiempo Real</title>
+  <title>Sudoku Competencia</title>
   <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
   <style>
-    table { border-collapse: collapse; margin: 20px auto; }
-    td {
-      width: 40px; height: 40px; text-align: center;
-      border: 1px solid #444; font-size: 20px;
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f7fafc;
     }
-    input { width: 100%; text-align: center; border: none; font-size: 20px; }
+
+    table {
+      border-collapse: collapse;
+      margin: 20px auto;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    }
+
+    td {
+      width: 50px;
+      height: 50px;
+      text-align: center;
+      border: 1px solid #555;
+      padding: 0;
+    }
+
+    input {
+      width: 100%;
+      height: 100%;
+      border: none;
+      text-align: center;
+      font-size: 20px;
+      background: none;
+      outline: none;
+    }
+
+    .fixed {
+      background: #edf2f7;
+      font-weight: bold;
+      color: #2d3748;
+    }
+
+    .correct {
+      background-color: #c6f6d5; /* verde */
+    }
+
+    .wrong {
+      background-color: #feb2b2; /* rojo */
+    }
+
+    .rival-correct {
+      background-color: rgba(198, 246, 213, 0.7);
+    }
+
+    .rival-wrong {
+      background-color: rgba(254, 178, 178, 0.7);
+    }
+
+    #status {
+      margin-top: 10px;
+      font-weight: bold;
+    }
   </style>
 </head>
+
 <body>
-<h2 style="text-align:center;">🧩 Sudoku en Tiempo Real</h2>
+<div th:replace="fragment/header :: header"></div>
+
 <table id="sudoku-board"></table>
 
-<script>
-  // --- 1. Crear tablero ---
-  const size = 4;
-  const board = document.getElementById("sudoku-board");
+<div id="status">Conectando...</div>
 
+<script>
+  // --- Sudoku base (4x4) ---
+  const puzzle = [
+    [0, 2, 0, 4],
+    [3, 0, 1, 0],
+    [0, 1, 0, 3],
+    [4, 0, 2, 0]
+  ];
+
+  const solution = [
+    [1, 2, 3, 4],
+    [3, 4, 1, 2],
+    [2, 1, 4, 3],
+    [4, 3, 2, 1]
+  ];
+
+  const board = document.getElementById("sudoku-board");
+  const size = 4;
+  let stompClient = null;
+  const playerId = Math.random().toString(36).substring(2, 9);
+
+  // --- Crear tablero ---
   for (let i = 0; i < size; i++) {
     const row = board.insertRow();
     for (let j = 0; j < size; j++) {
       const cell = row.insertCell();
       const input = document.createElement("input");
-      input.type = "number";
-      input.min = 1;
-      input.max = 4;
       input.dataset.row = i;
       input.dataset.col = j;
-      input.addEventListener("input", onCellChange);
+      input.maxLength = 1;
+
+      if (puzzle[i][j] !== 0) {
+        input.value = puzzle[i][j];
+        input.disabled = true;
+        input.classList.add("fixed");
+      } else {
+        input.addEventListener("input", handleInput);
+      }
+
       cell.appendChild(input);
     }
   }
 
-  // --- 2. Conectar a WebSocket ---
-  var socket = new SockJS('/spring/sudoku-ws');
-  var stompClient = Stomp.over(socket);
+  // --- Conectar WebSocket ---
+  function connect() {
+    const socket = new SockJS('/spring/sudoku-ws');
+    stompClient = Stomp.over(socket);
 
-  stompClient.connect({}, function (frame) {
-    console.log('Conectado: ' + frame);
+    stompClient.connect({}, (frame) => {
+      console.log("✅ Conectado:", frame);
+      document.getElementById("status").textContent = "🟢 Conectado";
 
-    // Escuchar los mensajes desde el servidor
-    stompClient.subscribe('/topic/board-updates', function (message) {
-      const update = JSON.parse(message.body);
-      const input = document.querySelector(`input[data-row="${update.row}"][data-col="${update.col}"]`);
-      if (input) input.value = update.value;
+      stompClient.subscribe('/topic/board-updates', (msg) => {
+        const update = JSON.parse(msg.body);
+        const input = document.querySelector(`input[data-row="${update.row}"][data-col="${update.col}"]`);
+        if (!input) return;
+
+        // Si el mensaje viene de otro jugador
+        if (update.playerId !== playerId) {
+          input.classList.remove("rival-correct", "rival-wrong");
+          input.value = ""; // el rival no ve el número
+          input.classList.add(update.correct ? "rival-correct" : "rival-wrong");
+        }
+      });
     });
-  });
+  }
 
-  // --- 3. Enviar cambios ---
-  function onCellChange(event) {
-    const row = event.target.dataset.row;
-    const col = event.target.dataset.col;
-    const value = event.target.value;
+  document.addEventListener("DOMContentLoaded", connect);
+
+  // --- Manejar entrada ---
+  function handleInput(e) {
+    const input = e.target;
+    const row = parseInt(input.dataset.row);
+    const col = parseInt(input.dataset.col);
+    const value = parseInt(input.value);
+
+    if (isNaN(value) || value < 1 || value > 4) {
+      input.value = "";
+      input.classList.remove("correct", "wrong");
+      return;
+    }
+
+    const correct = value === solution[row][col];
+    input.classList.remove("correct", "wrong");
+    input.classList.add(correct ? "correct" : "wrong");
 
     stompClient.send("/app/cell-update", {}, JSON.stringify({
-      row: row,
-      col: col,
-      value: value
+      row, col, value, correct, playerId
     }));
   }
 </script>
