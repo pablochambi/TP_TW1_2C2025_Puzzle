@@ -23,7 +23,8 @@ public class Usuario_Avatar {
     @JoinColumn(nullable = false)
     private Avatar avatar;
 
-    private Boolean en_uso;
+    @Column(nullable = false)
+    private Boolean en_uso = false;
 
     private LocalDateTime fecha_comprada;
 

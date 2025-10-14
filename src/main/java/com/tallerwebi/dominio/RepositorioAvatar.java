@@ -7,4 +7,8 @@ public interface RepositorioAvatar {
     Avatar buscarAvatarPorUrlImagen(String nuevoAvatar);
 
     Avatar buscarAvatarPorId(Long idAvatar);
+
+    Avatar obtenerAvatarDelUsuario(Usuario usuario);
+
+    void agregarAvataresGratuitosAlUsuario(Usuario usuario);
 }

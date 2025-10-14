@@ -1,17 +1,12 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Avatar;
-import com.tallerwebi.dominio.RepositorioUsuario;
-import com.tallerwebi.dominio.Usuario;
-import com.tallerwebi.dominio.Usuario_Avatar;
+import com.tallerwebi.dominio.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import java.time.LocalDateTime;
 
 @Repository("repositorioUsuario")
 public class RepositorioUsuarioImpl implements RepositorioUsuario {
@@ -54,44 +49,53 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     }
 
     @Override
-    public void actualizarPerfil(Long id_usuario, String nuevoNombre, Long id_avatar, String nuevaPassword) {
-
+    public UsuarioDTO actualizarPerfil(Long id_usuario, String nuevoNombre, Long id_avatar, String nuevaPassword) {
         Session session = sessionFactory.getCurrentSession();
+        UsuarioDTO usuarioDTO = null;
 
-        // 1 Buscar usuario
+        // 1. Buscar usuario
         Usuario usuario = session.get(Usuario.class, id_usuario);
         if (usuario == null) {
             throw new RuntimeException("Usuario no encontrado");
         }
 
-        // 2 Buscar nuevo avatar seleccionado
-        Avatar nuevoAvatar = session.get(Avatar.class, id_avatar);
-        if (nuevoAvatar == null) {
-            throw new RuntimeException("Avatar no encontrado");
+        // 2. Desactivar avatar actual (si hay uno)
+        Usuario_Avatar avatarActual = obtenerAvatarEnUso(usuario);
+        if (avatarActual != null) {
+            avatarActual.setEn_uso(false);
+            session.update(avatarActual);
         }
 
-        // 3 Verificar que el usuario tenga ese avatar comprado
-        Usuario_Avatar usuarioAvatar = buscarRelacionEntreUsuarioYAvatar(usuario, nuevoAvatar);
-        if (usuarioAvatar == null) {
-            throw new RuntimeException("El usuario no posee el avatar seleccionado");
+        // 3. Activar el nuevo avatar, solo si se seleccionó uno válido (>0)
+
+
+        if (id_avatar != null && id_avatar > 0) {
+            Avatar nuevoAvatar = session.get(Avatar.class, id_avatar);
+
+            if (nuevoAvatar == null) {
+                throw new RuntimeException("Avatar no encontrado");
+            }
+
+            // Verificar que el usuario posea ese avatar
+            Usuario_Avatar usuarioAvatar = buscarRelacionEntreUsuarioYAvatar(usuario, nuevoAvatar);
+            if (usuarioAvatar == null) {
+                throw new RuntimeException("El usuario no posee el avatar seleccionado");
+            }
+
+            usuarioAvatar.setEn_uso(true);
+            session.update(usuarioAvatar);
+
+            usuarioDTO = new UsuarioDTO(usuario, nuevoAvatar);
         }
 
-        // 4 Desactivar avatar anterior (si existe)
-        Usuario_Avatar actual = obtenerAvatarEnUso(usuario);
-        if (actual != null) {
-            actual.setEn_uso(false);
-            session.update(actual);
-        }
-
-        // 5 Activar el nuevo avatar
-        usuarioAvatar.setEn_uso(true);
-        session.update(usuarioAvatar);
-
-        // 6 Actualizar datos del usuario
+        // 4. Actualizar datos del usuario
         usuario.setNombreUsuario(nuevoNombre);
         usuario.setPassword(nuevaPassword);
         session.update(usuario);
+
+        return usuarioDTO;
     }
+
 
     private Usuario_Avatar obtenerAvatarEnUso(Usuario usuario) {
         return (Usuario_Avatar) sessionFactory.getCurrentSession()

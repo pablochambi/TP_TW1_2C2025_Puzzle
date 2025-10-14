@@ -9,7 +9,6 @@
 
   <!-- Bootstrap -->
   <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
-  <!-- Bootstrap Icons -->
   <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css}"/>
 
   <link rel="stylesheet" th:href="@{/css/editar_perfil.css}"/>
@@ -21,8 +20,16 @@
       color: #333;
       font-size: 1rem;
     }
+    .emoji-avatar {
+      font-size: 78px;
+    }
+    .avatar-premium img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
   </style>
-
 </head>
 <body>
 <div th:replace="fragment/header :: header"></div>
@@ -101,12 +108,30 @@
           <!-- Card de Vista Previa -->
           <div class="card text-center mb-4">
             <div class="card-body">
-              <div class="avatar" id="avatarPreview" th:text="${usuario}" >S</div>
+
+              <!-- Avatar -->
+              <div class="avatar text-center" id="avatarPreview">
+                <img th:if="${usuario.avatar != null and usuario.avatar.urlImagen != null}"
+                     th:src="@{${usuario.avatar.urlImagen}}"
+                     alt="Avatar del usuario"
+                     class="img-fluid rounded-circle">
+
+                <span th:if="${usuario.avatar != null and usuario.avatar.urlImagen == null}"
+                      th:utext="${usuario.avatar.iconoHexadecimal}"
+                      class="emoji-avatar"></span>
+
+                <span th:if="${usuario.avatar == null}"
+                      th:text="${#strings.substring(usuario.nombreUsuario,0,1).toUpperCase()}"
+                      class="emoji-avatar"></span>
+              </div>
+
               <div class="caja-datos">
                 <h5 class="card-title" th:text="${usuario.nombreUsuario}">Usuario</h5>
                 <p class="card-text" th:text="${usuario.email}">usuario@mail.com</p>
               </div>
-              <input type="hidden" name="avatarSeleccionado" id="avatarSeleccionadoInput" value="" />
+
+              <input type="hidden" name="id_avatar" id="idAvatarInput"
+                     th:value="${usuario.avatar != null ? usuario.avatar.id : 0}" />
             </div>
           </div>
 
@@ -119,68 +144,75 @@
                  data-type="letter"
                  th:data-value="${#strings.substring(usuario.nombreUsuario,0,1)}"
                  th:text="${#strings.substring(usuario.nombreUsuario,0,1)}"
-                 title="Por defecto">
+                 title="Por defecto"
+                 th:attr="data-avatar-id=0">
             </div>
-            <div class="avatar-option" data-type="emoji" data-value="&#x1F600;">&#x1F600;</div>
-            <div class="avatar-option" data-type="emoji" data-value="&#x1F47E;">&#x1F47E;</div>
-            <div class="avatar-option" data-type="emoji" data-value="&#x26BD;">&#x26BD;</div>
-            <div class="avatar-option" data-type="emoji" data-value="&#x1F46E;" title="Policía">&#x1F46E;</div>
-            <div class="avatar-option" data-type="emoji" data-value="&#x1F469;&#x200D;&#x1F692;" title="Bombero">&#x1F469;&#x200D;&#x1F692;</div>
-            <div class="avatar-option" data-type="emoji" data-value="&#x1F468;&#x200D;&#x1F4BC;" title="Profesional">&#x1F468;&#x200D;&#x1F4BC;</div>
-            <div class="avatar-option" data-type="emoji" data-value="&#x1F469;&#x200D;&#x1F4BB;" title="Desarrollador">&#x1F469;&#x200D;&#x1F4BB;</div>
-            <div class="avatar-option" data-type="emoji" data-value="&#x1F3AE;" title="Gamer">&#x1F3AE;</div>
-            <div class="avatar-option" data-type="emoji" data-value="&#x1F9E0;" title="Inteligente">&#x1F9E0;</div>
-            <div class="avatar-option" data-type="emoji" data-value="&#x2B50;" title="Estrella">&#x2B50;</div>
-            <div class="avatar-option" data-type="emoji" data-value="&#x1F3C6;" title="Campeón">&#x1F3C6;</div>
+
+            <!-- Iteración sobre los avatares gratis del backend -->
+            <div th:each="avatar : ${lista_avatares}" th:if="${avatar.precio == 0}"
+                 class="avatar-option"
+                 th:data-type="${#strings.isEmpty(avatar.urlImagen) ? 'emoji' : 'premium'}"
+                 th:data-value="${#strings.isEmpty(avatar.urlImagen) ? avatar.iconoHexadecimal : avatar.urlImagen}"
+                 th:title="${avatar.nombre}"
+                 th:attr="data-avatar-id=${avatar.id}">
+
+              <!-- Si es emoji -->
+              <span th:if="${#strings.isEmpty(avatar.urlImagen)}" th:utext="${avatar.iconoHexadecimal}"></span>
+
+              <!-- Si es imagen -->
+              <img th:if="${avatar.urlImagen != null}"
+                   th:src="@{${avatar.urlImagen}}"
+                   th:alt="${avatar.nombre}"
+                   class="img-fluid rounded-circle"
+                   style="width: 48px; height: 48px; object-fit: cover;">
+            </div>
+
           </div>
+
+
 
           <!-- Avatares de Pago -->
           <h4 class="selection-title">&#x1F48E; Avatares Premium</h4>
           <div class="row g-3">
-
-            <div class="col-6 col-md-3" th:each="avatar : ${lista_avatares}">
+            <div class="col-6 col-md-3" th:each="avatar : ${lista_avatares}  "  th:if="${avatar.precio > 0}">
               <div class="card text-center p-2">
 
-                <!-- Imagen del avatar -->
                 <img th:src="@{${avatar.urlImagen}}"
                      class="card-img-top"
-                     th:alt="${avatar.nombre}"
-                     th:attr="data-avatar-src=@{${avatar.urlImagen}}" />
+                     th:alt="${avatar.nombre}" />
 
-                <!-- Nombre -->
                 <div class="avatar-name mt-1 fw-semibold" th:text="${avatar.nombre}"></div>
 
-                <!-- Botón de compra o usar -->
                 <button type="button"
                         th:if="${!avatar.comprado}"
                         class="btn btn-success comprar-btn mt-2 d-flex align-items-center justify-content-center"
                         th:attr="data-avatar-id=${avatar.id},
-                         data-avatar-name=${avatar.nombre},
-                         data-avatar-price=${avatar.precio},
-                         data-avatar-img=${#strings.substringAfter(avatar.urlImagen, '/img/')}"
-                        data-type="avatar-premium">
+                                 data-avatar-name=${avatar.nombre},
+                                 data-avatar-price=${avatar.precio},
+                                 data-avatar-img=${#strings.substringAfter(avatar.urlImagen, '/img/')}">
                   <img th:src="@{/img/coin_master.png}" alt="Moneda" class="me-2">
                   <span th:text="${avatar.precio}"></span>
                 </button>
 
                 <button type="button"
                         th:if="${avatar.comprado}"
-                              class="btn btn-primary usar-btn mt-2"
-                              th:attr="data-avatar-type='premium',
-                               data-avatar-img=${#strings.substringAfter(avatar.urlImagen, '/img/')}"
-                              onclick="usarAvatarPremium(this)">
-                          Usar
+                        class="btn btn-primary usar-btn mt-2"
+                        th:attr="data-avatar-id=${avatar.id},
+                                 data-avatar-type='premium',
+                                 data-avatar-img=${#strings.substringAfter(avatar.urlImagen, '/img/')}">
+                  Usar
                 </button>
+
               </div>
             </div>
-
+          </div>
 
         </div>
       </div>
     </div>
 
     <!-- Buttons -->
-    <div class="form-buttons">
+    <div class="form-buttons mt-4">
       <button type="submit" class="btn btn-success">&#x1F4BE; Guardar Cambios</button>
       <a th:href="@{/perfil}" class="btn btn-secondary">&larr; Volver al Perfil</a>
     </div>
@@ -197,7 +229,7 @@
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text-center">
-        <img id="modalAvatarImg" th:src="@{#}" alt="Avatar" style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px;">
+        <img id="modalAvatarImg" src="" alt="Avatar" style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px;">
         <h5 id="modalAvatarName" class="mb-3">Nombre del Avatar</h5>
         <div class="d-flex align-items-center justify-content-center mb-3">
           <img th:src="@{/img/coin_master.png}" alt="Moneda" style="width: 30px; height: 30px;" class="me-2">
@@ -207,17 +239,14 @@
       </div>
       <div class="modal-footer justify-content-center">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <!-- Cambio: botón reemplazado por enlace dinámico -->
         <a href="#" class="btn btn-success" id="confirmarCompraBtn">Confirmar Compra</a>
       </div>
     </div>
   </div>
 </div>
 
-
-<script th:src="@{/js/home.js}"></script>
 <script th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/js/editar_perfil.js}"></script>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script th:src="@{/js/home.js}"></script>
 </body>
 </html>

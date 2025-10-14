@@ -1,6 +1,4 @@
 package com.tallerwebi.dominio;
-
-import com.tallerwebi.dominio.excepcion.FormatoDeAvatarInvalido;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,12 +30,14 @@ public class ServicioLoginImpl implements ServicioLogin {
             throw new UsuarioExistente();
         }
         repositorioUsuario.guardar(usuario);
+        repositorioAvatar.agregarAvataresGratuitosAlUsuario(usuario);
+
     }
 
     @Override
-    public void actualizarPerfil(Long idUsuario, String nuevoNombre, Long id_avatar, String nuevaPassword) {
+    public UsuarioDTO actualizarPerfil(Long idUsuario, String nuevoNombre, Long id_avatar, String nuevaPassword) {
 
-        repositorioUsuario.actualizarPerfil(idUsuario, nuevoNombre, id_avatar, nuevaPassword);
+        return repositorioUsuario.actualizarPerfil(idUsuario, nuevoNombre, id_avatar, nuevaPassword);
 
     }
 
@@ -49,6 +49,15 @@ public class ServicioLoginImpl implements ServicioLogin {
     @Override
     public Integer obtenerMonedas(Long idUsuario) {
         return repositorioUsuario.obtenerMonedasUsuario(idUsuario);
+    }
+
+    @Override
+    public UsuarioDTO consultarUsuarioDTOPorId(Long idUsuario) {
+
+        Usuario usuario = repositorioUsuario.obtenerUsuarioPorId(idUsuario);
+        Avatar avatar = repositorioAvatar.obtenerAvatarDelUsuario(usuario);
+
+        return new UsuarioDTO(usuario,avatar);
     }
 
 }

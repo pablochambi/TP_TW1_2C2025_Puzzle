@@ -1,13 +1,6 @@
 
 
 
-
-
-
-
-
-
-
 // Inicializar letra del avatar al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
     const UserNameActual = document.getElementById('profileName').textContent;
