@@ -5,7 +5,7 @@
 
       <a th:href="@{/tienda-monedas}" class="coins-display">
         <i class="fas fa-coins"></i>
-        <span class="user-name" th:text="${usuario.monedas}" > </span>
+        <span id="monedasUsuario" th:text="${usuario.monedas}" > </span>
       </a>
 
     </div>
@@ -19,7 +19,22 @@
 
     <div class="navbar-right">
       <div class="user-section" onclick="toggleAccordion()">
-        <div class="avatar" title="Avatar del usuario" id="userAvatar" th:text="${usuario.nombreUsuario.substring(0,1).toUpperCase()}">J</div>
+        <!-- Avatar -->
+        <div class="avatar text-center" >
+          <img th:if="${usuario.avatar != null and usuario.avatar.urlImagen != null}"
+               th:src="@{${usuario.avatar.urlImagen}}"
+               alt="Avatar del usuario"
+               class="img-fluid rounded-circle">
+
+          <span th:if="${usuario.avatar != null and usuario.avatar.urlImagen == null}"
+                th:utext="${usuario.avatar.iconoHexadecimal}"
+                class="emoji-avatar"></span>
+
+          <span th:if="${usuario.avatar == null}"
+                th:text="${#strings.substring(usuario.nombreUsuario,0,1).toUpperCase()}">
+          </span>
+        </div>
+        <!-- Nombre de usuario -->
         <div class="user-name" th:text="${usuario.nombreUsuario}" > </div>
         <i class="fas fa-chevron-down user-chevron"></i>
       </div>

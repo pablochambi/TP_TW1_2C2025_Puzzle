@@ -82,6 +82,10 @@ document.querySelectorAll('.usar-btn').forEach(btn => {
 const modalCompra = new bootstrap.Modal(document.getElementById('confirmCompraModal'));
 const confirmarCompraLink = document.getElementById('confirmarCompraBtn');
 
+// Obtener monedas del usuario ya renderizadas
+const monedasUsuario = parseInt(document.getElementById('monedasUsuario').textContent.trim()) || 0;
+
+
 document.querySelectorAll('.comprar-btn').forEach(btn => {
     btn.addEventListener('click', e => {
         e.preventDefault();
@@ -90,6 +94,13 @@ document.querySelectorAll('.comprar-btn').forEach(btn => {
         const avatarName = btn.dataset.avatarName;
         const avatarPrice = btn.dataset.avatarPrice;
         const avatarImg = btn.dataset.avatarImg;
+
+        // Verificamos si el usuario tiene suficientes monedas
+        if (monedasUsuario < avatarPrice) {
+            alert('❌ No tenés suficientes monedas para comprar este avatar.');
+            return; // Cancelamos la apertura del modal
+        }
+
 
         document.getElementById('modalAvatarName').textContent = avatarName;
         document.getElementById('modalAvatarPrice').textContent = avatarPrice;

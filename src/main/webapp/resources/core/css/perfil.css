@@ -41,8 +41,8 @@ body {
 }
 
 .avatar {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     background: #98d1f978;
     border-radius: 50%;
     display: flex;

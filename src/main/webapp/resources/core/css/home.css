@@ -94,6 +94,11 @@ body {
     cursor: pointer;
 }
 
+.header-fragment .emoji-avatar{
+    background: transparent;
+    font-size: 30px;
+}
+
 .user-chevron {
     transition: var(--transition);
     font-size: 0.8rem;

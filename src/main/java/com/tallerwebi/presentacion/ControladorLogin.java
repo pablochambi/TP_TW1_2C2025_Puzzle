@@ -83,7 +83,7 @@ public class ControladorLogin {
 
         ModelMap model = new ModelMap();
 
-        model.put("usuario", servicioLogin.consultarUsuarioPorId(id_usuario));
+        model.put("usuario", servicioLogin.consultarUsuarioDTOPorId(id_usuario));
 
         return new ModelAndView("home", model);
     }
