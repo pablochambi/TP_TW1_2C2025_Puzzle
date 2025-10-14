@@ -1,7 +1,9 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.Avatar;
 import com.tallerwebi.dominio.ServicioLogin;
 import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.UsuarioDTO;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +21,7 @@ public class ControladorLoginTest {
 
 	private ControladorLogin controladorLogin;
 	private Usuario usuarioMock;
+	private UsuarioDTO usuarioDTOMock;
 	private DatosLogin datosLoginMock;
 	private HttpServletRequest requestMock;
 	private HttpSession sessionMock;
@@ -29,6 +32,7 @@ public class ControladorLoginTest {
 	public void init(){
 		datosLoginMock = new DatosLogin("dami@unlam.com", "123");
 		usuarioMock = new Usuario(1L,"test@test.com", "jugador123",100);
+		usuarioDTOMock = new UsuarioDTO(usuarioMock, new Avatar());
 		requestMock = mock(HttpServletRequest.class);
 		sessionMock = mock(HttpSession.class);
 		servicioLoginMock = mock(ServicioLogin.class);
@@ -112,15 +116,15 @@ public class ControladorLoginTest {
 
 		when(sessionMock.getAttribute("id_usuario")).thenReturn(usuarioMock.getId());
 
-		when(servicioLoginMock.consultarUsuarioPorId(usuarioMock.getId())).thenReturn(usuarioMock);
+		when(servicioLoginMock.consultarUsuarioDTOPorId(usuarioMock.getId())).thenReturn(usuarioDTOMock);
 
 		// ejecucion
 		ModelAndView mav = controladorLogin.irAHome(sessionMock);
 
 		// validacion
 		assertThat(mav.getViewName(), is("home"));
-		assertThat(((Usuario)mav.getModel().get("usuario")).getNombreUsuario(), is("jugador123"));
-		assertThat(((Usuario)mav.getModel().get("usuario")).getMonedas(), is(100));
+		assertThat(((UsuarioDTO)mav.getModel().get("usuario")).getNombreUsuario(), is("jugador123"));
+		assertThat(((UsuarioDTO)mav.getModel().get("usuario")).getMonedas(), is(100));
 
 	}
 
