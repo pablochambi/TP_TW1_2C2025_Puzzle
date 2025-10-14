@@ -20,6 +20,7 @@ public class SudokuController {
         SudokuResponse sudoku = sudokuApiService.getSudokuFromApi(difficulty);
         mav.addObject("sudoku", sudoku);
         mav.addObject("difficulty", difficulty);
+
         return mav;
     }
 }
