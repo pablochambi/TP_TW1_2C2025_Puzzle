@@ -11,12 +11,12 @@ public enum PaqueteMonedas {
 
     private Integer id;
     private Integer cantidadMonedas;
-    private Integer precioUSD;
+    private Integer precioARS;
 
-    PaqueteMonedas(Integer id, Integer cantidadMonedas, Integer precioUSD) {
+    PaqueteMonedas(Integer id, Integer cantidadMonedas, Integer precioARS) {
         this.id = id;
         this.cantidadMonedas = cantidadMonedas;
-        this.precioUSD = precioUSD;
+        this.precioARS = precioARS;
     }
 
     public static PaqueteMonedas getPorId(Integer id) {
@@ -31,5 +31,5 @@ public enum PaqueteMonedas {
 
     public Integer getId() { return id; }
     public Integer getCantidadMonedas() { return cantidadMonedas; }
-    public Integer getPrecioUSD() { return precioUSD; }
+    public Integer getPrecioARS() { return precioARS; }
 }

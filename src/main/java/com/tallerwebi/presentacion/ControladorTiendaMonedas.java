@@ -7,6 +7,7 @@ import com.tallerwebi.dominio.excepcion.UsuarioInexistente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,6 +52,46 @@ public class ControladorTiendaMonedas {
 
 
     }
+
+    @GetMapping("/pago-exitoso")
+    public ModelAndView pagoExitoso(@RequestParam Integer paqueteId, @RequestParam String collection_id, HttpServletRequest request) throws SaldoInsuficienteException {
+        Long usuarioId = (Long) request.getSession().getAttribute("id_usuario");
+        ModelMap model  = new ModelMap();
+
+        if (servicioTiendaMonedas.obtenerPago(collection_id) !=null) {
+            model.put("monedas", servicioTiendaMonedas.obtenerMonedasUsuario(usuarioId));
+            return new ModelAndView("tienda-monedas", model);
+        }
+
+
+
+        servicioTiendaMonedas.comprarPaquete(usuarioId, paqueteId);
+        servicioTiendaMonedas.registrarPago(collection_id, usuarioId, paqueteId);
+
+
+
+
+        model.put("exitoPago" ,"✅Compra exitosa. Tus monedas se han actualizado");
+        model.put("monedas" , servicioTiendaMonedas.obtenerMonedasUsuario(usuarioId));
+
+
+
+        return new ModelAndView("tienda-monedas", model);
+    }
+
+    @GetMapping("/pago-fallido")
+    public ModelAndView pagoFallido(@RequestParam Integer paqueteId,HttpServletRequest request) throws SaldoInsuficienteException {
+        Long usuarioId = (Long) request.getSession().getAttribute("id_usuario");
+        ModelMap model  = new ModelMap();
+        model.put("monedas", servicioTiendaMonedas.obtenerMonedasUsuario(usuarioId));
+        model.put("errorPago" , "❌ El pago no se completó. Intenta nuevamente.");
+
+        return new ModelAndView("tienda-monedas", model);
+
+
+    }
+
+
 
 
 
