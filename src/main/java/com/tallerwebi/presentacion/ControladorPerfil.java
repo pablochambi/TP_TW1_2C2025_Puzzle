@@ -33,7 +33,6 @@ public class ControladorPerfil {
         }
         ModelMap model = new ModelMap();
         model.put("usuario",servicioLogin.consultarUsuarioDTOPorId(idUsuario));
-        //model.put("avatar", servicioAvatar.obtenerAvatarDelUsuario(idUsuario));
         model.put("estadisticasNivelFacil", servicioEstadistica.obtenerEstadisticas(idUsuario, "FACIL"));
         model.put("estadisticasNivelMedio", servicioEstadistica.obtenerEstadisticas(idUsuario, "MEDIO"));
         model.put("estadisticasNivelDificil", servicioEstadistica.obtenerEstadisticas(idUsuario, "DIFICIL"));

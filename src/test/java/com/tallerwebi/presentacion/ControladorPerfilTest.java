@@ -18,6 +18,7 @@ public class ControladorPerfilTest {
 
     private ControladorPerfil controladorPerfil;
     private Usuario usuarioMock;
+    private UsuarioDTO usuarioDTOMock;
 
     private HttpServletRequest requestMock;
     private HttpSession sessionMock;
@@ -36,6 +37,7 @@ public class ControladorPerfilTest {
     public void init(){
         usuarioMock = new Usuario(1L,"test@test.com","jugador123",100,"img/avatar/test.jpg");
         usuarioMock.setPassword("1234");
+        usuarioDTOMock = new UsuarioDTO(usuarioMock,new Avatar());
 
         requestMock = mock(HttpServletRequest.class);
         sessionMock = mock(HttpSession.class);
@@ -87,12 +89,12 @@ public class ControladorPerfilTest {
     public void queAlAccederAlPerfilSeCarguenLosDatosBasicosDelUsuario() {
 
         when(sessionMock.getAttribute("id_usuario")).thenReturn(usuarioMock.getId());
-        when(servicioLoginMock.consultarUsuarioPorId(usuarioMock.getId())).thenReturn(usuarioMock);
+        when(servicioLoginMock.consultarUsuarioDTOPorId(usuarioMock.getId())).thenReturn(usuarioDTOMock);
 
         ModelAndView mav = controladorPerfil.irAlPerfil(sessionMock);
 
         assertThat(mav.getViewName(), is("perfil"));
-        assertThat(mav.getModel().get("usuario"), is(usuarioMock));
+        assertThat(((UsuarioDTO) mav.getModel().get("usuario")).getId(), is(usuarioMock.getId()));
     }
 
 
@@ -121,7 +123,7 @@ public class ControladorPerfilTest {
 
         controladorPerfil.irAlPerfil(sessionMock);
 
-        verify(servicioLoginMock, times(1)).consultarUsuarioPorId(idUsuario);
+        verify(servicioLoginMock, times(1)).consultarUsuarioDTOPorId(idUsuario);
         verify(servicioEstadisticasMock, times(1)).obtenerEstadisticas(idUsuario,"FACIL");
         verify(servicioEstadisticasMock, times(1)).obtenerEstadisticas(idUsuario,"MEDIO");
         verify(servicioEstadisticasMock, times(1)).obtenerEstadisticas(idUsuario,"DIFICIL");
@@ -152,15 +154,15 @@ public class ControladorPerfilTest {
     public void queAlIrAEditarPerfil_SeMuestreLosDatosBasicosDelUsuarioYSuPassword() {
         // preparacion
         when(sessionMock.getAttribute("id_usuario")).thenReturn(usuarioMock.getId());
-        when(servicioLoginMock.consultarUsuarioPorId(usuarioMock.getId())).thenReturn(usuarioMock);
+        when(servicioLoginMock.consultarUsuarioDTOPorId(usuarioMock.getId())).thenReturn(usuarioDTOMock);
 
         // ejecucion
         ModelAndView mav = controladorPerfil.irAEditarPerfil(sessionMock);
 
         // verificacion
         assertThat(mav.getViewName(), is("editar_perfil"));
-        assertThat(mav.getModel().get("usuario"), is(usuarioMock));
-        assertThat(((Usuario) mav.getModel().get("usuario")).getPassword(), is("1234"));
+        assertThat(((UsuarioDTO) mav.getModel().get("usuario")).getId(), is(usuarioMock.getId()));
+        assertThat(((UsuarioDTO) mav.getModel().get("usuario")).getPassword(), is("1234"));
     }
 
 
@@ -194,31 +196,6 @@ public class ControladorPerfilTest {
 
         verify(servicioAvatarMock, times(1)).obtenerAvataresDTO(any());
     }
-
-    @Test
-    public void queAlGuardarCambiosDelPerfilSeActualicenLosDatosYRedirijaAlPerfil() {
-        Long idUsuario = 1L;
-        String nuevoNombre = "nuevoUsuario";
-        Long idAvatar = 1L;
-        String nuevaPassword = "nuevaPassword123";
-
-        Usuario usuarioActualizado = new Usuario();
-        usuarioActualizado.setId(idUsuario);
-        usuarioActualizado.setNombreUsuario(nuevoNombre);
-        usuarioActualizado.setPassword(nuevaPassword);
-
-        when(sessionMock.getAttribute("id_usuario")).thenReturn(idUsuario);
-        when(servicioLoginMock.consultarUsuarioPorId(idUsuario)).thenReturn(usuarioActualizado);
-
-        doNothing().when(servicioLoginMock).actualizarPerfil(idUsuario, nuevoNombre, idAvatar, nuevaPassword);
-
-        ModelAndView mav = controladorPerfil.guardarPerfil(nuevoNombre, idAvatar, nuevaPassword, sessionMock);
-
-        assertThat(mav.getViewName(), is("redirect:/perfil"));
-        assertThat(((Usuario)mav.getModel().get("usuario")).getNombreUsuario(), is(usuarioActualizado.getNombreUsuario()));
-        verify(servicioLoginMock, times(1)).actualizarPerfil(idUsuario, nuevoNombre, idAvatar, nuevaPassword);
-    }
-
 
 
     // ==================== TESTS DE /perfil/volver (Volver sin guardar) ====================

@@ -1,7 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.*;
-import com.tallerwebi.dominio.excepcion.UsuarioInexistente;
+import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,62 +17,130 @@ public class ServicioLoginTest {
     private RepositorioAvatar repositorioAvatarMock;
 
     private Usuario usuarioMock;
+    private UsuarioDTO usuarioDTOMock;
 
     @BeforeEach
     public void init() {
         repositorioUsuarioMock = mock(RepositorioUsuario.class);
         repositorioAvatarMock = mock(RepositorioAvatar.class);
-        servicioLogin = new ServicioLoginImpl(repositorioUsuarioMock,repositorioAvatarMock);
+        servicioLogin = new ServicioLoginImpl(repositorioUsuarioMock, repositorioAvatarMock);
 
         usuarioMock = new Usuario(1L, "test@test.com", "jugador123", 100, "img/avatar/test.jpg");
         usuarioMock.setPassword("1234");
+        usuarioDTOMock = new UsuarioDTO(usuarioMock, new Avatar());
     }
 
-    // ==================== TESTS DE obtenerUsuario ====================
+    // ==================== TESTS DE consultarUsuario ====================
 
     @Test
-    public void queAlObtenerUnUsuarioPorId_retorneUnUsuario() {
-        when(repositorioUsuarioMock.obtenerUsuarioPorId(usuarioMock.getId())).thenReturn(usuarioMock);
+    void quePuedaConsultarUsuarioExistente() {
+        // given
+        when(repositorioUsuarioMock.buscarUsuario("test@test.com", "1234")).thenReturn(usuarioMock);
 
-        Usuario usuario = servicioLogin.consultarUsuarioPorId(usuarioMock.getId());
+        // when
+        Usuario usuarioEncontrado = servicioLogin.consultarUsuario("test@test.com", "1234");
 
-        assertThat(usuario, is(usuarioMock));
-        verify(repositorioUsuarioMock, times(1)).obtenerUsuarioPorId(usuario.getId());
+        // then
+        assertThat(usuarioEncontrado, is(notNullValue()));
+        assertThat(usuarioEncontrado.getEmail(), equalTo("test@test.com"));
+        verify(repositorioUsuarioMock).buscarUsuario("test@test.com", "1234");
     }
 
-// ==================== TESTS DE actualizarPerfil ====================
+    // ==================== TESTS DE registrar ====================
 
     @Test
-    public void queAlActualizarPerfilSeModifiquenTodosLosDatosCorrectamente() {
-        String nuevoNombre = "nuevoNombre";
-        Long idAvatar = 1L;
-        String nuevaPassword = "nuevaPassword";
+    void queSePuedaRegistrarUnNuevoUsuarioConAvataresGratuitosSiNoExiste() throws UsuarioExistente {
+        // given
+        when(repositorioUsuarioMock.buscarUsuario(usuarioMock.getEmail(), usuarioMock.getPassword()))
+                .thenReturn(null);
 
-        when(repositorioUsuarioMock.obtenerUsuarioPorId(usuarioMock.getId())).thenReturn(usuarioMock);
-        when(repositorioAvatarMock.buscarAvatarPorId(idAvatar)).thenReturn(new Avatar());
+        // when
+        servicioLogin.registrar(usuarioMock);
 
-        doNothing().when(repositorioUsuarioMock).actualizarPerfil(usuarioMock.getId(), nuevoNombre, idAvatar, nuevaPassword);
-
-        servicioLogin.actualizarPerfil(usuarioMock.getId(), nuevoNombre, idAvatar, nuevaPassword);
-
-        verify(repositorioUsuarioMock, times(1)).actualizarPerfil(usuarioMock.getId(), nuevoNombre,idAvatar, nuevaPassword);
+        // then
+        verify(repositorioUsuarioMock).guardar(usuarioMock);
+        verify(repositorioAvatarMock).agregarAvataresGratuitosAlUsuario(usuarioMock);
     }
-
 
     @Test
-    public void queAlActualizarPerfilConUnaRutaDeLaNuevaImagenDePerfil_seGuardeComoRutaAEsaImagen() {
-        String nuevoNombre = "nuevoNombre";
-        Long idAvatar = 1L;
-        String nuevaPassword = "nuevaPassword";
+    void queLanceExcepcionSiElUsuarioYaExiste() {
+        // given
+        when(repositorioUsuarioMock.buscarUsuario(usuarioMock.getEmail(), usuarioMock.getPassword()))
+                .thenReturn(usuarioMock);
 
-        when(repositorioUsuarioMock.obtenerUsuarioPorId(usuarioMock.getId())).thenReturn(usuarioMock);
-        when(repositorioAvatarMock.buscarAvatarPorId(idAvatar)).thenReturn(new Avatar());
+        // when / then
+        assertThrows(UsuarioExistente.class, () -> servicioLogin.registrar(usuarioMock));
 
-        doNothing().when(repositorioUsuarioMock).actualizarPerfil(usuarioMock.getId(), nuevoNombre, idAvatar,  nuevaPassword);
-
-        servicioLogin.actualizarPerfil(usuarioMock.getId(), nuevoNombre, idAvatar, nuevaPassword);
-
-        verify(repositorioUsuarioMock, times(1)).actualizarPerfil(usuarioMock.getId(), nuevoNombre, idAvatar,  nuevaPassword);
+        verify(repositorioUsuarioMock, never()).guardar(any());
+        verify(repositorioAvatarMock, never()).agregarAvataresGratuitosAlUsuario(any());
     }
 
+    // ==================== TESTS DE actualizarPerfil ====================
+
+    @Test
+    void queActualiceElPerfilCorrectamente() {
+        // given
+        when(repositorioUsuarioMock.actualizarPerfil(1L, "NuevoNombre", 2L, "nuevaPass"))
+                .thenReturn(usuarioDTOMock);
+
+        // when
+        UsuarioDTO UsuarioResultado = servicioLogin.actualizarPerfil(1L, "NuevoNombre", 2L, "nuevaPass");
+
+        // then
+        assertThat(UsuarioResultado, is(notNullValue()));
+        verify(repositorioUsuarioMock).actualizarPerfil(1L, "NuevoNombre", 2L, "nuevaPass");
+    }
+
+    // ==================== TESTS DE consultarUsuarioPorId ====================
+
+    @Test
+    void queSePuedaObtenerUnUsuarioPorId() {
+        // given
+        when(repositorioUsuarioMock.obtenerUsuarioPorId(usuarioMock.getId()))
+                .thenReturn(usuarioMock);
+
+        // when
+        Usuario usuarioEncontrado = servicioLogin.consultarUsuarioPorId(usuarioMock.getId());
+
+        // then
+        assertThat(usuarioEncontrado.getId(), equalTo(usuarioMock.getId()));
+        verify(repositorioUsuarioMock).obtenerUsuarioPorId(usuarioMock.getId());
+    }
+
+    // ==================== TESTS DE obtenerMonedas ====================
+
+    @Test
+    void queObtengaCorrectamenteLasMonedasDelUsuario() {
+        // given
+        when(repositorioUsuarioMock.obtenerMonedasUsuario(1L)).thenReturn(250);
+
+        // when
+        Integer monedas = servicioLogin.obtenerMonedas(1L);
+
+        // then
+        assertThat(monedas, equalTo(250));
+        verify(repositorioUsuarioMock).obtenerMonedasUsuario(1L);
+    }
+
+    // ==================== TESTS DE consultarUsuarioDTOPorId ====================
+
+    @Test
+    void queConstruyaUsuarioDTOConAvatarCorrectamente() {
+        // given
+        Avatar avatar = new Avatar();
+        avatar.setNombre("AvatarGratis");
+
+        when(repositorioUsuarioMock.obtenerUsuarioPorId(1L)).thenReturn(usuarioMock);
+        when(repositorioAvatarMock.obtenerAvatarDelUsuario(usuarioMock)).thenReturn(avatar);
+
+        // when
+        UsuarioDTO usuarioDTOResultado = servicioLogin.consultarUsuarioDTOPorId(1L);
+
+        // then
+        assertThat(usuarioDTOResultado, is(notNullValue()));
+        assertThat(usuarioDTOResultado.getNombreUsuario(), equalTo(usuarioMock.getNombreUsuario()));
+        assertThat(usuarioDTOResultado.getAvatar().getNombre(), equalTo(avatar.getNombre()));
+        verify(repositorioUsuarioMock).obtenerUsuarioPorId(1L);
+        verify(repositorioAvatarMock).obtenerAvatarDelUsuario(usuarioMock);
+    }
 }
