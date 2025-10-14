@@ -24,6 +24,12 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>com.mercadopago</groupId>
+            <artifactId>sdk-java</artifactId>
+            <version>2.1.7</version>
+        </dependency>
+
         <!-- SPRING WEBSOCKET -->
         <dependency>
             <groupId>org.springframework</groupId>

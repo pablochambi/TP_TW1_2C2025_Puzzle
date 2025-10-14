@@ -9,6 +9,8 @@ public interface ServicioTiendaMonedas {
     void comprarPaquete(Long idUsuario, Integer paqueteId) throws SaldoInsuficienteException, UsuarioInexistente;
     Integer obtenerMonedasUsuario(Long idUsuario) throws UsuarioInexistente;
 
+    String obtenerPago(String collectionId);
+    void registrarPago(String collectionId, Long usuarioId, Integer paqueteId);
 }
 
 

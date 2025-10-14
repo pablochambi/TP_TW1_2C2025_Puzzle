@@ -12,9 +12,11 @@ import javax.transaction.Transactional;
 public class ServicioTiendaMonedasImpl implements ServicioTiendaMonedas {
 
     private final RepositorioUsuario repositorioUsuario;
+    private final RepositorioPago repositorioPago;
 
 
-    public ServicioTiendaMonedasImpl(RepositorioUsuario repositorioUsuario) {
+    public ServicioTiendaMonedasImpl(RepositorioUsuario repositorioUsuario, RepositorioPago repositorioPago) {
+        this.repositorioPago = repositorioPago;
         this.repositorioUsuario = repositorioUsuario;
 
     }
@@ -34,12 +36,12 @@ public class ServicioTiendaMonedasImpl implements ServicioTiendaMonedas {
 
         }
 
-        if (usuario.getSaldo() < paqueteMonedas.getPrecioUSD()){
+        if (usuario.getSaldo() < paqueteMonedas.getPrecioARS()){
             throw new SaldoInsuficienteException();
         }
 
         usuario.agregarMonedas(paqueteMonedas.getCantidadMonedas());
-        usuario.restarSaldo(paqueteMonedas.getPrecioUSD());
+        usuario.restarSaldo(paqueteMonedas.getPrecioARS());
 
 
 
@@ -48,6 +50,19 @@ public class ServicioTiendaMonedasImpl implements ServicioTiendaMonedas {
     @Override
     public Integer obtenerMonedasUsuario(Long idUsuario) throws UsuarioInexistente {
         return repositorioUsuario.obtenerMonedasUsuario(idUsuario);
+    }
+
+    @Override
+    public String obtenerPago(String collectionId) {
+
+        return repositorioPago.obtenerPagoPorCollectionId(collectionId);
+    }
+
+    @Override
+    public void registrarPago(String collectionId, Long usuarioId, Integer paqueteId) {
+
+        repositorioPago.registrarPago(collectionId, usuarioId, paqueteId);
+
     }
 
 

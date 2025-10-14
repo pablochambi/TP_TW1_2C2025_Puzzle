@@ -112,13 +112,14 @@
                     </p>
                         <p><strong>Precio:</strong> USD <span id="precioPaquete"></span></p></div>
                     <h6>Método de pago:</h6>
-                    <form th:action="@{/procesar-pago}" method="POST" id="formPago"><input type="hidden"
+                    <form th:action="@{/mercado-pago}" method="POST" id="formPago"><input type="hidden"
                                                                                            name="paqueteId"
                                                                                            id="paqueteId" value="">
                         <div class="metodos-pago">
                             <div class="form-check"><input class="form-check-input" type="radio" name="metodoPago"
                                                            id="mercadopago" value="mercadopago" checked> <label
                                     class="form-check-label" for="mercadopago"> Mercado Pago </label></div>
+                                 <div id="walletBrick_container"></div>
                         </div>
                     </form>
                     <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}"></p></div>
