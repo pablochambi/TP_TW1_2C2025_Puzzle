@@ -24,12 +24,10 @@ public class Usuario {
     private Integer monedas;
     private String urlAvatar;
 
-    private Integer saldo;
 
     public Usuario() {
         this.monedas = 100;
         this.pistas = 5;
-        this.saldo = 150;
         this.nombreUsuario = "jugador123";
     }
 
@@ -53,10 +51,6 @@ public class Usuario {
 
     public void agregarMonedas(Integer cantidad) {
         this.monedas += cantidad;
-    }
-
-    public void restarSaldo(Integer cantidad) {
-        this.saldo -= cantidad;
     }
 
 

@@ -24,13 +24,17 @@ public class ControladorMercadoPago {
     @PostMapping("/mercado-pago")
     public String crearPreferencia(@RequestParam("paqueteId") Integer paqueteId) throws MPException, MPApiException {
 
-        MercadoPagoConfig.setAccessToken("XXXX");
+        //TOKEN DE COMUNICACION
 
+        MercadoPagoConfig.setAccessToken("APP_USR-4494164065159566-101116-668009d69bb83392a0ccf25823aa9ed7-2919985285");
 
+        //se crea el paquete de la compra
         PaqueteMonedas paquete = PaqueteMonedas.getPorId(paqueteId);
         if (paquete == null) {
             return "redirect:/tienda-monedas";
         }
+
+        //creacion del item para la preferencia
 
         PreferenceItemRequest item = PreferenceItemRequest
                 .builder()
@@ -41,14 +45,12 @@ public class ControladorMercadoPago {
                 .unitPrice(new BigDecimal(1))
                 .quantity(1)
                 .build();
-
-
-
-
         List<PreferenceItemRequest> items = new ArrayList<>();
 
         items.add(item);
 
+
+        //se generan los urls de retorno posibles tras la compra
         PreferenceBackUrlsRequest backUrls =
 
                 PreferenceBackUrlsRequest.builder()
@@ -57,13 +59,17 @@ public class ControladorMercadoPago {
                         .failure("https://nonmobile-monica-ecclesiastical.ngrok-free.dev/spring/pago-fallido?paqueteId=" + paqueteId)
                         .build();
 
+        //Se crea finalmente al preferencia(pedido)con lo creado previamente
+
         PreferenceRequest preferenceRequest = PreferenceRequest.builder().autoReturn("approved").backUrls(backUrls).items(items).externalReference("PAQUETE" + paqueteId).build();
 
+        //Se instancia el cliente de mercado pago y se crea la conexion con la API pasandole todos los datos
         PreferenceClient client = new PreferenceClient();
-        Preference preference = client.create(preferenceRequest);
+        Preference preference = client.create(preferenceRequest); //PREFERENCE = Respuesta de MP
 
 
-        return "redirect:" + preference.getInitPoint();
+        //Se retorna el URL/VISTA para proceder con el pago
+        return "redirect:" + preference.getSandboxInitPoint();
     }
 
 }

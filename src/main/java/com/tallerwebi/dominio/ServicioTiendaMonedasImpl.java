@@ -1,7 +1,6 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.enums.PaqueteMonedas;
-import com.tallerwebi.dominio.excepcion.SaldoInsuficienteException;
 import com.tallerwebi.dominio.excepcion.UsuarioInexistente;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +23,7 @@ public class ServicioTiendaMonedasImpl implements ServicioTiendaMonedas {
 
 
     @Override
-    public void comprarPaquete(Long idUsuario, Integer paqueteId) throws SaldoInsuficienteException, UsuarioInexistente{
+    public void comprarPaquete(Long idUsuario, Integer paqueteId) throws  UsuarioInexistente{
 
         Usuario usuario = repositorioUsuario.obtenerUsuarioPorId(idUsuario);
         System.out.println(paqueteId);
@@ -36,12 +35,10 @@ public class ServicioTiendaMonedasImpl implements ServicioTiendaMonedas {
 
         }
 
-        if (usuario.getSaldo() < paqueteMonedas.getPrecioARS()){
-            throw new SaldoInsuficienteException();
-        }
+
 
         usuario.agregarMonedas(paqueteMonedas.getCantidadMonedas());
-        usuario.restarSaldo(paqueteMonedas.getPrecioARS());
+
 
 
 

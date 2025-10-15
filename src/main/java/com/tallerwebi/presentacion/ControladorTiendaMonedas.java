@@ -2,7 +2,6 @@ package com.tallerwebi.presentacion;
 
 
 import com.tallerwebi.dominio.ServicioTiendaMonedas;
-import com.tallerwebi.dominio.excepcion.SaldoInsuficienteException;
 import com.tallerwebi.dominio.excepcion.UsuarioInexistente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,10 +37,6 @@ public class ControladorTiendaMonedas {
             model.put("exitoPago" ,"Tus monedas se han actualizado");
             return new ModelAndView("tienda-monedas", model);
 
-        }catch (SaldoInsuficienteException ex){
-            model.put("errorPago", "Saldo insuficiente");
-            model.put("monedas", monedas);
-            return new ModelAndView("tienda-monedas", model);
 
         } catch (UsuarioInexistente e) {
             mv.setViewName("redirect:/login");
@@ -54,7 +49,7 @@ public class ControladorTiendaMonedas {
     }
 
     @GetMapping("/pago-exitoso")
-    public ModelAndView pagoExitoso(@RequestParam Integer paqueteId, @RequestParam String collection_id, HttpServletRequest request) throws SaldoInsuficienteException {
+    public ModelAndView pagoExitoso(@RequestParam Integer paqueteId, @RequestParam String collection_id, HttpServletRequest request) {
         Long usuarioId = (Long) request.getSession().getAttribute("id_usuario");
         ModelMap model  = new ModelMap();
 
@@ -80,7 +75,7 @@ public class ControladorTiendaMonedas {
     }
 
     @GetMapping("/pago-fallido")
-    public ModelAndView pagoFallido(@RequestParam Integer paqueteId,HttpServletRequest request) throws SaldoInsuficienteException {
+    public ModelAndView pagoFallido(@RequestParam Integer paqueteId,HttpServletRequest request) {
         Long usuarioId = (Long) request.getSession().getAttribute("id_usuario");
         ModelMap model  = new ModelMap();
         model.put("monedas", servicioTiendaMonedas.obtenerMonedasUsuario(usuarioId));
