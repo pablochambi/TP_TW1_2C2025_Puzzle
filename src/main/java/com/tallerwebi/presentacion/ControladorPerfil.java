@@ -1,6 +1,4 @@
 package com.tallerwebi.presentacion;
-
-
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.excepcion.FormatoDeAvatarInvalido;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +69,6 @@ public class ControladorPerfil {
         }
     }
 
-    //Aqui falta recibir el id del avatar correctamente desde el formulario
     @RequestMapping(path = "/perfil/guardar", method = RequestMethod.POST)
     public ModelAndView guardarPerfil(@RequestParam("nombreUsuario") String nuevoNombre,
                                       @RequestParam("id_avatar") Long id_avatar,
