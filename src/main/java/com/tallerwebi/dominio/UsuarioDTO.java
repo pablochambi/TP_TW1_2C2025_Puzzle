@@ -16,7 +16,6 @@ public class UsuarioDTO {
     private Integer monedas;
     private Avatar avatar;
 
-
     public UsuarioDTO() {
     }
     public UsuarioDTO(Usuario usuario, Avatar avatar) {

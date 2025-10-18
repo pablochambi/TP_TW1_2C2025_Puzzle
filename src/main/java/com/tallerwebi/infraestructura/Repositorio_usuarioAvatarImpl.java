@@ -25,68 +25,45 @@ public class Repositorio_usuarioAvatarImpl implements Repositorio_usuarioAvatar 
         this.sessionFactory = sessionFactory;
     }
 
+
+
+
+    @Override
+    public Usuario_Avatar obtenerAvatarEnUsoDelUsuario(Usuario usuario) {
+        return (Usuario_Avatar) sessionFactory.getCurrentSession().createCriteria(Usuario_Avatar.class)
+                .add(Restrictions.eq("usuario", usuario))
+                .add(Restrictions.eq("en_uso", true))
+                .uniqueResult();
+    }
+
+    @Override
+    public void actualizar(Usuario_Avatar avatarActual) {
+        sessionFactory.getCurrentSession().update(avatarActual);
+    }
+
+
+    @Override
+    public void relacionarUsuarioConAvatar(Usuario usuario, Avatar avatar) {
+
+        Usuario_Avatar relacion = new Usuario_Avatar();
+        relacion.setUsuario(usuario);
+        relacion.setAvatar(avatar);
+        relacion.setEn_uso(false);
+        relacion.setFecha_comprada(LocalDateTime.now());
+
+        sessionFactory.getCurrentSession().save(relacion);
+    }
     //SELECT *
     //FROM usuario_avatar
     //WHERE id_avatar = ? AND id_usuario = ?
     //LIMIT 1;
-
     @Override
-    public Boolean comprobarSiElAvatarEstaCompradoPorElUsuario(Long id_avatar, Long id_usuario) {
-
-        Boolean comprado = sessionFactory.getCurrentSession()
+    public Usuario_Avatar obtenerRelacionUsuarioAvatar(Usuario usuario, Avatar avatar) {
+        return (Usuario_Avatar) sessionFactory.getCurrentSession()
                 .createCriteria(Usuario_Avatar.class)
-                .add(Restrictions.eq("avatar.id", id_avatar))
-                .add(Restrictions.eq("usuario.id", id_usuario))
-                .uniqueResult() != null;
-
-        return comprado;
-    }
-
-    @Override
-    public Boolean comprobarSiElAvatarEstaEnUsoPorElUsuario(Long id_avatar, Long id_usuario) {
-        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Usuario_Avatar.class)
-                .add(Restrictions.eq("avatar.id", id_avatar))
-                .add(Restrictions.eq("usuario.id", id_usuario))
-                .add(Restrictions.eq("en_uso", true));
-
-        @SuppressWarnings("unchecked")
-        List<Usuario_Avatar> resultados = criteria.list();
-
-        if (resultados.isEmpty()) {
-            return false; // No está en uso
-        } else if (resultados.size() == 1) {
-            return true; // Está en uso
-        } else {
-            // ⚠️ Hay más de un resultado, lo cual no debería pasar
-            throw new IllegalStateException(
-                    "Error de integridad: el usuario con id " + id_usuario +
-                            " tiene múltiples avatares en uso con id " + id_avatar
-            );
-        }
-    }
-
-    public void relacionarUsuarioConAvatar(Long idUsuario, Long avatarId) {
-        Session session = sessionFactory.getCurrentSession();
-
-        Usuario usuario = session.get(Usuario.class, idUsuario);
-        Avatar avatar = session.get(Avatar.class, avatarId);
-
-        if (usuario == null || avatar == null) {
-            throw new IllegalArgumentException("Usuario o avatar no encontrado.");
-        }
-
-        if (usuario.getMonedas() < avatar.getPrecio()) {
-            throw new IllegalStateException(
-                    "No tienes suficientes monedas. Necesitas: " + avatar.getPrecio() +
-                            ", tienes: " + usuario.getMonedas());
-        }
-
-        Integer nuevasMonedas = usuario.getMonedas() - avatar.getPrecio();
-        usuario.setMonedas(nuevasMonedas);
-
-        Usuario_Avatar relacion = new Usuario_Avatar(usuario, avatar, false, LocalDateTime.now());
-        session.save(relacion);
-
+                .add(Restrictions.eq("usuario", usuario))
+                .add(Restrictions.eq("avatar", avatar))
+                .uniqueResult();
     }
 
 }

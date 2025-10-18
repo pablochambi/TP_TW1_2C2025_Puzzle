@@ -30,4 +30,5 @@ public class Partida {
     private Usuario usuario;
 
 
+
 }

@@ -16,6 +16,7 @@ public class ServicioAvatarTest {
 
     private ServicioAvatar servicioAvatar;
     private RepositorioAvatar repositorioAvatarMock;
+    private RepositorioUsuario repositorioUsuario;
     private Repositorio_usuarioAvatar repositorio_usuarioAvatarMock;
     private Usuario usuarioMock;
 
@@ -24,7 +25,7 @@ public class ServicioAvatarTest {
 
         repositorioAvatarMock = mock(RepositorioAvatar.class);
         repositorio_usuarioAvatarMock = mock(Repositorio_usuarioAvatar.class);
-        servicioAvatar = new ServicioAvatarImpl(repositorioAvatarMock,repositorio_usuarioAvatarMock);
+        servicioAvatar = new ServicioAvatarImpl(repositorioAvatarMock,repositorio_usuarioAvatarMock,repositorioUsuario);
 
         usuarioMock = new Usuario(1L, "test@test.com", "jugador123", 100, "img/avatar/test.jpg");
         usuarioMock.setPassword("1234");

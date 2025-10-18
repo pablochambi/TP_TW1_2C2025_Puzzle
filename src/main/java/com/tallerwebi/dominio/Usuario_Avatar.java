@@ -29,11 +29,4 @@ public class Usuario_Avatar {
     private LocalDateTime fecha_comprada;
 
     public Usuario_Avatar() {}
-
-    public Usuario_Avatar(Usuario usuario, Avatar avatar, Boolean en_uso, LocalDateTime fecha_comprada) {
-        this.usuario = usuario;
-        this.avatar = avatar;
-        this.en_uso = en_uso;
-        this.fecha_comprada = fecha_comprada;
-    }
 }

@@ -8,8 +8,6 @@ public interface RepositorioUsuario {
     void modificar(Usuario usuario);
     Usuario obtenerUsuarioPorId(Long id_usuario);
     Integer obtenerMonedasUsuario(Long idUsuario);
-    UsuarioDTO actualizarPerfil(Long idUsuario, String nuevoNombre,
-                                Long id_avatar, String nuevaPassword);
-    void actualizarNombreYPassword(Long idUsuario, String nuevoNombre, String nuevaPassword);
+
 }
 
