@@ -26,9 +26,7 @@ public class ServicioTiendaMonedasImpl implements ServicioTiendaMonedas {
     public void comprarPaquete(Long idUsuario, Integer paqueteId) throws  UsuarioInexistente{
 
         Usuario usuario = repositorioUsuario.obtenerUsuarioPorId(idUsuario);
-        System.out.println(paqueteId);
         PaqueteMonedas paqueteMonedas = obtenerPaquetePorId(paqueteId);
-        System.out.println(paqueteMonedas);
 
         if (usuario == null) {
             throw new UsuarioInexistente();
@@ -38,8 +36,6 @@ public class ServicioTiendaMonedasImpl implements ServicioTiendaMonedas {
 
 
         usuario.agregarMonedas(paqueteMonedas.getCantidadMonedas());
-
-
 
 
     }
@@ -64,6 +60,7 @@ public class ServicioTiendaMonedasImpl implements ServicioTiendaMonedas {
 
 
     private PaqueteMonedas obtenerPaquetePorId(Integer id) {
+
         return PaqueteMonedas.getPorId(id);
     }
 

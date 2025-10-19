@@ -42,7 +42,7 @@ public class RepositorioPagoImpl implements RepositorioPago {
     @Override
     public void registrarPago(String collectionId, Long usuarioId, Integer paqueteId) {
 
-        Pago pago = new Pago(collectionId, usuarioId, paqueteId );
+        Pago pago = new Pago(collectionId, usuarioId, paqueteId);
 
         sessionFactory.getCurrentSession().save(pago);
 
