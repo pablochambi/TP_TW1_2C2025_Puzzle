@@ -36,10 +36,8 @@ public class ControladorTiendaMonedas {
             return new ModelAndView("tienda-monedas", model);
         }
 
+        servicioTiendaMonedas.comprarPaquete(usuarioId, paqueteId, collection_id);
 
-
-        servicioTiendaMonedas.comprarPaquete(usuarioId, paqueteId);
-        servicioTiendaMonedas.registrarPago(collection_id, usuarioId, paqueteId);
 
 
 

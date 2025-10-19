@@ -5,11 +5,10 @@ import com.tallerwebi.dominio.excepcion.UsuarioInexistente;
 public interface ServicioTiendaMonedas {
 
 
-    void comprarPaquete(Long idUsuario, Integer paqueteId) throws UsuarioInexistente;
+    void comprarPaquete(Long idUsuario, Integer paqueteId, String collection_Id) throws UsuarioInexistente;
     Integer obtenerMonedasUsuario(Long idUsuario) throws UsuarioInexistente;
 
     String obtenerPago(String collectionId);
-    void registrarPago(String collectionId, Long usuarioId, Integer paqueteId);
 }
 
 

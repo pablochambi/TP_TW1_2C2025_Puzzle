@@ -21,7 +21,7 @@ public class ServicioMercadoPagoImpl implements ServicioMercadoPago {
 
     @Override
     public String crearYObtenerInitPoint(Integer paqueteId) throws MPException, MPApiException {
-        MercadoPagoConfig.setAccessToken(System.getenv("APP_USR-4494164065159566-101116-668009d69bb83392a0ccf25823aa9ed7-2919985285"));
+        MercadoPagoConfig.setAccessToken("APP_USR-4494164065159566-101116-668009d69bb83392a0ccf25823aa9ed7-2919985285");
         PaqueteMonedas paqueteMonedas = PaqueteMonedas.getPorId(paqueteId);
         if (paqueteMonedas == null) {
             return null;

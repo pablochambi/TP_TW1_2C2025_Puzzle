@@ -23,7 +23,7 @@ public class ServicioTiendaMonedasImpl implements ServicioTiendaMonedas {
 
 
     @Override
-    public void comprarPaquete(Long idUsuario, Integer paqueteId) throws  UsuarioInexistente{
+    public void comprarPaquete(Long idUsuario, Integer paqueteId, String collection_id) throws  UsuarioInexistente{
 
         Usuario usuario = repositorioUsuario.obtenerUsuarioPorId(idUsuario);
         PaqueteMonedas paqueteMonedas = obtenerPaquetePorId(paqueteId);
@@ -33,8 +33,7 @@ public class ServicioTiendaMonedasImpl implements ServicioTiendaMonedas {
 
         }
 
-
-
+        registrarPago(collection_id, idUsuario, paqueteId);
         usuario.agregarMonedas(paqueteMonedas.getCantidadMonedas());
 
 
@@ -51,8 +50,8 @@ public class ServicioTiendaMonedasImpl implements ServicioTiendaMonedas {
         return repositorioPago.obtenerPagoPorCollectionId(collectionId);
     }
 
-    @Override
-    public void registrarPago(String collectionId, Long usuarioId, Integer paqueteId) {
+
+    private void registrarPago(String collectionId, Long usuarioId, Integer paqueteId) {
 
         repositorioPago.registrarPago(collectionId, usuarioId, paqueteId);
 
