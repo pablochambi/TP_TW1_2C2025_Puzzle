@@ -106,7 +106,7 @@ public class ServicioEstadisticaTest {
         Partida partida = new Partida();
         partida.setId(id);
         partida.setUsuario(usuario);
-        partida.setNivel(nivel);
+        partida.setDificultad(nivel);
         partida.setGanada(ganada);
         partida.setPuntaje(puntos);
         return partida;

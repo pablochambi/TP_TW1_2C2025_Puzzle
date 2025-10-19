@@ -5,112 +5,145 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Historial Sudoku</title>
   <link rel="stylesheet" th:href="@{/css/historial.css}"/>
+  <link rel="stylesheet" th:href="@{/css/home.css}"/>
+  <link rel="stylesheet" th:href="@{/css/editar_perfil.css}"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
 
+    .history-container {
+      width: 90%;
+      margin: 0 auto;
+      margin-top: 2rem;
+    }
 
+    h1 {
+      text-align: center;
+      color: #264b77;
+      margin-bottom: 1rem;
+    }
+
+    .filters {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 1rem;
+      gap: 1rem;
+    }
+
+    .filters label {
+      font-weight: bold;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    thead {
+      background-color: #dce9f8;
+      color: #264b77;
+      font-weight: bold;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #cfd8e3;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f2f6fc;
+    }
+
+    tbody tr:nth-child(odd) {
+      background-color: #ffffff;
+    }
+
+    .status-icon {
+      font-size: 18px;
+    }
+
+    .win {
+      color: #2d7d46; /* verde */
+    }
+
+    .lose {
+      color: #a11b1b; /* rojo */
+    }
+  </style>
 </head>
 <body>
+
+<div th:replace="fragment/header :: header"></div>
+
 <div class="history-container">
-<!--  &lt;!&ndash; Título principal &ndash;&gt;-->
-<!--  <h1 class="page-title">🧩 Historial de Partidas</h1>-->
 
-<!--  &lt;!&ndash; Resumen de estadísticas &ndash;&gt;-->
-<!--  <div class="stats-summary">-->
-<!--    <div class="stat-card">-->
-<!--      <span class="stat-number">42</span>-->
-<!--      <div class="stat-label">Partidas Totales</div>-->
-<!--    </div>-->
-<!--    <div class="stat-card">-->
-<!--      <span class="stat-number">34</span>-->
-<!--      <div class="stat-label">Completadas</div>-->
-<!--    </div>-->
-<!--    <div class="stat-card">-->
-<!--      <span class="stat-number">12:34</span>-->
-<!--      <div class="stat-label">Mejor Tiempo</div>-->
-<!--    </div>-->
-<!--    <div class="stat-card">-->
-<!--      <span class="stat-number">81%</span>-->
-<!--      <div class="stat-label">Tasa Éxito</div>-->
-<!--    </div>-->
-<!--  </div>-->
+  <!-- Título central -->
+  <h1>Historial de Partidas</h1>
 
-  <!-- Filtros -->
+  <!-- Filtro por fecha -->
   <div class="filters">
-    <div class="filter-group">
-      <label for="difficulty">Dificultad:</label>
-      <select id="difficulty">
-        <option value="all">Todas</option>
-        <option value="easy">Fácil</option>
-        <option value="medium">Medio</option>
-        <option value="hard">Difícil</option>
-        <option value="expert">Experto</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <label for="status">Estado:</label>
-      <select id="status">
-        <option value="all">Todos</option>
-        <option value="completed">Completadas</option>
-        <option value="abandoned">Abandonadas</option>
-      </select>
-    </div>
-  </div>
-
-
-
-<!--  <ul  th:each="producto : ${partidas}" >-->
-<!--    <li th:text="${producto.getFecha()}"></li>-->
-<!--    <li th:text="${producto.getPistasUsadas()}"></li>-->
-<!--    <li th:text="${producto.getCompletado()}"></li>-->
-<!--    <li th:text="${producto.getDificultad()}"></li>-->
-<!--    <li th:text="${producto.getTemporalizador()}"></li>-->
-<!--  </ul>-->
-
-
-
-
-
-  <!-- Lista de partidas -->
-  <div class="game-list">
-    <!-- Partida 1 -->
-
-    <ul  th:each="producto : ${partidas}" >
-    <div class="game-card completed">
-      <div class="game-header">
-        <div class="game-date" th:text="${producto.getFecha()}"> </div>
-        <div class="game-status status-abandoned" th:text="${producto.getCompletado()}" ></div>
-      </div>
-      <div class="game-details">
-        <div class="detail-item">
-          <div class="detail-icon icon-time">&#x23F1</div>
-          <div class="detail-content">
-            <div class="detail-label">Tiempo</div>
-            <div class="detail-value time-value" th:text="${producto.getTemporalizador()}"></div>
-          </div>
-        </div>
-        <div class="detail-item">
-          <div class="detail-icon icon-difficulty">&#x2B50</div>
-          <div class="detail-content">
-            <div class="detail-label">Dificultad</div>
-            <div class="detail-value difficulty-medium" th:text="${producto.getDificultad()}"></div>
-          </div>
-        </div>
-        <div class="detail-item">
-          <div class="detail-icon icon-hints">&#x1F4A1</div>
-          <div class="detail-content">
-            <div class="detail-label">Pistas Usadas</div>
-            <div class="detail-value hints-value" th:text="${producto.getPistasUsadas()}"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-  </ul>
+    <label for="sortDate">Ordenar por fecha:</label>
+    <select id="sortDate" onchange="ordenarPorFecha()">
+      <option value="reciente" selected >Del más reciente al más antiguo</option>
+      <option value="antiguo">Del más antiguo al más reciente</option>
+    </select>
 
   </div>
 
-
+  <!-- Tabla de partidas -->
+  <table id="tablaPartidas">
+    <thead>
+    <tr>
+      <th>Modo de juego</th>
+      <th>Tiempo</th>
+      <th>Puntos/Monedas</th>
+      <th>Ganada</th>
+      <th>Pistas usadas</th>
+      <th>Fecha y hora</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="producto : ${partidas}">
+      <td th:text="${producto.getDificultad()}">Fácil</td>
+      <td th:text="${producto.getTiempoFormateado()}">0:02:27</td>
+      <td th:text="${producto.getPuntaje()}">20</td>
+      <td>
+        <span class="status-icon" th:if="${producto.isGanada()}" style="color:green;">&#10003;</span>
+        <span class="status-icon" th:unless="${producto.isGanada()}" style="color:red;">&#10007;</span>
+      </td>
+      <td th:text="${producto.getPistasUsadas()}">2</td>
+      <td th:text="${producto.getFechaHoraFormateada()}">10/19/2025 11:12 a.m.</td>
+    </tr>
+    </tbody>
+  </table>
 
 </div>
+
+<script>
+  function ordenarPorFecha() {
+    const select = document.getElementById('sortDate');
+    const tabla = document.getElementById('tablaPartidas').tBodies[0];
+    const filas = Array.from(tabla.rows);
+
+    if (select.value === 'reciente') {
+      filas.reverse(); // invertimos las filas para mostrar del más reciente al más antiguo
+    }
+    // si es 'antiguo', dejamos el orden original del backend
+
+    filas.forEach(fila => tabla.appendChild(fila));
+  }
+
+  // Llamamos a la función al cargar la página
+  window.addEventListener('DOMContentLoaded', () => {
+    ordenarPorFecha();
+  });
+
+</script>
+
+
 </body>
 </html>

@@ -14,7 +14,7 @@ VALUES
     (7, 'Mujer Bufanda',     '/img/emoji_mujer.png',          NULL, 20),
     (8, 'Mujer Baquera',     '/img/emoji_mujer_baquera.png',  NULL, 50);
 
---Avatares con iconos hexadecimales
+--Avatares gratuitos con iconos hexadecimales
 INSERT INTO Avatar (id, nombre, urlImagen, iconoHexadecimal, precio)
 VALUES
     (9, 'Emoji Sonriente',    NULL, '&#x1F600;', 0),
@@ -44,3 +44,16 @@ VALUES
     (1, 17,false),
     (1, 18,false),
     (1, 19,false);
+
+
+
+-- Partidas de prueba
+INSERT INTO Partida (id, usuario_id, dificultad, tiempoSegundos, puntaje, pistasUsadas, ganada, fechaHoraInicio)
+VALUES
+    (1, 1, 'FACIL', 120, 150, 0, TRUE, '2025-10-15 14:30:00'),
+    (2, 1, 'MEDIA', 240, 200, 1, TRUE, '2025-10-30 10:20:00'),
+    (3, 1, 'DIFICIL', 300, 250, 2, FALSE, '2025-10-17 18:45:00'),
+    (4, 1, 'FACIL', 90, 180, 0, TRUE, '2025-10-17 20:10:00'),
+    (5, 1, 'MEDIA', 210, 220, 1, TRUE, '2025-10-18 09:00:00');
+
+

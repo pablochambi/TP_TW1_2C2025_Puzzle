@@ -1,8 +1,9 @@
 package com.tallerwebi.dominio;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface ServicioHistorial {
 
-    ArrayList<Partida> ultimasDiezPartidas();
+    List<Partida> ultimasDiezPartidas();
+
 }
