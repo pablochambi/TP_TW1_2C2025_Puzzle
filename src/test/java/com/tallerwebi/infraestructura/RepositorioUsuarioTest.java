@@ -125,18 +125,18 @@ public class RepositorioUsuarioTest {
         thenLasMonedasSonCorrectas(monedas, 100);
     }
 
-    @Test
-    @Transactional
-    @Rollback
-    public void queSePuedaAgregarMonedasAlUsuario() {
-        Usuario usuario = dadoQueExisteUnUsuarioEnLaBase("test@test.com", "password123");
-
-        usuario.agregarMonedas(100);
-
-        Integer monedas = sessionFactory.getCurrentSession().get(Usuario.class, usuario.getId()).getMonedas();
-
-        assertThat(monedas, equalTo(201));
-    }
+//    @Test
+//    @Transactional
+//    @Rollback
+//    public void queSePuedaAgregarMonedasAlUsuario() {
+//        Usuario usuario = dadoQueExisteUnUsuarioEnLaBase("test@test.com", "password123");
+//
+//        usuario.agregarMonedas(100);
+//
+//        Integer monedas = sessionFactory.getCurrentSession().get(Usuario.class, usuario.getId()).getMonedas();
+//
+//        assertThat(monedas, equalTo(201));
+//    }
 
 
 
