@@ -1,4 +1,4 @@
-package com.tallerwebi.infraestructura;
+package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +24,11 @@ public class ServicioEstadisticaTest {
         repositorioPartidaMock = mock(RepositorioPartida.class);
         servicioEstadistica = new ServicioEstadisticaImpl(repositorioPartidaMock);
 
-        usuarioMock = new Usuario(1L, "usuario1",100);
+        usuarioMock = new Usuario();
+        usuarioMock.setId(1L);
+        usuarioMock.setEmail("test@test.com");
+        usuarioMock.setNombreUsuario("jugador123");
+        usuarioMock.setMonedas(100);
 
         // Configurar partidas de nivel fácil
         partidas = new ArrayList<>();

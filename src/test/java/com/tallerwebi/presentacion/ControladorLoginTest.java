@@ -31,8 +31,15 @@ public class ControladorLoginTest {
 	@BeforeEach
 	public void init(){
 		datosLoginMock = new DatosLogin("dami@unlam.com", "123");
-		usuarioMock = new Usuario(1L,"test@test.com", "jugador123",100);
+
+		usuarioMock = new Usuario();
+		usuarioMock.setId(1L);
+		usuarioMock.setEmail("test@test.com");
+		usuarioMock.setNombreUsuario("jugador123");
+		usuarioMock.setMonedas(100);
+
 		usuarioDTOMock = new UsuarioDTO(usuarioMock, new Avatar());
+
 		requestMock = mock(HttpServletRequest.class);
 		sessionMock = mock(HttpSession.class);
 		servicioLoginMock = mock(ServicioLogin.class);

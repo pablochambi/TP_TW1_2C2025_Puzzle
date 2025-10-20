@@ -20,7 +20,7 @@ public class ControladorHomeTest {
     private HttpServletRequest requestMock;
     private HttpSession sessionMock;
     private ServicioLogin servicioLoginMock;
-    Usuario usuario = new Usuario(1L, "dami@unlam.com", 100);
+    private Usuario usuario;
 
         @BeforeEach
         public void init(){
@@ -29,7 +29,11 @@ public class ControladorHomeTest {
             requestMock = mock(HttpServletRequest.class);
             sessionMock = mock(HttpSession.class);
 
-
+            usuario = new Usuario();
+            usuario.setId(1L);
+            usuario.setEmail("dami@unlam.com");
+            usuario.setNombreUsuario("jugador123");
+            usuario.setMonedas(100);
 
         }
 

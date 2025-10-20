@@ -1,4 +1,4 @@
-package com.tallerwebi.infraestructura;
+package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
@@ -34,7 +34,11 @@ public class ServicioLoginTest {
                 repositorio_usuarioAvatarMock
         );
 
-        usuarioMock = new Usuario(1L, "test@test.com", "jugador123", 100, "img/avatar/test.jpg");
+        usuarioMock = new Usuario();
+        usuarioMock.setId(1L);
+        usuarioMock.setEmail("test@test.com");
+        usuarioMock.setNombreUsuario("jugador123");
+        usuarioMock.setMonedas(100);
         usuarioMock.setPassword("1234");
 
         avatarMock = new Avatar();

@@ -31,8 +31,11 @@ public class ControladorTiendaMonedasTest {
 
     @BeforeEach
     public void init() {
-        usuario = new Usuario(1L, "dami@unlam.com", 100);
-
+        usuario = new Usuario();
+        usuario.setId(1L);
+        usuario.setEmail("dami@unlam.com");
+        usuario.setNombreUsuario("jugador123");
+        usuario.setMonedas(100);
     }
 
     @Test

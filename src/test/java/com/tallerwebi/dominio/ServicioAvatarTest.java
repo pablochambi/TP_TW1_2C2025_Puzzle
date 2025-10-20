@@ -1,4 +1,4 @@
-package com.tallerwebi.infraestructura;
+package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +27,11 @@ public class ServicioAvatarTest {
         repositorio_usuarioAvatarMock = mock(Repositorio_usuarioAvatar.class);
         servicioAvatar = new ServicioAvatarImpl(repositorioAvatarMock,repositorio_usuarioAvatarMock,repositorioUsuario);
 
-        usuarioMock = new Usuario(1L, "test@test.com", "jugador123", 100, "img/avatar/test.jpg");
+        usuarioMock = new Usuario();
+        usuarioMock.setId(1L);
+        usuarioMock.setEmail("test@test.com");
+        usuarioMock.setNombreUsuario("jugador123");
+        usuarioMock.setMonedas(100);
         usuarioMock.setPassword("1234");
     }
 

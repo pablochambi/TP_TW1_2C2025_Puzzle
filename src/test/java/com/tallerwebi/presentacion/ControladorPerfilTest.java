@@ -35,7 +35,11 @@ public class ControladorPerfilTest {
     // Inicializo los Mocks y el controlador para usar en cada test
     @BeforeEach
     public void init(){
-        usuarioMock = new Usuario(1L,"test@test.com","jugador123",100,"img/avatar/test.jpg");
+        usuarioMock = new Usuario();
+        usuarioMock.setId(1L);
+        usuarioMock.setEmail("test@test.com");
+        usuarioMock.setNombreUsuario("jugador123");
+        usuarioMock.setMonedas(100);
         usuarioMock.setPassword("1234");
         usuarioDTOMock = new UsuarioDTO(usuarioMock,new Avatar());
 

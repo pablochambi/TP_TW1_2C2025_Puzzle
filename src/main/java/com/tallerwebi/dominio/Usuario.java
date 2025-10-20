@@ -19,34 +19,15 @@ public class Usuario {
     private String nombreUsuario;
     private String password;
     private String rol;
-    private Boolean activo = false;
+    private Boolean activo;
     private Integer pistas;
     private Integer monedas;
-    private String urlAvatar;
-
 
     public Usuario() {
         this.monedas = 100;
         this.pistas = 5;
         this.nombreUsuario = "jugador123";
-    }
-
-    public Usuario(Long id, String email, Integer monedas) {
-        this.id = id;
-        this.email = email;
-        this.monedas = monedas;
-    }
-    public Usuario(Long id, String email,String nombreUsuario, Integer monedas) {
-        this.id = id;
-        this.email = email;
-        this.monedas = monedas;
-        this.nombreUsuario = nombreUsuario;
-    }
-    public Usuario(Long id, String email,String nombreUsuario, Integer monedas, String urlAvatar) {
-        this.id = id;
-        this.email = email;
-        this.nombreUsuario = nombreUsuario;
-        this.monedas = monedas;
+        this.activo = true;
     }
 
     public void agregarMonedas(Integer cantidad) {
@@ -54,17 +35,4 @@ public class Usuario {
     }
 
 
-
-    public void activar() {
-        activo = true;
-        this.urlAvatar = urlAvatar;
-    }
-
-    public Integer getPistas() {
-        return pistas;
-    }
-
-    public void setPistas(Integer pistas) {
-        this.pistas = pistas;
-    }
 }

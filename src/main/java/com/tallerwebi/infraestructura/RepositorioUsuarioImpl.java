@@ -3,7 +3,6 @@ package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -45,14 +44,6 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     @Override
     public Usuario obtenerUsuarioPorId(Long id_usuario) {
         return sessionFactory.getCurrentSession().get(Usuario.class, id_usuario);
-    }
-
-    private Usuario_Avatar obtenerAvatarEnUso(Usuario usuario) {
-        return (Usuario_Avatar) sessionFactory.getCurrentSession()
-                .createCriteria(Usuario_Avatar.class)
-                .add(Restrictions.eq("usuario", usuario))
-                .add(Restrictions.eq("en_uso", true))
-                .uniqueResult();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.tallerwebi.infraestructura;
+package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,13 @@ public class ServicioTiendaMonedasTest {
         repositorioPago = mock(RepositorioPago.class);
         repositorioUsuario = mock(RepositorioUsuario.class);
         servicioMonedas = new ServicioTiendaMonedasImpl(repositorioUsuario, repositorioPago);
-        usuario = new Usuario(1L, "dami@unlam.com", 100);
+
+        usuario = new Usuario();
+        usuario.setId(1L);
+        usuario.setEmail("dami@unlam.com");
+        usuario.setNombreUsuario("jugador123");
+        usuario.setMonedas(100);
+
         collection_Id = "1234";
 
     }
