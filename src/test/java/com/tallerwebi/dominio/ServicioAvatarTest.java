@@ -1,6 +1,10 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.implementacion.ServicioAvatarImpl;
+import com.tallerwebi.dominio.interfaces.RepositorioAvatar;
+import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
+import com.tallerwebi.dominio.interfaces.Repositorio_usuarioAvatar;
+import com.tallerwebi.dominio.interfaces.ServicioAvatar;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

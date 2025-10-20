@@ -1,6 +1,9 @@
 package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.excepcion.FormatoDeAvatarInvalido;
+import com.tallerwebi.dominio.interfaces.ServicioAvatar;
+import com.tallerwebi.dominio.interfaces.ServicioEstadistica;
+import com.tallerwebi.dominio.interfaces.ServicioLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

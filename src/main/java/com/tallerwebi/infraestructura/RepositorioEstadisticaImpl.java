@@ -1,6 +1,6 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.RepositorioEstadistica;
+import com.tallerwebi.dominio.interfaces.RepositorioEstadistica;
 import org.springframework.stereotype.Repository;
 
 @Repository

@@ -1,5 +1,7 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.implementacion;
 
+import com.tallerwebi.dominio.Partida;
+import com.tallerwebi.dominio.interfaces.ServicioHistorial;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

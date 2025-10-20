@@ -1,6 +1,8 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.implementacion.ServicioEstadisticaImpl;
+import com.tallerwebi.dominio.interfaces.RepositorioPartida;
+import com.tallerwebi.dominio.interfaces.ServicioEstadistica;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

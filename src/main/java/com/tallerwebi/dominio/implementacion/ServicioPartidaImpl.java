@@ -1,6 +1,9 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.implementacion;
 
-import com.tallerwebi.infraestructura.RepositorioUsuarioImpl;
+import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.interfaces.RepositorioPartida;
+import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
+import com.tallerwebi.dominio.interfaces.ServicioPartida;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,14 +11,12 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class ServicioPartidaImpl implements ServicioPartida{
+public class ServicioPartidaImpl implements ServicioPartida {
 
     private final RepositorioUsuario repositorioUsuario;
     private final RepositorioPartida repositorioPartida;

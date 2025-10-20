@@ -1,18 +1,15 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.Avatar;
-import com.tallerwebi.dominio.Repositorio_usuarioAvatar;
+import com.tallerwebi.dominio.interfaces.Repositorio_usuarioAvatar;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.Usuario_Avatar;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Repository
 public class Repositorio_usuarioAvatarImpl implements Repositorio_usuarioAvatar {

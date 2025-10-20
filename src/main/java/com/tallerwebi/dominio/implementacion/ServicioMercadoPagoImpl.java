@@ -1,4 +1,4 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.implementacion;
 
 
 import com.mercadopago.MercadoPagoConfig;
@@ -9,6 +9,7 @@ import com.mercadopago.client.preference.PreferenceRequest;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.preference.Preference;
+import com.tallerwebi.dominio.interfaces.ServicioMercadoPago;
 import com.tallerwebi.dominio.enums.PaqueteMonedas;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;

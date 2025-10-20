@@ -1,4 +1,7 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.interfaces;
+
+import com.tallerwebi.dominio.Avatar;
+import com.tallerwebi.dominio.Usuario;
 
 import java.util.List;
 

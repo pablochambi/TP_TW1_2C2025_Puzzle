@@ -1,7 +1,11 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
+import com.tallerwebi.dominio.implementacion.ServicioLoginImpl;
+import com.tallerwebi.dominio.interfaces.RepositorioAvatar;
+import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
+import com.tallerwebi.dominio.interfaces.Repositorio_usuarioAvatar;
+import com.tallerwebi.dominio.interfaces.ServicioLogin;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

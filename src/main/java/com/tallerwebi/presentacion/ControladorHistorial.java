@@ -1,9 +1,8 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Partida;
 import com.tallerwebi.dominio.PartidaDTO;
-import com.tallerwebi.dominio.ServicioLogin;
-import com.tallerwebi.dominio.ServicioPartida;
+import com.tallerwebi.dominio.interfaces.ServicioLogin;
+import com.tallerwebi.dominio.interfaces.ServicioPartida;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.List;
 

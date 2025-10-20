@@ -1,6 +1,6 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.RepositorioUsuario;
+import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
@@ -28,6 +28,17 @@ public class RepositorioUsuarioTest {
 
     @Autowired
     SessionFactory sessionFactory;
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaInsertarUnUsuarioParaTestear() {
+        Usuario usuario = new Usuario();
+        usuario.setEmail("test@test.com");
+        usuario.setPassword("password123");
+
+        repositorioUsuario.guardar(usuario);
+    }
 
     @Test
     @Transactional

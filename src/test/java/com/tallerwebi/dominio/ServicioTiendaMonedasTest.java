@@ -1,6 +1,9 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.implementacion.ServicioTiendaMonedasImpl;
+import com.tallerwebi.dominio.interfaces.RepositorioPago;
+import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
+import com.tallerwebi.dominio.interfaces.ServicioTiendaMonedas;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

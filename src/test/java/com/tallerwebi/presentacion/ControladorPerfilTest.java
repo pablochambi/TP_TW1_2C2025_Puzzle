@@ -1,6 +1,9 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.interfaces.ServicioAvatar;
+import com.tallerwebi.dominio.interfaces.ServicioEstadistica;
+import com.tallerwebi.dominio.interfaces.ServicioLogin;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;

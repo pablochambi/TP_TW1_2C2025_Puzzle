@@ -1,10 +1,9 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.Avatar;
-import com.tallerwebi.dominio.RepositorioAvatar;
+import com.tallerwebi.dominio.interfaces.RepositorioAvatar;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.Usuario_Avatar;
-import jdk.jfr.Registered;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

@@ -3,7 +3,7 @@ package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.Pago;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import com.tallerwebi.dominio.RepositorioPago;
+import com.tallerwebi.dominio.interfaces.RepositorioPago;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

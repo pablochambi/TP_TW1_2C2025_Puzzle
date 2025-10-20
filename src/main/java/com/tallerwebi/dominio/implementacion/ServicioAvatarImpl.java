@@ -1,6 +1,10 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.implementacion;
 
-import com.tallerwebi.infraestructura.RepositorioUsuarioImpl;
+import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.interfaces.RepositorioAvatar;
+import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
+import com.tallerwebi.dominio.interfaces.Repositorio_usuarioAvatar;
+import com.tallerwebi.dominio.interfaces.ServicioAvatar;
 import com.tallerwebi.presentacion.AvatarDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

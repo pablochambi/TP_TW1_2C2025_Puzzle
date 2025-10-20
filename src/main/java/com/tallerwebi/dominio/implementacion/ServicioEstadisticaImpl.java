@@ -1,9 +1,11 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.implementacion;
 
+import com.tallerwebi.dominio.Partida;
+import com.tallerwebi.dominio.interfaces.RepositorioPartida;
+import com.tallerwebi.dominio.interfaces.ServicioEstadistica;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;

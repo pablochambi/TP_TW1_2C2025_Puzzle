@@ -1,5 +1,9 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.implementacion;
 
+import com.tallerwebi.dominio.interfaces.RepositorioPago;
+import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
+import com.tallerwebi.dominio.interfaces.ServicioTiendaMonedas;
+import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.enums.PaqueteMonedas;
 import com.tallerwebi.dominio.excepcion.UsuarioInexistente;
 import org.springframework.stereotype.Service;

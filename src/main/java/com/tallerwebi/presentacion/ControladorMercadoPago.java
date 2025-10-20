@@ -2,7 +2,7 @@ package com.tallerwebi.presentacion;
 
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
-import com.tallerwebi.dominio.ServicioMercadoPago;
+import com.tallerwebi.dominio.interfaces.ServicioMercadoPago;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
