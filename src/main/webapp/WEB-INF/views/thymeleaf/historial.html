@@ -67,11 +67,11 @@
     }
 
     .win {
-      color: #2d7d46; /* verde */
+      color: #2d7d46;
     }
 
     .lose {
-      color: #a11b1b; /* rojo */
+      color: #a11b1b;
     }
   </style>
 </head>
@@ -81,69 +81,71 @@
 
 <div class="history-container">
 
-  <!-- Título central -->
   <h1>Historial de Partidas</h1>
 
   <!-- Filtro por fecha -->
   <div class="filters">
     <label for="sortDate">Ordenar por fecha:</label>
-    <select id="sortDate" onchange="ordenarPorFecha()">
-      <option value="reciente" selected >Del más reciente al más antiguo</option>
-      <option value="antiguo">Del más antiguo al más reciente</option>
+    <select id="sortDate">
+      <option value="reciente">Del más reciente al más antiguo</option>
+      <option value="antiguo" selected>Del más antiguo al más reciente</option>
     </select>
-
   </div>
 
-  <!-- Tabla de partidas -->
-  <table id="tablaPartidas">
-    <thead>
-    <tr>
-      <th>Modo de juego</th>
-      <th>Tiempo</th>
-      <th>Puntos/Monedas</th>
-      <th>Ganada</th>
-      <th>Pistas usadas</th>
-      <th>Fecha y hora</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="producto : ${partidas}">
-      <td th:text="${producto.getDificultad()}">Fácil</td>
-      <td th:text="${producto.getTiempoFormateado()}">0:02:27</td>
-      <td th:text="${producto.getPuntaje()}">20</td>
-      <td>
-        <span class="status-icon" th:if="${producto.isGanada()}" style="color:green;">&#10003;</span>
-        <span class="status-icon" th:unless="${producto.isGanada()}" style="color:red;">&#10007;</span>
-      </td>
-      <td th:text="${producto.getPistasUsadas()}">2</td>
-      <td th:text="${producto.getFechaHoraFormateada()}">10/19/2025 11:12 a.m.</td>
-    </tr>
-    </tbody>
-  </table>
+
+  <!-- Fragmento de tabla de partidas con ajax-->
+  <div id="tablaContainer" th:fragment="tablaPartidas">
+    <table id="tablaPartidas">
+      <thead>
+      <tr>
+        <th>Modo de juego</th>
+        <th>Tiempo</th>
+        <th>Puntos/Monedas</th>
+        <th>Ganada</th>
+        <th>Pistas usadas</th>
+        <th>Fecha y hora</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="producto : ${partidas}">
+        <td th:text="${producto.getDificultad()}">Fácil</td>
+        <td th:text="${producto.getTiempoFormateado()}">0:02:27</td>
+        <td th:text="${producto.getPuntaje()}">20</td>
+        <td>
+          <span class="status-icon" th:if="${producto.isGanada()}" style="color:green;">&#10003;</span>
+          <span class="status-icon" th:unless="${producto.isGanada()}" style="color:red;">&#10007;</span>
+        </td>
+        <td th:text="${producto.getPistasUsadas()}">2</td>
+        <td th:text="${producto.getFechaHoraFormateada()}">10/19/2025 11:12 a.m.</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
 
 </div>
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
-  function ordenarPorFecha() {
-    const select = document.getElementById('sortDate');
-    const tabla = document.getElementById('tablaPartidas').tBodies[0];
-    const filas = Array.from(tabla.rows);
+  $(document).ready(function() {
+    // Detectar cambio en el select
+    $("#sortDate").on("change", function() {
+      const orden = $(this).val();
 
-    if (select.value === 'reciente') {
-      filas.reverse(); // invertimos las filas para mostrar del más reciente al más antiguo
-    }
-    // si es 'antiguo', dejamos el orden original del backend
-
-    filas.forEach(fila => tabla.appendChild(fila));
-  }
-
-  // Llamamos a la función al cargar la página
-  window.addEventListener('DOMContentLoaded', () => {
-    ordenarPorFecha();
+      $.ajax({
+        url: '/spring/actualizar-orden', // endpoint
+        type: 'GET',
+        data: { orden: orden },
+        success: function(response) {
+          // reemplazamos el contenido del contenedor con el fragmento actualizado
+          $("#tablaContainer").html(response);
+        },
+        error: function() {
+          alert("Ocurrió un error al ordenar las partidas.");
+        }
+      });
+    });
   });
-
 </script>
-
-
 </body>
 </html>

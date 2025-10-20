@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,6 +43,25 @@ public class ServicioPartidaImpl implements ServicioPartida{
         // Ordenar del más antiguo al más reciente
         partidas.sort(Comparator.comparing(Partida::getFechaHoraInicio));
 
+        List<PartidaDTO> dtoList = formatearDePartidasAPartidasDTO(partidas);
+
+        return dtoList;
+    }
+
+    @Override
+    public List<PartidaDTO> obtenerTodasLasPartidasDTODelMasRecienteAlMasAntiguo(Long idUsuario) {
+
+        List<Partida> partidas = obtenerTodasLasPartidas(idUsuario);
+        
+        //Ordena Del Mas Reciente Al Mas Antiguo
+        partidas.sort(Comparator.comparing(Partida::getFechaHoraInicio).reversed());
+
+        List<PartidaDTO> dtoList = formatearDePartidasAPartidasDTO(partidas);
+
+        return dtoList;
+    }
+
+    private List<PartidaDTO> formatearDePartidasAPartidasDTO(List<Partida> partidas) {
         // Convertir a DTO
         List<PartidaDTO> dtoList = new ArrayList<>();
         for (Partida p : partidas) {
@@ -55,10 +75,8 @@ public class ServicioPartidaImpl implements ServicioPartida{
             );
             dtoList.add(dto);
         }
-
         return dtoList;
     }
-
 
 
     private String formatearFecha(LocalDateTime fechaHora) {
@@ -71,11 +89,8 @@ public class ServicioPartidaImpl implements ServicioPartida{
         long minutos = (totalSegundos % 3600) / 60;
         long segundos = totalSegundos % 60;
 
-        if (horas > 0) {
-            return String.format("%d:%02d:%02d", horas, minutos, segundos);
-        } else {
-            return String.format("%d:%02d", minutos, segundos);
-        }
+        return String.format("%d:%02d:%02d", horas, minutos, segundos);
+
     }
 
 
