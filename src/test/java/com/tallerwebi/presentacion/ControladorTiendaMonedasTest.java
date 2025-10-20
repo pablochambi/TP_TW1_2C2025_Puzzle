@@ -62,7 +62,7 @@ public class ControladorTiendaMonedasTest {
         //GIVEN
         when(requestMock.getSession()).thenReturn(sessionMock);
         when(sessionMock.getAttribute("id_usuario")).thenReturn(usuario.getId());
-        doNothing().when(servicioTiendaMonedas).comprarPaquete(usuario.getId(), 1);
+        doNothing().when(servicioTiendaMonedas).comprarPaquete(usuario.getId(), 1, "1234");
         when(servicioTiendaMonedas.obtenerMonedasUsuario(usuario.getId())).thenReturn(1100);
 
         //WHEN

@@ -22,6 +22,7 @@ public class ServicioTiendaMonedasTest {
     RepositorioUsuario repositorioUsuario;
     RepositorioPago repositorioPago;
     Usuario usuario;
+    String collection_Id;
 
     @BeforeEach
     public void init() {
@@ -29,6 +30,7 @@ public class ServicioTiendaMonedasTest {
         repositorioUsuario = mock(RepositorioUsuario.class);
         servicioMonedas = new ServicioTiendaMonedasImpl(repositorioUsuario, repositorioPago);
         usuario = new Usuario(1L, "dami@unlam.com", 100);
+        collection_Id = "1234";
 
     }
 
@@ -47,7 +49,7 @@ public class ServicioTiendaMonedasTest {
 
 
         //WHEN
-        servicioMonedas.comprarPaquete(usuario.getId(), 1);
+        servicioMonedas.comprarPaquete(usuario.getId(), 1, collection_Id);
 
 
         //THEN
@@ -58,13 +60,14 @@ public class ServicioTiendaMonedasTest {
     }
 
     @Test
-    public void dadoQueTengoUnUsuarioYHaceUnPagoCuandoObtengoElPagoEsteQuedaRegistrado(){
+    public void dadoQueTengoUnUsuarioYHagoUnaCompraDelPrimerPaqueteObtengoElPagoEsteQuedaRegistrado(){
        //given
-        servicioMonedas.registrarPago("COLL_1234",usuario.getId(), 1);
-        when(repositorioPago.obtenerPagoPorCollectionId("COLL_1234")).thenReturn("COLL_1234");
+        when(repositorioUsuario.obtenerUsuarioPorId(usuario.getId())).thenReturn(usuario);
+        servicioMonedas.comprarPaquete(usuario.getId(), 1, collection_Id);
+        when(repositorioPago.obtenerPagoPorCollectionId(collection_Id)).thenReturn("1234");
 
         //when
-        String resultado = servicioMonedas.obtenerPago("COLL_1234");
+        String resultado = servicioMonedas.obtenerPago("1234");
 
         //then
         assertThat(resultado, notNullValue());

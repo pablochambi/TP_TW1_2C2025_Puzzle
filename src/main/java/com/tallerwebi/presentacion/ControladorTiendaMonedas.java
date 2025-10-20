@@ -24,29 +24,7 @@ public class ControladorTiendaMonedas {
         this.servicioTiendaMonedas = servicioTiendaMonedas;
     }
 
-    @RequestMapping(path = "/procesar-pago", method = RequestMethod.POST)
-    public ModelAndView procesarPago (@RequestParam Integer paqueteId, HttpServletRequest request) throws UsuarioInexistente {
-        ModelAndView mv = new ModelAndView();
-        ModelMap model  = new ModelMap();
-        Long usuarioId = (Long) request.getSession().getAttribute("id_usuario");
-        Integer monedas = servicioTiendaMonedas.obtenerMonedasUsuario(usuarioId);
 
-        try {
-            servicioTiendaMonedas.comprarPaquete(usuarioId, paqueteId);
-            model.put("monedas", servicioTiendaMonedas.obtenerMonedasUsuario(usuarioId));
-            model.put("exitoPago" ,"Tus monedas se han actualizado");
-            return new ModelAndView("tienda-monedas", model);
-
-
-        } catch (UsuarioInexistente e) {
-            mv.setViewName("redirect:/login");
-        }
-
-
-        return mv;
-
-
-    }
 
     @GetMapping("/pago-exitoso")
     public ModelAndView pagoExitoso(@RequestParam Integer paqueteId, @RequestParam String collection_id, HttpServletRequest request) {
@@ -58,10 +36,8 @@ public class ControladorTiendaMonedas {
             return new ModelAndView("tienda-monedas", model);
         }
 
+        servicioTiendaMonedas.comprarPaquete(usuarioId, paqueteId, collection_id);
 
-
-        servicioTiendaMonedas.comprarPaquete(usuarioId, paqueteId);
-        servicioTiendaMonedas.registrarPago(collection_id, usuarioId, paqueteId);
 
 
 
