@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.enums.NIVEL;
 import com.tallerwebi.dominio.implementacion.ServicioEstadisticaImpl;
 import com.tallerwebi.dominio.interfaces.RepositorioPartida;
 import com.tallerwebi.dominio.interfaces.ServicioEstadistica;
@@ -34,23 +35,21 @@ public class ServicioEstadisticaTest {
 
         // Configurar partidas de nivel fácil
         partidas = new ArrayList<>();
-        partidas.add(crearPartida(1L, usuarioMock, "FACIL", true, 100));
-        partidas.add(crearPartida(2L, usuarioMock, "FACIL", true, 150));
-        partidas.add(crearPartida(3L, usuarioMock, "FACIL", false, 50));
-        partidas.add(crearPartida(4L, usuarioMock, "FACIL", true, 200));
-        partidas.add(crearPartida(5L, usuarioMock, "FACIL", false, 75));
-
-
+        partidas.add(crearPartida(1L, usuarioMock, NIVEL.FACIL, true, 100));
+        partidas.add(crearPartida(2L, usuarioMock, NIVEL.FACIL, true, 150));
+        partidas.add(crearPartida(3L, usuarioMock, NIVEL.FACIL, false, 50));
+        partidas.add(crearPartida(4L, usuarioMock, NIVEL.FACIL, true, 200));
+        partidas.add(crearPartida(5L, usuarioMock, NIVEL.FACIL, false, 75));
     }
 
     // ==================== TESTS DE obtenerDeNivelFacil ====================
 
     @Test
     public void queAlObtenerEstadisticasDeNivelFacilRetorneMapaConDatosCorrectos() {
-        when(repositorioPartidaMock.obtenerPartidasPorUsuarioYNivel(1L, "FACIL"))
+        when(repositorioPartidaMock.obtenerPartidasPorUsuarioYNivel(1L, NIVEL.FACIL))
                 .thenReturn(partidas);
 
-        Map<String, Object> estadisticas = servicioEstadistica.obtenerEstadisticas(1L, "FACIL");
+        Map<String, Object> estadisticas = servicioEstadistica.obtenerEstadisticas(1L, NIVEL.FACIL);
 
         assertThat(estadisticas, is(notNullValue()));
         assertThat(estadisticas.get("Partidas jugadas"), is(5));
@@ -59,60 +58,24 @@ public class ServicioEstadisticaTest {
         assertThat(estadisticas.get("Porcentaje de Victoria"), is("60,0%"));
     }
 
-
     @Test
     public void queAlObtenerEstadisticasFacilesSinPartidasNoRetorneUnMapaVacio() {
-        when(repositorioPartidaMock.obtenerPartidasPorUsuarioYNivel(1L, "FACIL"))
+        when(repositorioPartidaMock.obtenerPartidasPorUsuarioYNivel(1L, NIVEL.FACIL))
                 .thenReturn(new ArrayList<>());
 
-        Map<String, Object> estadisticas = servicioEstadistica.obtenerEstadisticas(1L, "FACIL");
+        Map<String, Object> estadisticas = servicioEstadistica.obtenerEstadisticas(1L, NIVEL.FACIL);
 
         assertThat(estadisticas, is(notNullValue()));
         assertThat(estadisticas.isEmpty(), is(false));
     }
 
-
-//
-//    @Test
-//    public void queElMapaDeEstadisticasMantenga_ElOrdenDeInsercion() {
-//        when(repositorioPartidaMock.obtenerPartidasPorUsuarioYNivel(1L, "FACIL"))
-//                .thenReturn(partidas);
-//
-//        Map<String, Object> estadisticas = servicioEstadistica.obtenerDeNivelFacil(1L);
-//
-//        List<String> keys = new ArrayList<>(estadisticas.keySet());
-//        assertThat(keys.get(0), is("Partidas Jugadas"));
-//        assertThat(keys.get(1), is("Partidas Ganadas"));
-//        assertThat(keys.get(2), is("Partidas Perdidas"));
-//        assertThat(keys.get(3), is("Porcentaje de Victoria"));
-//    }
-
-//
-//    @Test
-//    public void queAlObtenerEstadisticasDeDistintosUsuariosRetorneDatosIndependientes() {
-//        List<Partida> partidasUsuario2 = new ArrayList<>();
-//        partidasUsuario2.add(crearPartida(20L, 2L, "FACIL", true, 100));
-//
-//        when(repositorioPartidaMock.obtenerPartidasPorUsuarioYNivel(1L, "FACIL"))
-//                .thenReturn(partidas);
-//        when(repositorioPartidaMock.obtenerPartidasPorUsuarioYNivel(2L, "FACIL"))
-//                .thenReturn(partidasUsuario2);
-//
-//        Map<String, Object> estadisticasUsuario1 = servicioEstadistica.obtenerDeNivelFacil(1L);
-//        Map<String, Object> estadisticasUsuario2 = servicioEstadistica.obtenerDeNivelFacil(2L);
-//
-//        assertThat(estadisticasUsuario1.get("Partidas Jugadas"), is(5));
-//        assertThat(estadisticasUsuario2.get("Partidas Jugadas"), is(1));
-//    }
-
-
     // ==================== METODO AUXILIAR ====================
 
-    private Partida crearPartida(Long id, Usuario usuario, String nivel, boolean ganada, Integer puntos) {
+    private Partida crearPartida(Long id, Usuario usuario, NIVEL nivel, boolean ganada, Integer puntos) {
         Partida partida = new Partida();
         partida.setId(id);
         partida.setUsuario(usuario);
-        partida.setDificultad(nivel);
+        partida.setNivel(nivel);
         partida.setGanada(ganada);
         partida.setPuntaje(puntos);
         return partida;

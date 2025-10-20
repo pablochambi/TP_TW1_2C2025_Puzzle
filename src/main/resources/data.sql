@@ -48,12 +48,22 @@ VALUES
 
 
 -- Partidas de prueba
-INSERT INTO Partida (id, usuario_id, dificultad, tiempoSegundos, puntaje, pistasUsadas, ganada, fechaHoraInicio)
+INSERT INTO Partida (id, usuario_id, nivel, tiempoSegundos, puntaje, pistasUsadas, ganada, fechaHoraInicio)
 VALUES
-    (1, 1, 'FACIL', 120, 150, 0, TRUE, '2025-10-15 14:30:00'),
-    (2, 1, 'MEDIA', 240, 200, 1, TRUE, '2025-10-30 10:20:00'),
-    (3, 1, 'DIFICIL', 300, 250, 2, FALSE, '2025-10-17 18:45:00'),
-    (4, 1, 'FACIL', 90, 180, 0, TRUE, '2025-10-17 20:10:00'),
-    (5, 1, 'MEDIA', 210, 220, 1, TRUE, '2025-10-18 09:00:00');
+    -- Nivel FACIL (4 partidas, 1 perdida)
+    (1, 1, 'FACIL', 120, 35, 0, TRUE,  '2025-10-15 14:30:00'),
+    (2, 1, 'FACIL', 95, 30, 1, TRUE,   '2025-10-16 16:00:00'),
+    (3, 1, 'FACIL', 110, 25, 2, TRUE,  '2025-10-17 18:00:00'),
+    (4, 1, 'FACIL', 130, 0, 2, FALSE, '2025-10-18 20:30:00'),
+
+    -- Nivel MEDIO (3 partidas, 1 perdida)
+    (5, 1, 'MEDIO', 200, 50, 1, TRUE,  '2025-10-19 10:20:00'),
+    (6, 1, 'MEDIO', 220, 60, 0, TRUE,  '2025-10-20 11:15:00'),
+    (7, 1, 'MEDIO', 210, 0, 2, FALSE, '2025-10-21 09:50:00'),
+
+    -- Nivel DIFICIL (2 partidas, 1 perdida)
+    (8, 1, 'DIFICIL', 300, 90, 1, TRUE,  '2025-10-22 14:00:00'),
+    (9, 1, 'DIFICIL', 320, 0, 2, FALSE, '2025-10-23 15:30:00');
+
 
 

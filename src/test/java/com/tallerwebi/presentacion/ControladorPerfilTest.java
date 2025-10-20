@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.enums.NIVEL;
 import com.tallerwebi.dominio.interfaces.ServicioAvatar;
 import com.tallerwebi.dominio.interfaces.ServicioEstadistica;
 import com.tallerwebi.dominio.interfaces.ServicioLogin;
@@ -83,7 +84,6 @@ public class ControladorPerfilTest {
 
     @Test
     public void queAlAccederAlPerfilConSesionValidaMuestreLaVistaPerfil() {
-
         when(sessionMock.getAttribute("id_usuario")).thenReturn(usuarioMock.getId());
 
         ModelAndView mav = controladorPerfil.irAlPerfil(sessionMock);
@@ -94,7 +94,6 @@ public class ControladorPerfilTest {
 
     @Test
     public void queAlAccederAlPerfilSeCarguenLosDatosBasicosDelUsuario() {
-
         when(sessionMock.getAttribute("id_usuario")).thenReturn(usuarioMock.getId());
         when(servicioLoginMock.consultarUsuarioDTOPorId(usuarioMock.getId())).thenReturn(usuarioDTOMock);
 
@@ -104,16 +103,13 @@ public class ControladorPerfilTest {
         assertThat(((UsuarioDTO) mav.getModel().get("usuario")).getId(), is(usuarioMock.getId()));
     }
 
-
     @Test
     public void queAlAccederAlPerfilSeCarguenLasEstadisticasDeTodosLosNiveles() {
-
-
         when(sessionMock.getAttribute("id_usuario")).thenReturn(usuarioMock.getId());
 
-        when(servicioEstadisticasMock.obtenerEstadisticas(usuarioMock.getId(),"FACIL")).thenReturn(estadisticasFacilMock);
-        when(servicioEstadisticasMock.obtenerEstadisticas(usuarioMock.getId(),"MEDIO")).thenReturn(estadisticasMedioMock);
-        when(servicioEstadisticasMock.obtenerEstadisticas(usuarioMock.getId(),"DIFICIL")).thenReturn(estadisticasDificilMock);
+        when(servicioEstadisticasMock.obtenerEstadisticas(usuarioMock.getId(), NIVEL.FACIL)).thenReturn(estadisticasFacilMock);
+        when(servicioEstadisticasMock.obtenerEstadisticas(usuarioMock.getId(), NIVEL.MEDIO)).thenReturn(estadisticasMedioMock);
+        when(servicioEstadisticasMock.obtenerEstadisticas(usuarioMock.getId(), NIVEL.DIFICIL)).thenReturn(estadisticasDificilMock);
 
         ModelAndView mav = controladorPerfil.irAlPerfil(sessionMock);
 
@@ -121,7 +117,6 @@ public class ControladorPerfilTest {
         assertThat(mav.getModel().get("estadisticasNivelMedio"), is(estadisticasMedioMock));
         assertThat(mav.getModel().get("estadisticasNivelDificil"), is(estadisticasDificilMock));
     }
-
 
     @Test
     public void queAlAccederAlPerfilSeLlamenLosServiciosCorrectamente() {
@@ -131,9 +126,9 @@ public class ControladorPerfilTest {
         controladorPerfil.irAlPerfil(sessionMock);
 
         verify(servicioLoginMock, times(1)).consultarUsuarioDTOPorId(idUsuario);
-        verify(servicioEstadisticasMock, times(1)).obtenerEstadisticas(idUsuario,"FACIL");
-        verify(servicioEstadisticasMock, times(1)).obtenerEstadisticas(idUsuario,"MEDIO");
-        verify(servicioEstadisticasMock, times(1)).obtenerEstadisticas(idUsuario,"DIFICIL");
+        verify(servicioEstadisticasMock, times(1)).obtenerEstadisticas(idUsuario, NIVEL.FACIL);
+        verify(servicioEstadisticasMock, times(1)).obtenerEstadisticas(idUsuario, NIVEL.MEDIO);
+        verify(servicioEstadisticasMock, times(1)).obtenerEstadisticas(idUsuario, NIVEL.DIFICIL);
     }
 
     @Test
@@ -141,9 +136,9 @@ public class ControladorPerfilTest {
         Long idUsuario = 1L;
         when(sessionMock.getAttribute("id_usuario")).thenReturn(idUsuario);
 
-        when(servicioEstadisticasMock.obtenerEstadisticas(idUsuario,"FACIL")).thenReturn(new HashMap<>());
-        when(servicioEstadisticasMock.obtenerEstadisticas(idUsuario,"MEDIO")).thenReturn(new HashMap<>());
-        when(servicioEstadisticasMock.obtenerEstadisticas(idUsuario,"DIFICIL")).thenReturn(new HashMap<>());
+        when(servicioEstadisticasMock.obtenerEstadisticas(idUsuario, NIVEL.FACIL)).thenReturn(new HashMap<>());
+        when(servicioEstadisticasMock.obtenerEstadisticas(idUsuario, NIVEL.MEDIO)).thenReturn(new HashMap<>());
+        when(servicioEstadisticasMock.obtenerEstadisticas(idUsuario, NIVEL.DIFICIL)).thenReturn(new HashMap<>());
 
         ModelAndView mav = controladorPerfil.irAlPerfil(sessionMock);
 
@@ -153,7 +148,6 @@ public class ControladorPerfilTest {
         assertThat(mav.getModel().get("estadisticasNivelMedio"),  is(notNullValue()));
         assertThat(mav.getModel().get("estadisticasNivelDificil"),  is(notNullValue()));
     }
-
 
     // ==================== TESTS DE /perfil/editar GET (Ir a Editar) ====================
 
@@ -171,7 +165,6 @@ public class ControladorPerfilTest {
         assertThat(((UsuarioDTO) mav.getModel().get("usuario")).getId(), is(usuarioMock.getId()));
         assertThat(((UsuarioDTO) mav.getModel().get("usuario")).getPassword(), is("1234"));
     }
-
 
     @Test
     public void queAlGuardarCambiosDelPerfilSinSesionRedirijaAlLogin() {
@@ -203,7 +196,6 @@ public class ControladorPerfilTest {
 
         verify(servicioAvatarMock, times(1)).obtenerAvataresDTO(any());
     }
-
 
     // ==================== TESTS DE /perfil/volver (Volver sin guardar) ====================
 

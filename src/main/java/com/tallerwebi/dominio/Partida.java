@@ -2,6 +2,7 @@ package com.tallerwebi.dominio;
 
 
 
+import com.tallerwebi.dominio.enums.NIVEL;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,7 +17,8 @@ public class Partida {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String dificultad;
+    @Enumerated(EnumType.STRING)
+    private NIVEL nivel;
     private Integer tiempoSegundos;
     private Integer puntaje;
     private Integer pistasUsadas;

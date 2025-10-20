@@ -67,7 +67,7 @@ public class ServicioPartidaImpl implements ServicioPartida {
         List<PartidaDTO> dtoList = new ArrayList<>();
         for (Partida p : partidas) {
             PartidaDTO dto = new PartidaDTO(
-                    p.getDificultad(),
+                    p.getNivel().name(),
                     formatearTiempo(p.getTiempoSegundos()),
                     p.getPuntaje(),
                     p.getGanada(),
