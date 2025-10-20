@@ -36,8 +36,8 @@ public class ServicioLoginImpl implements ServicioLogin {
         if(usuarioEncontrado != null){
             throw new UsuarioExistente();
         }
-        repositorioAvatar.agregarAvataresGratuitosAlUsuario(usuario);
         repositorioUsuario.guardar(usuario);
+        repositorioAvatar.agregarAvataresGratuitosAlUsuario(usuario);
     }
     @Override
     public UsuarioDTO actualizarPerfil(Long idUsuario, String nuevoNombre, Long id_avatar, String nuevaPassword) {
