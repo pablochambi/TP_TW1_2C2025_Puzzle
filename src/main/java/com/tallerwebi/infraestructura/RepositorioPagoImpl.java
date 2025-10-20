@@ -11,11 +11,11 @@ import org.springframework.stereotype.Repository;
 @Repository("repositorioPago")
 public class RepositorioPagoImpl implements RepositorioPago {
 
-   private final SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
 
     @Autowired
-            public RepositorioPagoImpl(SessionFactory sessionFactory) {
-            this.sessionFactory = sessionFactory;
+    public RepositorioPagoImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
 
     }
 
@@ -40,9 +40,8 @@ public class RepositorioPagoImpl implements RepositorioPago {
     }
 
     @Override
-    public void registrarPago(String collectionId, Long usuarioId, Integer paqueteId) {
+    public void registrarPago(Pago pago) {
 
-        Pago pago = new Pago(collectionId, usuarioId, paqueteId);
 
         sessionFactory.getCurrentSession().save(pago);
 

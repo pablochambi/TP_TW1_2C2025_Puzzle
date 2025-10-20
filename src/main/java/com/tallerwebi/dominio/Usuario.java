@@ -30,9 +30,6 @@ public class Usuario {
         this.activo = true;
     }
 
-    public void agregarMonedas(Integer cantidad) {
-        this.monedas += cantidad;
-    }
 
 
 }

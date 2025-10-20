@@ -1,11 +1,13 @@
 package com.tallerwebi.dominio.implementacion;
 
-import com.tallerwebi.dominio.interfaces.RepositorioPago;
-import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
-import com.tallerwebi.dominio.interfaces.ServicioTiendaMonedas;
+
+import com.tallerwebi.dominio.Pago;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.enums.PaqueteMonedas;
 import com.tallerwebi.dominio.excepcion.UsuarioInexistente;
+import com.tallerwebi.dominio.interfaces.RepositorioPago;
+import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
+import com.tallerwebi.dominio.interfaces.ServicioTiendaMonedas;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -38,7 +40,8 @@ public class ServicioTiendaMonedasImpl implements ServicioTiendaMonedas {
         }
 
         registrarPago(collection_id, idUsuario, paqueteId);
-        usuario.agregarMonedas(paqueteMonedas.getCantidadMonedas());
+        usuario.setMonedas(usuario.getMonedas() + paqueteMonedas.getCantidadMonedas());
+        //usuario.agregarMonedas(paqueteMonedas.getCantidadMonedas());
 
 
     }
@@ -57,7 +60,14 @@ public class ServicioTiendaMonedasImpl implements ServicioTiendaMonedas {
 
     private void registrarPago(String collectionId, Long usuarioId, Integer paqueteId) {
 
-        repositorioPago.registrarPago(collectionId, usuarioId, paqueteId);
+        Usuario usuario  = repositorioUsuario.obtenerUsuarioPorId(usuarioId);
+        PaqueteMonedas paquete = PaqueteMonedas.getPorId(paqueteId);
+
+
+
+        Pago pago = new Pago(collectionId, usuario, paquete);
+
+        repositorioPago.registrarPago(pago);
 
     }
 

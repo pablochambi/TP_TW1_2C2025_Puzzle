@@ -1,5 +1,8 @@
 package com.tallerwebi.dominio.enums;
 
+
+
+
 public enum PaqueteMonedas {
 
     PAQUETE_1(1, 1000, 1),
@@ -9,6 +12,7 @@ public enum PaqueteMonedas {
     PAQUETE_5(5, 25000, 20),
     PAQUETE_6(6, 150000, 100);
 
+
     private Integer id;
     private Integer cantidadMonedas;
     private Integer precioARS;
@@ -17,6 +21,10 @@ public enum PaqueteMonedas {
         this.id = id;
         this.cantidadMonedas = cantidadMonedas;
         this.precioARS = precioARS;
+    }
+
+   PaqueteMonedas() {
+
     }
 
     public static PaqueteMonedas getPorId(Integer id) {
