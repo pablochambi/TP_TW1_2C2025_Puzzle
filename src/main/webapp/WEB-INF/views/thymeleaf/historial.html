@@ -4,75 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Historial Sudoku</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Bootstrap core css -->
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css}"/>
+  <!-- CSS personalizado -->
   <link rel="stylesheet" th:href="@{/css/historial.css}"/>
   <link rel="stylesheet" th:href="@{/css/home.css}"/>
-  <link rel="stylesheet" th:href="@{/css/editar_perfil.css}"/>
+<!--  <link rel="stylesheet" th:href="@{/css/editar_perfil.css}"/>-->
   <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
 
-    .history-container {
-      width: 90%;
-      margin: 0 auto;
-      margin-top: 2rem;
-    }
-
-    h1 {
-      text-align: center;
-      color: #264b77;
-      margin-bottom: 1rem;
-    }
-
-    .filters {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 1rem;
-      gap: 1rem;
-    }
-
-    .filters label {
-      font-weight: bold;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-family: Arial, sans-serif;
-      text-align: center;
-    }
-
-    thead {
-      background-color: #dce9f8;
-      color: #264b77;
-      font-weight: bold;
-    }
-
-    th, td {
-      padding: 10px;
-      border: 1px solid #cfd8e3;
-    }
-
-    tbody tr:nth-child(even) {
-      background-color: #f2f6fc;
-    }
-
-    tbody tr:nth-child(odd) {
-      background-color: #ffffff;
-    }
-
-    .status-icon {
-      font-size: 18px;
-    }
-
-    .win {
-      color: #2d7d46;
-    }
-
-    .lose {
-      color: #a11b1b;
-    }
   </style>
 </head>
 <body>
@@ -126,6 +71,7 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script th:src="@{/js/home.js}"></script>
 <script>
   $(document).ready(function() {
     // Detectar cambio en el select

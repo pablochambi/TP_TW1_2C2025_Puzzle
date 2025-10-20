@@ -12,9 +12,66 @@ body {
     color: #333;
 }
 
+h1 {
+    text-align: center;
+    color: #264b77;
+    margin-bottom: 1rem;
+}
+
+.filters {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.filters label {
+    font-weight: bold;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+thead {
+    background-color: #dce9f8;
+    color: #264b77;
+    font-weight: bold;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #cfd8e3;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f2f6fc;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+.status-icon {
+    font-size: 18px;
+}
+
+.win {
+    color: #2d7d46;
+}
+
+.lose {
+    color: #a11b1b;
+}
+
 .history-container {
     max-width: 800px;
     margin: 0 auto;
+    margin-top: 7rem;
 }
 
 .page-title {

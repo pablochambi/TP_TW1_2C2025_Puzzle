@@ -31,53 +31,6 @@ body {
     line-height: 1.6;
 }
 
-/* NAVBAR - Similar al home */
-.navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: var(--primary-white);
-    box-shadow: var(--shadow);
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 1000;
-    backdrop-filter: blur(10px);
-}
-
-.navbar-left {
-    display: flex;
-    align-items: center;
-}
-
-.logo-section {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-
-.logo-icon {
-    width: 45px;
-    height: 45px;
-    background: linear-gradient(135deg, var(--gold) 0%, #ffb300 100%);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    color: white;
-    text-decoration: none;
-    box-shadow: var(--shadow);
-}
-.logo-icon:hover
-{
-    text-decoration: none;
-    color: white;
-}
-
 .breadcrumb-section {
     display: flex;
     align-items: center;
