@@ -1,0 +1,340 @@
+/* ============================================
+   VARIABLES CSS
+   ============================================ */
+:root {
+    --primary-white: #ffffff;
+    --soft-gray: #f8f9fa;
+    --light-blue: #e3f2fd;
+    --accent-blue: #1976d2;
+    --dark-blue: #0d47a1;
+    --gold: #ffd700;
+    --silver: #c0c0c0;
+    --bronze: #cd7f32;
+    --text-dark: #2c3e50;
+    --text-gray: #6c757d;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
+    --border-radius: 12px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   BODY Y CONTENEDOR BASE
+   ============================================ */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, var(--soft-gray) 0%, var(--light-blue) 100%);
+    color: var(--text-dark);
+    min-height: 100vh;
+    padding-top: 80px;
+}
+
+/* ============================================
+   FILTROS
+   ============================================ */
+.filters-container {
+    background: var(--primary-white);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    margin: 2rem auto;
+    max-width: 1200px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: center;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 200px;
+}
+
+.filter-group label {
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-group label i {
+    color: var(--accent-blue);
+}
+
+.filter-group select {
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--soft-gray);
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: var(--transition);
+    background: white;
+    color: var(--text-dark);
+}
+
+.filter-group select:hover {
+    border-color: var(--accent-blue);
+}
+
+.filter-group select:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+}
+
+/* ============================================
+   TABLA RANKING
+   ============================================ */
+.ranking-table-container {
+    background: var(--primary-white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin: 2rem auto;
+    max-width: 1200px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* THEAD */
+thead {
+    background: linear-gradient(135deg, var(--accent-blue), var(--dark-blue));
+    color: white;
+}
+
+thead th {
+    padding: 1.25rem 1rem;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* TBODY */
+tbody tr {
+    border-bottom: 1px solid var(--soft-gray);
+    transition: var(--transition);
+}
+
+tbody tr:hover {
+    background: var(--light-blue);
+    transform: scale(1.01);
+}
+
+tbody tr:last-child {
+    border-bottom: none;
+}
+
+tbody td {
+    padding: 1.25rem 1rem;
+    text-align: center;
+    font-size: 0.95rem;
+    vertical-align: middle;
+}
+
+/* ============================================
+   CELDAS ESPECIALES
+   ============================================ */
+
+/* Posición */
+.position-cell {
+    font-weight: 700;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.medal {
+    font-size: 1.8rem;
+    line-height: 1;
+}
+
+.position-1 {
+    color: var(--gold);
+}
+
+.position-2 {
+    color: var(--silver);
+}
+
+.position-3 {
+    color: var(--bronze);
+}
+
+/* Usuario */
+.username-cell {
+    font-weight: 600;
+    color: var(--dark-blue);
+    font-size: 1rem;
+}
+
+/* Puntaje */
+.score-cell {
+    font-weight: 700;
+    color: var(--accent-blue);
+    font-size: 1.1rem;
+}
+
+/* ============================================
+   TÍTULO Y PÁGINA
+   ============================================ */
+.page-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--dark-blue);
+    margin: 2rem 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 992px) {
+    .filters-container {
+        padding: 1rem;
+        gap: 1.5rem;
+    }
+
+    .filter-group {
+        min-width: 150px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-top: 70px;
+    }
+
+    .page-title {
+        font-size: 2rem;
+        margin: 1.5rem 0;
+    }
+
+    .filters-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        margin: 1rem;
+    }
+
+    .filter-group {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .ranking-table-container {
+        margin: 1rem;
+        overflow-x: auto;
+    }
+
+    table {
+        font-size: 0.85rem;
+    }
+
+    thead th,
+    tbody td {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .position-cell {
+        font-size: 1rem;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .medal {
+        font-size: 1.4rem;
+    }
+
+    .username-cell {
+        font-size: 0.9rem;
+    }
+
+    .score-cell {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-title {
+        font-size: 1.7rem;
+    }
+
+    table {
+        font-size: 0.8rem;
+    }
+
+    thead th,
+    tbody td {
+        padding: 0.6rem 0.4rem;
+    }
+
+    .position-cell {
+        font-size: 0.9rem;
+    }
+
+    .medal {
+        font-size: 1.2rem;
+    }
+}
+
+/* ============================================
+   ANIMACIONES
+   ============================================ */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ranking-table-container {
+    animation: fadeIn 0.5s ease-out;
+}
+
+tbody tr {
+    animation: fadeIn 0.3s ease-out;
+    animation-fill-mode: both;
+}
+
+tbody tr:nth-child(1) { animation-delay: 0.1s; }
+tbody tr:nth-child(2) { animation-delay: 0.15s; }
+tbody tr:nth-child(3) { animation-delay: 0.2s; }
+tbody tr:nth-child(4) { animation-delay: 0.25s; }
+tbody tr:nth-child(5) { animation-delay: 0.3s; }
+
+/* ============================================
+   ESTADOS VACÍOS
+   ============================================ */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-gray);
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: var(--accent-blue);
+    margin-bottom: 1rem;
+}
+
+.empty-state p {
+    font-size: 1.1rem;
+    margin-top: 1rem;
+}

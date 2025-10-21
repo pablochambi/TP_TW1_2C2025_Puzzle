@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranking Sudoku Master</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css}"/>
+
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" th:href="@{/css/home.css}"/>
+    <link rel="stylesheet" th:href="@{/css/ranking.css}"/>
+</head>
+
+<body>
+<!-- HEADER (Fragment) -->
+<div th:replace="fragment/header :: header"></div>
+
+<!-- TÍTULO PÁGINA -->
+<h1 class="page-title">🏆 Ranking de Jugadores</h1>
+
+<!-- FILTROS -->
+<div class="filters-container">
+    <div class="filter-group">
+        <label for="filtroDificultad">
+            <i class="fas fa-filter"></i> Dificultad:
+        </label>
+        <select id="filtroDificultad" onchange="aplicarFiltros()">
+            <option value="GENERAL" th:selected="${dificultadSeleccionada == 'GENERAL'}">General (Todas)</option>
+            <option value="FACIL" th:selected="${dificultadSeleccionada == 'FACIL'}">Fácil</option>
+            <option value="MEDIA" th:selected="${dificultadSeleccionada == 'MEDIA'}">Media</option>
+            <option value="DIFICIL" th:selected="${dificultadSeleccionada == 'DIFICIL'}">Difícil</option>
+        </select>
+    </div>
+
+    <div class="filter-group">
+        <label for="filtroOrden">
+            <i class="fas fa-sort"></i> Ordenar por:
+        </label>
+        <select id="filtroOrden" onchange="aplicarFiltros()">
+            <option value="PUNTAJE" th:selected="${ordenSeleccionado == 'PUNTAJE'}">Mejor Puntaje</option>
+            <option value="TIEMPO" th:selected="${ordenSeleccionado == 'TIEMPO'}">Mejor Tiempo</option>
+            <option value="PARTIDAS" th:selected="${ordenSeleccionado == 'PARTIDAS'}">Partidas Ganadas</option>
+        </select>
+    </div>
+</div>
+
+<!-- TABLA RANKING -->
+<div class="ranking-table-container">
+    <table>
+        <thead>
+        <tr>
+            <th>Posición</th>
+            <th>Jugador</th>
+            <th>Mejor Puntaje</th>
+            <th>Dificultad</th>
+            <th>Mejor Tiempo</th>
+            <th>Partidas Ganadas</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Si hay ranking -->
+        <tr th:each="jugador, iterStat : ${ranking}">
+            <td>
+                <div class="position-cell"
+                     th:classappend="${iterStat.index == 0 ? 'position-1'
+                : (iterStat.index == 1 ? 'position-2'
+                : (iterStat.index == 2 ? 'position-3' : ''))}">
+                    <span class="medal" th:if="${iterStat.index == 0}">🥇</span>
+                    <span class="medal" th:if="${iterStat.index == 1}">🥈</span>
+                    <span class="medal" th:if="${iterStat.index == 2}">🥉</span>
+                    <span th:text="${jugador.posicion}"></span>
+                </div>
+            </td>
+            <td class="username-cell" th:text="${jugador.nombreJugador}">Usuario</td>
+            <td class="score-cell" th:text="${jugador.mejorPuntaje}">0</td>
+            <td class="score-cell" th:text="${jugador.dificultad}">0</td>
+            <td th:text="${jugador.mejorTiempo}">0:00</td>
+           <td th:text="${jugador.partidasGanadas}">0</td>
+        </tr>
+
+        <!-- Si NO hay ranking -->
+        <tr th:if="${#lists.isEmpty(ranking)}">
+            <td colspan="5">
+                <div class="empty-state">
+                    <i class="fas fa-trophy"></i>
+                    <p>Aún no hay jugadores en el ranking.</p>
+                    <p>¡Sé el primero en jugar y ganar!</p>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Bootstrap JS -->
+<script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/home.js}"></script>
+
+<!-- JavaScript de filtros -->
+<script>
+    function aplicarFiltros() {
+        const dificultad = document.getElementById('filtroDificultad').value;
+        const orden = document.getElementById('filtroOrden').value;
+
+        // Construir URL con parámetros
+        const params = new URLSearchParams();
+        params.append('dificultad', dificultad);
+        params.append('orden', orden);
+
+        // Redirigir con los filtros
+        window.location.href = '/spring/ranking?' + params.toString();
+    }
+</script>
+</body>
+</html>

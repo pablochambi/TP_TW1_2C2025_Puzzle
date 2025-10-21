@@ -29,5 +29,16 @@ public class UsuarioDTO {
         this.monedas = usuario.getMonedas();
         this.avatar = avatar;
     }
+    public UsuarioDTO(Usuario usuario) {
+        this.id = usuario.getId();
+        this.email = usuario.getEmail();
+        this.nombreUsuario = usuario.getNombreUsuario();
+        this.password = usuario.getPassword();
+        this.rol = usuario.getRol();
+        this.activo = usuario.getActivo();
+        this.pistas = usuario.getPistas();
+        this.monedas = usuario.getMonedas();
+
+    }
 
 }

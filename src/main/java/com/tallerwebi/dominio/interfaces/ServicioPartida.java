@@ -11,4 +11,10 @@ public interface ServicioPartida {
     List<PartidaDTO> obtenerTodasLasPartidasDTO(Long idUsuario);
 
     List<PartidaDTO> obtenerTodasLasPartidasDTODelMasRecienteAlMasAntiguo(Long idUsuario);
+    List<PartidaDTO> obtenerPartidasDTOOrdenadasPorPuntaje();
+
+
+    List<PartidaDTO> obtenerPartidasPorCriterio(String dificultad, String orden);
+
+    List<PartidaDTO> obtenerPartidasDTOOrdenadasPorTiempo();
 }

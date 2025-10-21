@@ -61,6 +61,59 @@ public class ServicioPartidaImpl implements ServicioPartida {
 
         return dtoList;
     }
+    @Override
+    public List<PartidaDTO> obtenerPartidasPorCriterio(String dificultad, String orden) {
+        List<Partida> partidas;
+        List<PartidaDTO> dtoList;
+        if (dificultad.equalsIgnoreCase("general") && orden.equalsIgnoreCase("tiempo")) {
+            dtoList = obtenerPartidasDTOOrdenadasPorTiempo();
+            return dtoList;
+        }else if (dificultad.equalsIgnoreCase("general") && orden.equalsIgnoreCase("puntaje")) {
+            dtoList = obtenerPartidasDTOOrdenadasPorPuntaje();
+            return dtoList;
+        }
+
+
+
+        if (orden.equalsIgnoreCase("tiempo")) {
+            orden = "tiempoSegundos";
+        }
+
+        partidas = repositorioPartida.obtenerPartidasPorCriterio(dificultad, orden);
+        dtoList = formatearDePartidasAPartidasDTO(partidas);
+
+
+
+
+
+
+        return dtoList;
+    }
+    @Override
+    public List<PartidaDTO> obtenerPartidasDTOOrdenadasPorPuntaje() {
+        List<Partida> partidas;
+        List<PartidaDTO> dtoList;
+        partidas = repositorioPartida.obtenerPartidasPorPuntajeDesc();
+        dtoList = formatearDePartidasAPartidasDTO(partidas);
+
+
+
+        return dtoList;
+    }
+
+
+
+    @Override
+    public List<PartidaDTO> obtenerPartidasDTOOrdenadasPorTiempo() {
+        List<Partida> partidas;
+        List<PartidaDTO> dtoList;
+        partidas = repositorioPartida.obtenerPartidasPorTiempoAsc();
+        dtoList = formatearDePartidasAPartidasDTO(partidas);
+
+
+
+        return dtoList;
+    }
 
     private List<PartidaDTO> formatearDePartidasAPartidasDTO(List<Partida> partidas) {
         // Convertir a DTO
@@ -72,7 +125,8 @@ public class ServicioPartidaImpl implements ServicioPartida {
                     p.getPuntaje(),
                     p.getGanada(),
                     p.getPistasUsadas(),
-                    formatearFecha(p.getFechaHoraInicio())
+                    formatearFecha(p.getFechaHoraInicio()),
+                    new UsuarioDTO(p.getUsuario())
             );
             dtoList.add(dto);
         }
@@ -93,6 +147,7 @@ public class ServicioPartidaImpl implements ServicioPartida {
         return String.format("%d:%02d:%02d", horas, minutos, segundos);
 
     }
+
 
 
 }

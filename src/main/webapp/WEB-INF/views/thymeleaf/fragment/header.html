@@ -45,19 +45,19 @@
   <div class="accordion-menu">
     <div class="accordion-option">
       <i class="fas fa-user"></i>
-      <a th:href="@{/perfil}" >Ver Perfil</a>
+      <a th:href="@{/perfil}" style="text-decoration: none" >Ver Perfil</a>
     </div>
     <div class="accordion-option" >
       <i class="fas fa-history"></i>
-      <a th:href="@{/historial}" >Historias de Partidas</a>
+      <a th:href="@{/historial}" style="text-decoration: none">Historias de Partidas</a>
     </div>
     <div class="accordion-option" >
       <i class="fas fa-chart-line"></i>
-      <span>Estadísticas</span>
+        <a th:href="@{/ranking}" style="text-decoration: none" >Ranking</a>
     </div>
     <div class="accordion-option" >
       <i class="fas fa-sign-out-alt"></i>
-      <a th:href="@{/cerrar_sesion}" >Cerrar Session</a>
+      <a th:href="@{/cerrar_sesion}" style="text-decoration: none" >Cerrar Session</a>
     </div>
   </div>
 </div>

@@ -1,5 +1,8 @@
 INSERT INTO Usuario(id, email,nombreUsuario, password, rol, activo,monedas)
-VALUES(null, 'test@unlam.edu.ar', 'jugador123', 'test', 'ADMIN',true,100);
+VALUES
+    (null, 'test@unlam.edu.ar', 'jugador123', 'test', 'ADMIN',true,100),
+    (null, 'donatoalbera@gmail.com', 'JUGADOR1', 'test', 'ADMIN',true,100),
+    (null, 'donatoalbera2@gmail.com', 'JUGADOR2', 'test', 'ADMIN',true,100);
 
 
 --Avatares con imagenes
@@ -54,6 +57,9 @@ VALUES
     (2, 1, 'MEDIA', 240, 200, 1, TRUE, '2025-10-30 10:20:00'),
     (3, 1, 'DIFICIL', 300, 250, 2, FALSE, '2025-10-17 18:45:00'),
     (4, 1, 'FACIL', 90, 180, 0, TRUE, '2025-10-17 20:10:00'),
-    (5, 1, 'MEDIA', 210, 220, 1, TRUE, '2025-10-18 09:00:00');
-
+    (5, 2, 'MEDIA', 210, 220, 1, TRUE, '2025-10-18 09:00:00'),
+    (6, 3, 'MEDIA', 210, 320, 1, TRUE, '2025-10-18 09:00:00'),
+    (7, 3, 'FACIL', 210, 220, 3, TRUE, '2025-10-18 09:00:00'),
+    (8, 2, 'MEDIA', 210, 450, 1, TRUE, '2025-10-18 09:00:00'),
+    (9, 3, 'DIFICIL', 210, 220, 2, TRUE, '2025-10-18 09:00:00');
 

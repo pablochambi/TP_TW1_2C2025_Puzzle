@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class PartidaDTO {
 
+    private UsuarioDTO usuarioDTO;
     private String dificultad;
     private String tiempoFormateado;      // Ej: "0:02:27"
     private int puntaje;
@@ -16,13 +17,14 @@ public class PartidaDTO {
 
     // Constructor
     public PartidaDTO(String dificultad, String tiempoFormateado, int puntaje,
-                      boolean ganada, int pistasUsadas, String fechaHoraFormateada) {
+                      boolean ganada, int pistasUsadas, String fechaHoraFormateada, UsuarioDTO usuarioDTO) {
         this.dificultad = dificultad;
         this.tiempoFormateado = tiempoFormateado;
         this.puntaje = puntaje;
         this.ganada = ganada;
         this.pistasUsadas = pistasUsadas;
         this.fechaHoraFormateada = fechaHoraFormateada;
+        this.usuarioDTO = usuarioDTO;
     }
 
 }
