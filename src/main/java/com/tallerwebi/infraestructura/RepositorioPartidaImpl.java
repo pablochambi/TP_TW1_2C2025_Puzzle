@@ -1,6 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.Partida;
+import com.tallerwebi.dominio.enums.NIVEL;
 import com.tallerwebi.dominio.interfaces.RepositorioPartida;
 import com.tallerwebi.dominio.Usuario;
 import org.hibernate.Criteria;
@@ -20,8 +21,13 @@ public class RepositorioPartidaImpl implements RepositorioPartida {
     SessionFactory sessionFactory;
 
     @Override
-    public List<Partida> obtenerPartidasPorUsuarioYNivel(Long id_usuario, String nivel) {
-        return List.of();
+    public List<Partida> obtenerPartidasPorUsuarioYNivel(Long id_usuario, NIVEL nivel) {
+        return (List<Partida>) sessionFactory.getCurrentSession()
+                .createCriteria(Partida.class)
+                .createAlias("usuario", "u")
+                .add(Restrictions.eq("u.id", id_usuario))
+                .add(Restrictions.eq("nivel", nivel))
+                .list();
     }
 
     @Override

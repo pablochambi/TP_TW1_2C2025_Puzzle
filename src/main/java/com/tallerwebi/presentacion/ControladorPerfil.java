@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.enums.NIVEL;
 import com.tallerwebi.dominio.excepcion.FormatoDeAvatarInvalido;
 import com.tallerwebi.dominio.interfaces.ServicioAvatar;
 import com.tallerwebi.dominio.interfaces.ServicioEstadistica;
@@ -34,9 +35,9 @@ public class ControladorPerfil {
         }
         ModelMap model = new ModelMap();
         model.put("usuario",servicioLogin.consultarUsuarioDTOPorId(idUsuario));
-        model.put("estadisticasNivelFacil", servicioEstadistica.obtenerEstadisticas(idUsuario, "FACIL"));
-        model.put("estadisticasNivelMedio", servicioEstadistica.obtenerEstadisticas(idUsuario, "MEDIO"));
-        model.put("estadisticasNivelDificil", servicioEstadistica.obtenerEstadisticas(idUsuario, "DIFICIL"));
+        model.put("estadisticasNivelFacil", servicioEstadistica.obtenerEstadisticas(idUsuario, NIVEL.FACIL));
+        model.put("estadisticasNivelMedio", servicioEstadistica.obtenerEstadisticas(idUsuario, NIVEL.MEDIO));
+        model.put("estadisticasNivelDificil", servicioEstadistica.obtenerEstadisticas(idUsuario, NIVEL.DIFICIL));
 
         return new ModelAndView("perfil", model);
     }
