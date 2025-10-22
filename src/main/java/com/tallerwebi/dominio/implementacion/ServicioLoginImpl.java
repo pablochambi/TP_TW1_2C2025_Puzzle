@@ -38,6 +38,7 @@ public class ServicioLoginImpl implements ServicioLogin {
         }
         repositorioUsuario.guardar(usuario);
         repositorioAvatar.agregarAvataresGratuitosAlUsuario(usuario);
+
     }
     @Override
     public UsuarioDTO actualizarPerfil(Long idUsuario, String nuevoNombre, Long id_avatar, String nuevaPassword) {

@@ -1,0 +1,925 @@
+<!DOCTYPE HTML>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Sudoku Master - Juego en Línea</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.0/css/bootstrap.min.css"/>
+    <!-- Boostrap core css -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+
+    <link rel="stylesheet" th:href="@{/css/home.css}"/>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            padding-bottom: 3rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .lobby-header {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 3rem;
+        }
+
+        .lobby-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+
+        .lobby-header p {
+            font-size: 1.1rem;
+            color: #5a6c7d;
+        }
+
+        .players-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            width: 1200px;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title i {
+            color: #3498db;
+        }
+
+        .player-card {
+            background: #ffffff;
+            border: 2px solid #e8ecef;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .player-card:hover {
+            border-color: #3498db;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.15);
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex: 1;
+        }
+
+        .player-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .player-details {
+            flex: 1;
+        }
+
+        .player-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+        }
+
+        .player-stats {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+            color: #5a6c7d;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .stat-item i {
+            font-size: 0.85rem;
+            color: #3498db;
+        }
+
+        .bet-amount {
+            background: #e74c3c;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-right: 1rem;
+        }
+
+        .player-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-action {
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-profile {
+            background: white;
+            color: #3498db;
+            border: 2px solid #3498db;
+        }
+
+        .btn-profile:hover {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-accept {
+            background: #27ae60;
+            color: white;
+            border: 2px solid #27ae60;
+        }
+
+        .btn-accept:hover {
+            background: #229954;
+            border-color: #229954;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            background: #27ae60;
+            color: white;
+        }
+
+        .status-badge i {
+            font-size: 0.7rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .new-game-section {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .btn-new-game {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+        }
+
+        .btn-new-game:hover {
+            background: #2980b9;
+            box-shadow: 0 6px 16px rgba(52, 152, 219, 0.3);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #95a5a6;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #2c3e50;
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-header h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-header p {
+            color: #5a6c7d;
+        }
+
+        .game-mode-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .mode-option {
+            flex: 1;
+            padding: 1.5rem;
+            border: 2px solid #e8ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            background: white;
+        }
+
+        .mode-option:hover {
+            border-color: #3498db;
+        }
+
+        .mode-option.selected {
+            border-color: #3498db;
+            background: #ebf5fb;
+        }
+
+        .mode-option i {
+            font-size: 2rem;
+            color: #3498db;
+            margin-bottom: 0.5rem;
+        }
+
+        .mode-option .mode-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+        }
+
+        .mode-option .mode-desc {
+            font-size: 0.85rem;
+            color: #5a6c7d;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e8ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .bet-range-info {
+            font-size: 0.85rem;
+            color: #5a6c7d;
+            margin-top: 0.3rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-modal {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn-cancel {
+            background: #ecf0f1;
+            color: #5a6c7d;
+        }
+
+        .btn-cancel:hover {
+            background: #bdc3c7;
+        }
+
+        .btn-create {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-create:hover {
+            background: #2980b9;
+        }
+
+        /* Modal de perfil */
+        .profile-modal-content {
+            max-width: 600px;
+        }
+
+        .profile-header {
+            text-align: center;
+            padding: 2rem 0;
+            border-bottom: 2px solid #ecf0f1;
+            margin-bottom: 2rem;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            margin: 0 auto 1rem;
+        }
+
+        .profile-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-box {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #e8ecef;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #3498db;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #5a6c7d;
+        }
+
+        .profile-bet-info {
+            background: #e74c3c;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile-bet-info .bet-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 0.3rem;
+        }
+
+        .profile-bet-info .bet-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+<div th:replace="fragment/header :: header"></div>
+
+<div class="container">
+    <div class="lobby-header">
+        <h1><i class="fas fa-users"></i> Sala de Juego en Línea</h1>
+        <p>Encuentra rivales y demuestra tus habilidades en el Sudoku</p>
+    </div>
+
+    <div class="players-section">
+        <h2 class="section-title">
+            <i class="fas fa-fire"></i>
+            Jugadores Buscando Partida
+        </h2>
+
+        <!-- Player Card 1 -->
+        <div class="player-card" onclick="showProfile('player1')">
+            <div class="player-info">
+                <div class="player-avatar">🎮</div>
+                <div class="player-details">
+                    <div class="player-name">SudokuMaster92</div>
+                    <div class="player-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-trophy"></i>
+                            <span>1,250 pts</span>
+                        </div>
+                        <div class="stat-item">
+                <span class="status-badge">
+                  <i class="fas fa-circle"></i>
+                  Buscando partida
+                </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bet-amount">
+                <i class="fas fa-coins"></i>
+                50 monedas
+            </div>
+            <div class="player-actions">
+                <button class="btn-action btn-profile" onclick="event.stopPropagation(); showProfile('player1')">
+                    <i class="fas fa-user"></i> Ver Perfil
+                </button>
+                <button class="btn-action btn-accept" onclick="event.stopPropagation(); acceptChallenge('player1')">
+                    <i class="fas fa-handshake"></i> Aceptar
+                </button>
+            </div>
+        </div>
+
+        <!-- Player Card 2 -->
+        <div class="player-card" onclick="showProfile('player2')">
+            <div class="player-info">
+                <div class="player-avatar">🧠</div>
+                <div class="player-details">
+                    <div class="player-name">LogicQueen</div>
+                    <div class="player-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-trophy"></i>
+                            <span>2,840 pts</span>
+                        </div>
+                        <div class="stat-item">
+                <span class="status-badge">
+                  <i class="fas fa-circle"></i>
+                  Buscando partida
+                </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bet-amount">
+                <i class="fas fa-coins"></i>
+                150 monedas
+            </div>
+            <div class="player-actions">
+                <button class="btn-action btn-profile" onclick="event.stopPropagation(); showProfile('player2')">
+                    <i class="fas fa-user"></i> Ver Perfil
+                </button>
+                <button class="btn-action btn-accept" onclick="event.stopPropagation(); acceptChallenge('player2')">
+                    <i class="fas fa-handshake"></i> Aceptar
+                </button>
+            </div>
+        </div>
+
+        <!-- Player Card 3 -->
+        <div class="player-card" onclick="showProfile('player3')">
+            <div class="player-info">
+                <div class="player-avatar">⚡</div>
+                <div class="player-details">
+                    <div class="player-name">FastSolver</div>
+                    <div class="player-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-trophy"></i>
+                            <span>890 pts</span>
+                        </div>
+                        <div class="stat-item">
+                <span class="status-badge">
+                  <i class="fas fa-circle"></i>
+                  Buscando partida
+                </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bet-amount">
+                <i class="fas fa-coins"></i>
+                25 monedas
+            </div>
+            <div class="player-actions">
+                <button class="btn-action btn-profile" onclick="event.stopPropagation(); showProfile('player3')">
+                    <i class="fas fa-user"></i> Ver Perfil
+                </button>
+                <button class="btn-action btn-accept" onclick="event.stopPropagation(); acceptChallenge('player3')">
+                    <i class="fas fa-handshake"></i> Aceptar
+                </button>
+            </div>
+        </div>
+
+        <!-- Player Card 4 -->
+        <div class="player-card" onclick="showProfile('player4')">
+            <div class="player-info">
+                <div class="player-avatar">🔥</div>
+                <div class="player-details">
+                    <div class="player-name">ProGamer2024</div>
+                    <div class="player-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-trophy"></i>
+                            <span>3,420 pts</span>
+                        </div>
+                        <div class="stat-item">
+                <span class="status-badge">
+                  <i class="fas fa-circle"></i>
+                  Buscando partida
+                </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bet-amount">
+                <i class="fas fa-coins"></i>
+                500 monedas
+            </div>
+            <div class="player-actions">
+                <button class="btn-action btn-profile" onclick="event.stopPropagation(); showProfile('player4')">
+                    <i class="fas fa-user"></i> Ver Perfil
+                </button>
+                <button class="btn-action btn-accept" onclick="event.stopPropagation(); acceptChallenge('player4')">
+                    <i class="fas fa-handshake"></i> Aceptar
+                </button>
+            </div>
+        </div>
+
+        <!-- Player Card 5 -->
+        <div class="player-card" onclick="showProfile('player5')">
+            <div class="player-info">
+                <div class="player-avatar">🎯</div>
+                <div class="player-details">
+                    <div class="player-name">NumberNinja</div>
+                    <div class="player-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-trophy"></i>
+                            <span>1,680 pts</span>
+                        </div>
+                        <div class="stat-item">
+                <span class="status-badge">
+                  <i class="fas fa-circle"></i>
+                  Buscando partida
+                </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bet-amount">
+                <i class="fas fa-coins"></i>
+                100 monedas
+            </div>
+            <div class="player-actions">
+                <button class="btn-action btn-profile" onclick="event.stopPropagation(); showProfile('player5')">
+                    <i class="fas fa-user"></i> Ver Perfil
+                </button>
+                <button class="btn-action btn-accept" onclick="event.stopPropagation(); acceptChallenge('player5')">
+                    <i class="fas fa-handshake"></i> Aceptar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="new-game-section">
+        <button class="btn-new-game" onclick="openNewGameModal()">
+            <i class="fas fa-plus-circle"></i>
+            Nuevo Juego
+        </button>
+    </div>
+</div>
+
+<!-- Modal Nuevo Juego -->
+<div id="newGameModal" class="modal">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeNewGameModal()">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <div class="modal-header">
+            <h2>Crear Nueva Partida</h2>
+            <p>Configura tu partida y espera un rival</p>
+        </div>
+
+        <div class="game-mode-selector">
+            <div class="mode-option selected" id="publicMode" onclick="selectMode('public')">
+                <i class="fas fa-globe"></i>
+                <div class="mode-title">Público</div>
+                <div class="mode-desc">Cualquiera puede unirse</div>
+            </div>
+            <div class="mode-option" id="friendMode" onclick="selectMode('friend')">
+                <i class="fas fa-user-plus"></i>
+                <div class="mode-title">Amigo</div>
+                <div class="mode-desc">Invita a un jugador</div>
+            </div>
+        </div>
+
+        <form id="newGameForm" th:action="@{/sudoku/online/create}" method="post">
+            <input type="hidden" name="gameMode" id="gameMode" value="public">
+            <input type="hidden" name="difficulty" th:value="${param.difficulty}">
+
+            <div class="form-group">
+                <label for="betAmount">
+                    <i class="fas fa-coins"></i> Monto de Apuesta
+                </label>
+                <input
+                        type="number"
+                        id="betAmount"
+                        name="betAmount"
+                        min="10"
+                        max="5000"
+                        value="50"
+                        required
+                >
+                <div class="bet-range-info">
+                    Mínimo: 10 monedas | Máximo: 5,000 monedas
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-modal btn-cancel" onclick="closeNewGameModal()">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn-modal btn-create">
+                    <i class="fas fa-play"></i> Crear Partida
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Perfil -->
+<div id="profileModal" class="modal">
+    <div class="modal-content profile-modal-content">
+        <button class="modal-close" onclick="closeProfileModal()">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <div class="profile-header">
+            <div class="profile-avatar" id="profileAvatar">🎮</div>
+            <div class="profile-name" id="profileName">SudokuMaster92</div>
+        </div>
+
+        <div class="profile-stats-grid">
+            <div class="stat-box">
+                <div class="stat-value" id="profilePoints">1,250</div>
+                <div class="stat-label">Puntos Totales</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="profileWins">45</div>
+                <div class="stat-label">Victorias</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="profileLosses">12</div>
+                <div class="stat-label">Derrotas</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="profileWinRate">78%</div>
+                <div class="stat-label">% Victorias</div>
+            </div>
+        </div>
+
+        <div class="profile-bet-info">
+            <div class="bet-label">Apuesta Propuesta</div>
+            <div class="bet-value">
+                <i class="fas fa-coins"></i>
+                <span id="profileBet">50</span> monedas
+            </div>
+        </div>
+
+        <div class="modal-actions">
+            <button type="button" class="btn-modal btn-cancel" onclick="closeProfileModal()">
+                Cerrar
+            </button>
+            <button type="button" class="btn-modal btn-create" id="acceptFromProfile" onclick="acceptFromProfile()">
+                <i class="fas fa-handshake"></i> Aceptar Desafío
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Datos de ejemplo para los jugadores
+    const playersData = {
+        player1: {
+            avatar: '🎮',
+            name: 'SudokuMaster92',
+            points: 1250,
+            wins: 45,
+            losses: 12,
+            bet: 50
+        },
+        player2: {
+            avatar: '🧠',
+            name: 'LogicQueen',
+            points: 2840,
+            wins: 89,
+            losses: 23,
+            bet: 150
+        },
+        player3: {
+            avatar: '⚡',
+            name: 'FastSolver',
+            points: 890,
+            wins: 28,
+            losses: 15,
+            bet: 25
+        },
+        player4: {
+            avatar: '🔥',
+            name: 'ProGamer2024',
+            points: 3420,
+            wins: 112,
+            losses: 18,
+            bet: 500
+        },
+        player5: {
+            avatar: '🎯',
+            name: 'NumberNinja',
+            points: 1680,
+            wins: 56,
+            losses: 20,
+            bet: 100
+        }
+    };
+
+    let currentPlayerId = null;
+
+    function openNewGameModal() {
+        document.getElementById('newGameModal').classList.add('show');
+    }
+
+    function closeNewGameModal() {
+        document.getElementById('newGameModal').classList.remove('show');
+    }
+
+    function selectMode(mode) {
+        document.getElementById('publicMode').classList.remove('selected');
+        document.getElementById('friendMode').classList.remove('selected');
+
+        if (mode === 'public') {
+            document.getElementById('publicMode').classList.add('selected');
+        } else {
+            document.getElementById('friendMode').classList.add('selected');
+        }
+
+        document.getElementById('gameMode').value = mode;
+    }
+
+    function showProfile(playerId) {
+        currentPlayerId = playerId;
+        const player = playersData[playerId];
+
+        document.getElementById('profileAvatar').textContent = player.avatar;
+        document.getElementById('profileName').textContent = player.name;
+        document.getElementById('profilePoints').textContent = player.points.toLocaleString();
+        document.getElementById('profileWins').textContent = player.wins;
+        document.getElementById('profileLosses').textContent = player.losses;
+
+        const winRate = Math.round((player.wins / (player.wins + player.losses)) * 100);
+        document.getElementById('profileWinRate').textContent = winRate + '%';
+        document.getElementById('profileBet').textContent = player.bet;
+
+        document.getElementById('profileModal').classList.add('show');
+    }
+
+    function closeProfileModal() {
+        document.getElementById('profileModal').classList.remove('show');
+        currentPlayerId = null;
+    }
+
+    function acceptChallenge(playerId) {
+        // Redirigir a la ruta de desafío
+        window.location.href = `/sudoku/online/challenge/${playerId}`;
+    }
+
+    function acceptFromProfile() {
+        if (currentPlayerId) {
+            acceptChallenge(currentPlayerId);
+        }
+    }
+
+    // Cerrar modales al hacer clic fuera
+    document.getElementById('newGameModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeNewGameModal();
+        }
+    });
+
+    document.getElementById('profileModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeProfileModal();
+        }
+    });
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.0/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -13,6 +13,71 @@
 
   <link rel="stylesheet" th:href="@{/css/home.css}"/>
 
+  <style>
+    .difficulty-card {
+      cursor: default;
+      padding-bottom: 1.5rem;
+    }
+
+    .difficulty-card a {
+      text-decoration: none;
+    }
+
+    .game-mode-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1.2rem;
+      padding: 0 0.5rem;
+      align-items: center;
+    }
+
+    .mode-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      cursor: pointer;
+      width: 100%;
+      max-width: 250px;
+    }
+
+    .mode-button i {
+      font-size: 1.1rem;
+    }
+
+    /* Botón de arriba (Offline) - Azul */
+    .mode-button.offline {
+      background: #007bff;
+      color: #fff;
+      border-color: #006ae6;
+    }
+
+    .mode-button.offline:hover {
+      background: #006ae6;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+    }
+
+    /* Botón de abajo (Online) - Verde */
+    .mode-button.online {
+      background: #28a745;
+      color: #fff;
+      border-color: #218838;
+    }
+
+    .mode-button.online:hover {
+      background: #218838;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+    }
+  </style>
 </head>
 
 <body>
@@ -23,43 +88,84 @@
   <!-- WELCOME SECTION -->
   <section class="welcome-section fade-in-up">
     <h1 class="welcome-title">¡Bienvenido de vuelta!</h1>
-    <p class="welcome-subtitle">¿Listo para un nuevo desafío de Sudoku? Elige tu nivel y comienza a jugar.</p>
+    <p class="welcome-subtitle">¿Listo para un nuevo desafío de Sudoku? Elige tu nivel y modo de juego.</p>
   </section>
 
   <div class="menu" id="menu">
 
-  <a th:href="@{/sudoku(difficulty='easy')}" style="text-decoration: none">
+    <!-- PRINCIPIANTE -->
     <div class="difficulty-card easy">
       <div class="difficulty-header">
-        <span class="difficulty-icon">&#x1F331</span>
+        <span class="difficulty-icon">&#x1F331;</span>
         <span class="difficulty-title">Principiante</span>
       </div>
       <div class="difficulty-desc">Ideal para comenzar.</div>
+
+      <div class="game-mode-buttons">
+        <a th:href="@{/sudoku(difficulty='easy')}">
+          <button class="mode-button offline">
+            <i class="fas fa-gamepad"></i>
+            Jugar fuera de línea
+          </button>
+        </a>
+        <a th:href="@{/sudoku/online(difficulty='easy')}">
+          <button class="mode-button online">
+            <i class="fas fa-globe"></i>
+            Jugar en línea
+          </button>
+        </a>
+      </div>
     </div>
-  </a>
 
-
-  <a th:href="@{/sudoku(difficulty='medium')}" style="text-decoration: none">
+    <!-- INTERMEDIO -->
     <div class="difficulty-card medium">
       <div class="difficulty-header">
-        <span class="difficulty-icon">&#x26A1</span>
+        <span class="difficulty-icon">&#x26A1;</span>
         <span class="difficulty-title">Intermedio</span>
       </div>
       <div class="difficulty-desc">Un desafío equilibrado.</div>
-    </div>
-  </a>
 
-  <a th:href="@{/sudoku(difficulty='hard')}" style="text-decoration: none">
+      <div class="game-mode-buttons">
+        <a th:href="@{/sudoku(difficulty='medium')}">
+          <button class="mode-button offline">
+            <i class="fas fa-gamepad"></i>
+            Jugar fuera de línea
+          </button>
+        </a>
+        <a th:href="@{/sudoku/online(difficulty='medium')}">
+          <button class="mode-button online">
+            <i class="fas fa-globe"></i>
+            Jugar en línea
+          </button>
+        </a>
+      </div>
+    </div>
+
+    <!-- EXPERTO -->
     <div class="difficulty-card hard">
       <div class="difficulty-header">
-        <span class="difficulty-icon">&#x1F525</span>
+        <span class="difficulty-icon">&#x1F525;</span>
         <span class="difficulty-title">Experto</span>
       </div>
       <div class="difficulty-desc">Para maestros del Sudoku.</div>
-    </div>
-  </a>
 
+      <div class="game-mode-buttons">
+        <a th:href="@{/sudoku(difficulty='hard')}">
+          <button class="mode-button offline">
+            <i class="fas fa-gamepad"></i>
+            Jugar fuera de línea
+          </button>
+        </a>
+        <a th:href="@{/sudoku/online(difficulty='hard')}">
+          <button class="mode-button online">
+            <i class="fas fa-globe"></i>
+            Jugar en línea
+          </button>
+        </a>
+      </div>
     </div>
+
+  </div>
 </main>
 
 <script th:src="@{/js/home.js}"></script>
