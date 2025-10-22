@@ -36,7 +36,7 @@ public class ControladorPerfil {
         ModelMap model = new ModelMap();
         model.put("usuario",servicioLogin.consultarUsuarioDTOPorId(idUsuario));
         model.put("estadisticasNivelFacil", servicioEstadistica.obtenerEstadisticas(idUsuario, NIVEL.FACIL));
-        model.put("estadisticasNivelMedio", servicioEstadistica.obtenerEstadisticas(idUsuario, NIVEL.MEDIA));
+        model.put("estadisticasNivelMedio", servicioEstadistica.obtenerEstadisticas(idUsuario, NIVEL.MEDIO));
         model.put("estadisticasNivelDificil", servicioEstadistica.obtenerEstadisticas(idUsuario, NIVEL.DIFICIL));
 
         return new ModelAndView("perfil", model);
