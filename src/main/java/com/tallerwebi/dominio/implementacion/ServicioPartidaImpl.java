@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio.implementacion;
 
 import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.enums.NIVEL;
 import com.tallerwebi.dominio.interfaces.RepositorioPartida;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.interfaces.ServicioPartida;
@@ -65,6 +66,7 @@ public class ServicioPartidaImpl implements ServicioPartida {
     public List<PartidaDTO> obtenerPartidasPorCriterio(String dificultad, String orden) {
         List<Partida> partidas;
         List<PartidaDTO> dtoList;
+
         if (dificultad.equalsIgnoreCase("general") && orden.equalsIgnoreCase("tiempo")) {
             dtoList = obtenerPartidasDTOOrdenadasPorTiempo();
             return dtoList;
@@ -73,13 +75,13 @@ public class ServicioPartidaImpl implements ServicioPartida {
             return dtoList;
         }
 
-
-
         if (orden.equalsIgnoreCase("tiempo")) {
             orden = "tiempoSegundos";
         }
+        NIVEL nivel = NIVEL.valueOf(dificultad.toUpperCase());
 
-        partidas = repositorioPartida.obtenerPartidasPorCriterio(dificultad, orden);
+
+        partidas = repositorioPartida.obtenerPartidasPorCriterio(nivel, orden);
         dtoList = formatearDePartidasAPartidasDTO(partidas);
 
 

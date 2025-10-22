@@ -108,7 +108,7 @@ public class ControladorPerfilTest {
         when(sessionMock.getAttribute("id_usuario")).thenReturn(usuarioMock.getId());
 
         when(servicioEstadisticasMock.obtenerEstadisticas(usuarioMock.getId(), NIVEL.FACIL)).thenReturn(estadisticasFacilMock);
-        when(servicioEstadisticasMock.obtenerEstadisticas(usuarioMock.getId(), NIVEL.MEDIO)).thenReturn(estadisticasMedioMock);
+        when(servicioEstadisticasMock.obtenerEstadisticas(usuarioMock.getId(), NIVEL.MEDIA)).thenReturn(estadisticasMedioMock);
         when(servicioEstadisticasMock.obtenerEstadisticas(usuarioMock.getId(), NIVEL.DIFICIL)).thenReturn(estadisticasDificilMock);
 
         ModelAndView mav = controladorPerfil.irAlPerfil(sessionMock);
@@ -127,7 +127,7 @@ public class ControladorPerfilTest {
 
         verify(servicioLoginMock, times(1)).consultarUsuarioDTOPorId(idUsuario);
         verify(servicioEstadisticasMock, times(1)).obtenerEstadisticas(idUsuario, NIVEL.FACIL);
-        verify(servicioEstadisticasMock, times(1)).obtenerEstadisticas(idUsuario, NIVEL.MEDIO);
+        verify(servicioEstadisticasMock, times(1)).obtenerEstadisticas(idUsuario, NIVEL.MEDIA);
         verify(servicioEstadisticasMock, times(1)).obtenerEstadisticas(idUsuario, NIVEL.DIFICIL);
     }
 
@@ -137,7 +137,7 @@ public class ControladorPerfilTest {
         when(sessionMock.getAttribute("id_usuario")).thenReturn(idUsuario);
 
         when(servicioEstadisticasMock.obtenerEstadisticas(idUsuario, NIVEL.FACIL)).thenReturn(new HashMap<>());
-        when(servicioEstadisticasMock.obtenerEstadisticas(idUsuario, NIVEL.MEDIO)).thenReturn(new HashMap<>());
+        when(servicioEstadisticasMock.obtenerEstadisticas(idUsuario, NIVEL.MEDIA)).thenReturn(new HashMap<>());
         when(servicioEstadisticasMock.obtenerEstadisticas(idUsuario, NIVEL.DIFICIL)).thenReturn(new HashMap<>());
 
         ModelAndView mav = controladorPerfil.irAlPerfil(sessionMock);

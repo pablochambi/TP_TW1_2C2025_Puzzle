@@ -5,7 +5,6 @@ import com.tallerwebi.dominio.enums.NIVEL;
 import com.tallerwebi.dominio.interfaces.RepositorioPartida;
 import com.tallerwebi.dominio.Usuario;
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -48,9 +47,9 @@ public class RepositorioPartidaImpl implements RepositorioPartida {
     }
 
     @Override
-    public List<Partida> obtenerPartidasPorCriterio(String dificultad, String orden) {
+    public List<Partida> obtenerPartidasPorCriterio(NIVEL dificultad, String orden) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Partida.class);
-        criteria.add(Restrictions.eq("dificultad", dificultad));
+        criteria.add(Restrictions.eq("nivel", dificultad));
 
         if (orden.equals("tiempoSegundos")) {
             criteria.addOrder(Order.asc(orden));

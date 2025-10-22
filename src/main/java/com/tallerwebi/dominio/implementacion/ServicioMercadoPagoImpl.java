@@ -9,8 +9,8 @@ import com.mercadopago.client.preference.PreferenceRequest;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.preference.Preference;
+import com.tallerwebi.dominio.enums.PAQUETE_MONEDAS;
 import com.tallerwebi.dominio.interfaces.ServicioMercadoPago;
-import com.tallerwebi.dominio.enums.PaqueteMonedas;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -23,8 +23,8 @@ public class ServicioMercadoPagoImpl implements ServicioMercadoPago {
     @Override
     public String crearYObtenerInitPoint(Integer paqueteId) throws MPException, MPApiException {
         MercadoPagoConfig.setAccessToken("APP_USR-4494164065159566-101116-668009d69bb83392a0ccf25823aa9ed7-2919985285");
-        PaqueteMonedas paqueteMonedas = PaqueteMonedas.getPorId(paqueteId);
-        if (paqueteMonedas == null) {
+        PAQUETE_MONEDAS PAQUETEMONEDAS = PAQUETE_MONEDAS.getPorId(paqueteId);
+        if (PAQUETEMONEDAS == null) {
             return null;
         }
 
@@ -42,7 +42,7 @@ public class ServicioMercadoPagoImpl implements ServicioMercadoPago {
     //creacion del item para la preferencia
 
     private PreferenceItemRequest crearItemPreference(Integer paqueteId) {
-        PaqueteMonedas paquete = PaqueteMonedas.getPorId(paqueteId);
+        PAQUETE_MONEDAS paquete = PAQUETE_MONEDAS.getPorId(paqueteId);
 
 
         PreferenceItemRequest item = PreferenceItemRequest
@@ -62,7 +62,7 @@ public class ServicioMercadoPagoImpl implements ServicioMercadoPago {
 
     private PreferenceBackUrlsRequest generarBackUrls(Integer paqueteId) {
 
-        PaqueteMonedas paquete = PaqueteMonedas.getPorId(paqueteId);
+        PAQUETE_MONEDAS paquete = PAQUETE_MONEDAS.getPorId(paqueteId);
         if(paquete == null){
             return null;
         }

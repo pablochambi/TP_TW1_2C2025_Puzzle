@@ -3,7 +3,7 @@ package com.tallerwebi.dominio.implementacion;
 
 import com.tallerwebi.dominio.Pago;
 import com.tallerwebi.dominio.Usuario;
-import com.tallerwebi.dominio.enums.PaqueteMonedas;
+import com.tallerwebi.dominio.enums.PAQUETE_MONEDAS;
 import com.tallerwebi.dominio.excepcion.UsuarioInexistente;
 import com.tallerwebi.dominio.interfaces.RepositorioPago;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
@@ -32,7 +32,7 @@ public class ServicioTiendaMonedasImpl implements ServicioTiendaMonedas {
     public void comprarPaquete(Long idUsuario, Integer paqueteId, String collection_id) throws  UsuarioInexistente{
 
         Usuario usuario = repositorioUsuario.obtenerUsuarioPorId(idUsuario);
-        PaqueteMonedas paqueteMonedas = obtenerPaquetePorId(paqueteId);
+        PAQUETE_MONEDAS PAQUETEMONEDAS = obtenerPaquetePorId(paqueteId);
 
         if (usuario == null) {
             throw new UsuarioInexistente();
@@ -40,8 +40,8 @@ public class ServicioTiendaMonedasImpl implements ServicioTiendaMonedas {
         }
 
         registrarPago(collection_id, idUsuario, paqueteId);
-        usuario.setMonedas(usuario.getMonedas() + paqueteMonedas.getCantidadMonedas());
-        //usuario.agregarMonedas(paqueteMonedas.getCantidadMonedas());
+        usuario.setMonedas(usuario.getMonedas() + PAQUETEMONEDAS.getCantidadMonedas());
+        //usuario.agregarMonedas(PAQUETEMONEDAS.getCantidadMonedas());
 
 
     }
@@ -61,7 +61,7 @@ public class ServicioTiendaMonedasImpl implements ServicioTiendaMonedas {
     private void registrarPago(String collectionId, Long usuarioId, Integer paqueteId) {
 
         Usuario usuario  = repositorioUsuario.obtenerUsuarioPorId(usuarioId);
-        PaqueteMonedas paquete = PaqueteMonedas.getPorId(paqueteId);
+        PAQUETE_MONEDAS paquete = PAQUETE_MONEDAS.getPorId(paqueteId);
 
 
 
@@ -72,9 +72,9 @@ public class ServicioTiendaMonedasImpl implements ServicioTiendaMonedas {
     }
 
 
-    private PaqueteMonedas obtenerPaquetePorId(Integer id) {
+    private PAQUETE_MONEDAS obtenerPaquetePorId(Integer id) {
 
-        return PaqueteMonedas.getPorId(id);
+        return PAQUETE_MONEDAS.getPorId(id);
     }
 
 

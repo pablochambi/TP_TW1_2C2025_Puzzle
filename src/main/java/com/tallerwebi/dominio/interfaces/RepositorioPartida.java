@@ -13,7 +13,7 @@ public interface RepositorioPartida {
 
     List<Partida> obtenerPartidasPorPuntajeDesc();
 
-    List<Partida> obtenerPartidasPorCriterio(String dificultad, String orden);
+    List<Partida> obtenerPartidasPorCriterio(NIVEL dificultad, String orden);
 
     List<Partida> obtenerPartidasPorTiempoAsc();
 }
