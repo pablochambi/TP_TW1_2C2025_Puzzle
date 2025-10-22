@@ -3,7 +3,7 @@ package com.tallerwebi.dominio.enums;
 
 
 
-public enum PaqueteMonedas {
+public enum PAQUETE_MONEDAS {
 
     PAQUETE_1(1, 1000, 1),
     PAQUETE_2(2, 2200, 2),
@@ -17,18 +17,18 @@ public enum PaqueteMonedas {
     private Integer cantidadMonedas;
     private Integer precioARS;
 
-    PaqueteMonedas(Integer id, Integer cantidadMonedas, Integer precioARS) {
+    PAQUETE_MONEDAS(Integer id, Integer cantidadMonedas, Integer precioARS) {
         this.id = id;
         this.cantidadMonedas = cantidadMonedas;
         this.precioARS = precioARS;
     }
 
-   PaqueteMonedas() {
+   PAQUETE_MONEDAS() {
 
     }
 
-    public static PaqueteMonedas getPorId(Integer id) {
-        for (PaqueteMonedas paquete : values()) {
+    public static PAQUETE_MONEDAS getPorId(Integer id) {
+        for (PAQUETE_MONEDAS paquete : values()) {
             if (paquete.id.equals(id)) {
                 return paquete;
             }

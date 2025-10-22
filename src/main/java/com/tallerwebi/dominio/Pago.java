@@ -1,6 +1,6 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.enums.PaqueteMonedas;
+import com.tallerwebi.dominio.enums.PAQUETE_MONEDAS;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,11 +22,11 @@ public class Pago {
     private Usuario usuario;
 
     @Enumerated(EnumType.STRING)
-    private PaqueteMonedas paquete;
+    private PAQUETE_MONEDAS paquete;
 
     public Pago() {}
 
-    public Pago(String collectionId, Usuario usuario, PaqueteMonedas paquete) {
+    public Pago(String collectionId, Usuario usuario, PAQUETE_MONEDAS paquete) {
         this.collectionId = collectionId;
         this.usuario = usuario;
         this.paquete = paquete;
