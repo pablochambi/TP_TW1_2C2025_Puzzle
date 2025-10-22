@@ -51,7 +51,7 @@ VALUES
 
 
 -- Partidas de prueba
-INSERT INTO Partida (id, usuario_id, dificultad, tiempoSegundos, puntaje, pistasUsadas, ganada, fechaHoraInicio)
+INSERT INTO Partida (id, usuario_id, nivel, tiempoSegundos, puntaje, pistasUsadas, ganada, fechaHoraInicio)
 VALUES
     -- Nivel FACIL (4 partidas, 1 perdida)
     (1, 1, 'FACIL', 120, 35, 0, TRUE,  '2025-10-15 14:30:00'),
