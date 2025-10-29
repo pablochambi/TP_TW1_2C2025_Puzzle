@@ -58,38 +58,12 @@ public class ControladorRanking {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         model.put("dificultadSeleccionada", dificultad);
         model.put("ordenSeleccionado", orden);
         model.put("ranking", ranking);
         model.put("usuario", servicioLogin.consultarUsuarioDTOPorId(idUsuario));
         return new ModelAndView("ranking", model);
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
 

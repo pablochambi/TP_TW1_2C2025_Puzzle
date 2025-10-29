@@ -1,8 +1,8 @@
-INSERT INTO Usuario(id, email,nombreUsuario, password, rol, activo,monedas)
+INSERT INTO Usuario(id, email,nombreUsuario, password, rol, activo,monedas,partidasGanadas)
 VALUES
-    (null, 'test@unlam.edu.ar', 'jugador123', 'test', 'ADMIN',true,100),
-    (null, 'donatoalbera@gmail.com', 'JUGADOR1', 'test', 'ADMIN',true,100),
-    (null, 'donatoalbera2@gmail.com', 'JUGADOR2', 'test', 'ADMIN',true,100);
+    (null, 'test@unlam.edu.ar', 'jugador123', 'test', 'ADMIN',true,100, 4),
+    (null, 'donatoalbera@gmail.com', 'JUGADOR1', 'test', 'ADMIN',true,100,10),
+    (null, 'donatoalbera2@gmail.com', 'JUGADOR2', 'test', 'ADMIN',true,100,30);
 
 
 --Avatares con imagenes

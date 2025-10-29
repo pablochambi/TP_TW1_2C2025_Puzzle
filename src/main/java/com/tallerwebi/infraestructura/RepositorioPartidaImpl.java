@@ -7,6 +7,8 @@ import com.tallerwebi.dominio.Usuario;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -65,5 +67,15 @@ public class RepositorioPartidaImpl implements RepositorioPartida {
 
 
         return criteria.list();
+    }
+
+    @Override
+    public Partida obtenerMejorPartidaUsuario(Usuario usuario) {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Partida.class);
+        criteria.add(Restrictions.eq("usuario", usuario));
+        criteria.addOrder(Order.desc("puntaje"));
+        criteria.setMaxResults(1);
+
+        return (Partida) criteria.uniqueResult();
     }
 }

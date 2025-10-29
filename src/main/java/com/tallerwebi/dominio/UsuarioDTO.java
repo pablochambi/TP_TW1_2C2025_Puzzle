@@ -15,6 +15,9 @@ public class UsuarioDTO {
     private Integer pistas;
     private Integer monedas;
     private Avatar avatar;
+    private Integer partidasGanadas;
+
+
 
     public UsuarioDTO() {
     }
@@ -28,6 +31,8 @@ public class UsuarioDTO {
         this.pistas = usuario.getPistas();
         this.monedas = usuario.getMonedas();
         this.avatar = avatar;
+        this.partidasGanadas = usuario.getPartidasGanadas();
+
     }
     public UsuarioDTO(Usuario usuario) {
         this.id = usuario.getId();
@@ -38,6 +43,7 @@ public class UsuarioDTO {
         this.activo = usuario.getActivo();
         this.pistas = usuario.getPistas();
         this.monedas = usuario.getMonedas();
+        this.partidasGanadas = usuario.getPartidasGanadas();
 
     }
 

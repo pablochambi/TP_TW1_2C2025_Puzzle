@@ -16,4 +16,6 @@ public interface RepositorioPartida {
     List<Partida> obtenerPartidasPorCriterio(NIVEL dificultad, String orden);
 
     List<Partida> obtenerPartidasPorTiempoAsc();
+
+    Partida obtenerMejorPartidaUsuario(Usuario usuario);
 }

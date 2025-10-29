@@ -2,6 +2,7 @@ package com.tallerwebi.dominio.implementacion;
 
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.enums.NIVEL;
+import com.tallerwebi.dominio.interfaces.RepositorioAvatar;
 import com.tallerwebi.dominio.interfaces.RepositorioPartida;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.interfaces.ServicioPartida;
@@ -21,11 +22,13 @@ public class ServicioPartidaImpl implements ServicioPartida {
 
     private final RepositorioUsuario repositorioUsuario;
     private final RepositorioPartida repositorioPartida;
+    private final RepositorioAvatar repositorioAvatar;
 
     @Autowired
-    public ServicioPartidaImpl(RepositorioPartida repositorioPartida, RepositorioUsuario repositorioUsuario) {
+    public ServicioPartidaImpl(RepositorioPartida repositorioPartida, RepositorioUsuario repositorioUsuario, RepositorioAvatar repositorioAvatar) {
         this.repositorioPartida = repositorioPartida;
         this.repositorioUsuario = repositorioUsuario;
+        this.repositorioAvatar = repositorioAvatar;
     }
 
     @Override
@@ -64,7 +67,7 @@ public class ServicioPartidaImpl implements ServicioPartida {
     }
     @Override
     public List<PartidaDTO> obtenerPartidasPorCriterio(String dificultad, String orden) {
-        List<Partida> partidas;
+        List<Partida> partidas = new ArrayList<>();
         List<PartidaDTO> dtoList;
 
         if (dificultad.equalsIgnoreCase("general") && orden.equalsIgnoreCase("tiempo")) {
@@ -75,22 +78,34 @@ public class ServicioPartidaImpl implements ServicioPartida {
             return dtoList;
         }
 
+        if (orden.equalsIgnoreCase("partidas")) {
+            List<Usuario> usuariosOrdenadosPorPartidasGanadas= repositorioUsuario.obtenerUsuariosConMasPartidasGanadas();
+            for (Usuario usuario : usuariosOrdenadosPorPartidasGanadas) {
+                partidas.add(obtenerMejorPartidaUsuario(usuario));
+
+
+            }
+            return formatearDePartidasAPartidasDTO(partidas);
+        }
+
         if (orden.equalsIgnoreCase("tiempo")) {
             orden = "tiempoSegundos";
         }
+
+
+
         NIVEL nivel = NIVEL.valueOf(dificultad.toUpperCase());
-
-
         partidas = repositorioPartida.obtenerPartidasPorCriterio(nivel, orden);
-        dtoList = formatearDePartidasAPartidasDTO(partidas);
 
-
-
-
-
-
-        return dtoList;
+        return formatearDePartidasAPartidasDTO(partidas);
     }
+
+    private Partida obtenerMejorPartidaUsuario(Usuario usuario) {
+        Partida partida = repositorioPartida.obtenerMejorPartidaUsuario(usuario);
+
+        return partida;
+    }
+
     @Override
     public List<PartidaDTO> obtenerPartidasDTOOrdenadasPorPuntaje() {
         List<Partida> partidas;
@@ -128,7 +143,7 @@ public class ServicioPartidaImpl implements ServicioPartida {
                     p.getGanada(),
                     p.getPistasUsadas(),
                     formatearFecha(p.getFechaHoraInicio()),
-                    new UsuarioDTO(p.getUsuario())
+                    new UsuarioDTO(p.getUsuario(), repositorioAvatar.obtenerAvatarDelUsuario(p.getUsuario()))
             );
             dtoList.add(dto);
         }

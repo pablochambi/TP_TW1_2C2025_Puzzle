@@ -69,6 +69,7 @@ public class ServicioRankingImpl implements ServicioRanking {
             ranking.get(i).setNombreJugador(partidasDTO.get(i).getUsuarioDTO().getNombreUsuario());
             ranking.get(i).setMejorPuntaje(partidasDTO.get(i).getPuntaje());
             ranking.get(i).setMejorTiempo(partidasDTO.get(i).getTiempoFormateado());
+            ranking.get(i).setPartidasGanadas(partidasDTO.get(i).getUsuarioDTO().getPartidasGanadas());
             ranking.get(i).setDificultad(partidasDTO.get(i).getDificultad());
         }
 

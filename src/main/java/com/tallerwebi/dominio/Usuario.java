@@ -22,6 +22,7 @@ public class Usuario {
     private Boolean activo;
     private Integer pistas;
     private Integer monedas;
+    private Integer partidasGanadas;
 
     public Usuario() {
         this.monedas = 100;

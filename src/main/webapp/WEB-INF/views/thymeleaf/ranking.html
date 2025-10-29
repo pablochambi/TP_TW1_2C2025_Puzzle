@@ -58,10 +58,10 @@
         <tr>
             <th>Posición</th>
             <th>Jugador</th>
-            <th>Mejor Puntaje</th>
+            <th>Partidas Ganadas</th>
             <th>Dificultad</th>
             <th>Mejor Tiempo</th>
-            <th>Partidas Ganadas</th>
+            <th>Mejor Puntaje</th>
         </tr>
         </thead>
         <tbody>
@@ -79,10 +79,10 @@
                 </div>
             </td>
             <td class="username-cell" th:text="${jugador.nombreJugador}">Usuario</td>
-            <td class="score-cell" th:text="${jugador.mejorPuntaje}">0</td>
+            <td th:text="${jugador.partidasGanadas}">0</td>
             <td class="score-cell" th:text="${jugador.dificultad}">0</td>
             <td th:text="${jugador.mejorTiempo}">0:00</td>
-           <td th:text="${jugador.partidasGanadas}">0</td>
+            <td class="score-cell" th:text="${jugador.mejorPuntaje}">0</td>
         </tr>
 
         <!-- Si NO hay ranking -->

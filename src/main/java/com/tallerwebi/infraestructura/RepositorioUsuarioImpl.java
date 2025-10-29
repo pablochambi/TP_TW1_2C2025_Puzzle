@@ -2,11 +2,15 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository("repositorioUsuario")
 public class RepositorioUsuarioImpl implements RepositorioUsuario {
@@ -53,21 +57,14 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         return usuario.getMonedas();
     }
 
+    @Override
+    public List<Usuario> obtenerUsuariosConMasPartidasGanadas() {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Usuario.class);
+        criteria.addOrder(Order.desc("partidasGanadas"));
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return criteria.list();
+    }
 
 
 }
